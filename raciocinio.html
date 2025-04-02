@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raciocínio Lógico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00FFFF;
+            --secondary-color: #0A192F;
+            --accent-color: #1F4068;
+            --dark-accent: #162447;
+            --text-color: #E6F1FF;
+            --correct-color: #4CAF50;
+            --wrong-color: #F44336;
+            --card-bg: rgba(31, 64, 104, 0.7);
+            --neon-glow: 0 0 10px rgba(0, 255, 255, 0.8);
+            --reward-color: #FFD700;
+            --rank-1: #8B93FF;
+            --rank-2: #6B8CFF;
+            --rank-3: #4B86FF;
+            --rank-4: #2B80FF;
+            --rank-5: #0B6BFF;
+            --rank-6: #0055CC;
+            --rank-7: #0040AA;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary-color);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--neon-glow);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color), 
+                var(--dark-accent), 
+                var(--primary-color));
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 16px;
+            animation: borderGlow 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--primary-color);
+            letter-spacing: 1px;
+        }
+        
+        .banner {
+            width: 100%;
+            max-width: 882px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .banner:hover {
+            transform: scale(1.01);
+        }
+        
+        .progress-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #00E5FF);
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+            width: 0%;
+        }
+        
+        .rank-marker {
+            position: absolute;
+            height: 15px;
+            width: 2px;
+            background-color: white;
+            top: -2.5px;
+            transform: translateX(-50%);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .rank-box {
+            background: linear-gradient(135deg, var(--current-rank-color), rgba(0, 0, 0, 0.5));
+            border: 1px solid var(--current-rank-color);
+            box-shadow: 0 0 15px var(--current-rank-color);
+        }
+        
+        .timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .timer span {
+            margin-left: 5px;
+        }
+        
+        .quiz-content {
+            margin: 25px 0;
+            min-height: 150px;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+        }
+        
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button.correct {
+            background-color: var(--correct-color);
+            border-color: var(--correct-color);
+            color: white;
+        }
+        
+        button.wrong {
+            background-color: var(--wrong-color);
+            border-color: var(--wrong-color);
+            color: white;
+        }
+        
+        .result-container {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .explanation {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .rank-up-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .rank-up-box {
+            background: linear-gradient(135deg, var(--current-rank-color), #162447);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 25px var(--current-rank-color);
+            border: 2px solid var(--current-rank-color);
+            animation: pulseReward 2s infinite;
+        }
+        
+        @keyframes pulseReward {
+            0% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+            50% { transform: scale(1.02); box-shadow: 0 0 35px var(--current-rank-color); }
+            100% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+        }
+        
+        .rank-up-title {
+            color: var(--current-rank-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--current-rank-color);
+        }
+        
+        .rank-up-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .rank-icon {
+            font-size: 4rem;
+            color: var(--current-rank-color);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .next-btn {
+            display: block;
+            margin: 25px auto 0;
+            min-width: 150px;
+            background: linear-gradient(45deg, var(--primary-color), #00E5FF);
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .next-btn:hover {
+            background: linear-gradient(45deg, #00E5FF, var(--primary-color));
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            to { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        
+        .search-results {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--dark-accent);
+            border-radius: 8px;
+            margin-top: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-item:hover {
+            background: var(--accent-color);
+        }
+        
+        .rank-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 3px solid var(--current-rank-color);
+        }
+        
+        .rank-name {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--current-rank-color);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .rank-progress {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .rank-requirements {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .answer-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .stat-box {
+                min-width: 100%;
+            }
+            
+            .rank-up-title {
+                font-size: 1.5rem;
+            }
+            
+            .rank-up-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-particles" id="particles"></div>
+        <img src="PF2025.png" alt="Banner do Site" class="banner">
+        <h1>Raciocinio Lógico</h1>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar questão por número ou texto...">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        
+        <div class="rank-info">
+            <div class="rank-name" id="currentRank">Novato Digital</div>
+            <div class="rank-progress" id="rankProgress">0/100 acertos para o próximo nível</div>
+            <div class="rank-requirements" id="rankRequirements">Próximo nível: Aprendiz de Código (100 acertos)</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-info">
+                <span id="progress">Progresso: 0%</span>
+                <span id="question-number">Questão 1/1300</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="rank-marker" style="left: 7.69%;" title="Aprendiz de Código (100)"></div>
+                <div class="rank-marker" style="left: 21.54%;" title="Programador Júnior (280)"></div>
+                <div class="rank-marker" style="left: 38.46%;" title="Desenvolvedor Pleno (500)"></div>
+                <div class="rank-marker" style="left: 53.85%;" title="Sênior de Sistemas (700)"></div>
+                <div class="rank-marker" style="left: 69.23%;" title="Arquiteto Digital (900)"></div>
+                <div class="rank-marker" style="left: 84.62%;" title="Mestre da Nuvem (1100)"></div>
+                <div class="rank-marker" style="left: 100%;" title="Lenda da TI (1300)"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-content">
+            <div id="quiz"></div>
+            <div class="result-container" id="result">
+                <div class="result-message" id="resultMessage"></div>
+                <div class="explanation" id="comment"></div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="timer">⏳ <span id="timer">90</span>s</div>
+                </div>
+                <div class="stat-box">
+                    ✔️ Acertos: <span id="correctCount">0</span>
+                </div>
+                <div class="stat-box">
+                    ❌ Erros: <span id="wrongCount">0</span>
+                </div>
+                <div class="stat-box rank-box" id="rankBox">
+                    <i class="fas fa-user" id="rankIcon"></i> <span id="rankDisplay">Novato</span>
+                </div>
+            </div>
+        </div>
+        
+        <button class="next-btn" onclick="nextQuestion()" id="nextBtn" disabled>Próxima</button>
+    </div>
+    
+    <div class="rank-up-container" id="rankUpContainer">
+        <div class="rank-up-box">
+            <div class="rank-icon">
+                <i class="fas fa-star" id="rankUpIcon"></i>
+            </div>
+            <h2 class="rank-up-title" id="rankUpTitle">Promovido!</h2>
+            <p class="rank-up-message" id="rankUpMessage">Você alcançou um novo nível!</p>
+            <button onclick="closeRankUp()">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de ranks evolutivos
+        const RANKS = [
+            { name: "Novato Digital", minCorrect: 0, color: "var(--rank-1)", icon: "fa-user" },
+            { name: "Aprendiz de Código", minCorrect: 100, color: "var(--rank-2)", icon: "fa-laptop-code" },
+            { name: "Programador Júnior", minCorrect: 280, color: "var(--rank-3)", icon: "fa-code" },
+            { name: "Desenvolvedor Pleno", minCorrect: 500, color: "var(--rank-4)", icon: "fa-file-code" },
+            { name: "Sênior de Sistemas", minCorrect: 700, color: "var(--rank-5)", icon: "fa-server" },
+            { name: "Arquiteto Digital", minCorrect: 900, color: "var(--rank-6)", icon: "fa-network-wired" },
+            { name: "Mestre da Nuvem", minCorrect: 1100, color: "var(--rank-7)", icon: "fa-cloud" },
+            { name: "Lenda da TI", minCorrect: 1300, color: "var(--reward-color)", icon: "fa-crown" }
+        ];
+        
+        // Configurações do quiz
+        const TOTAL_QUESTIONS = 1300;
+        const TIME_PER_QUESTION = 90;
+        
+        // Elementos do DOM
+        const quizDiv = document.getElementById('quiz');
+        const resultDiv = document.getElementById('result');
+        const resultMessage = document.getElementById('resultMessage');
+        const commentDiv = document.getElementById('comment');
+        const progressFill = document.getElementById('progressFill');
+        const progressDisplay = document.getElementById('progress');
+        const questionNumberDisplay = document.getElementById('question-number');
+        const timerDisplay = document.getElementById('timer');
+        const nextBtn = document.getElementById('nextBtn');
+        const correctDisplay = document.getElementById('correctCount');
+        const wrongDisplay = document.getElementById('wrongCount');
+        const rankDisplay = document.getElementById('rankDisplay');
+        const rankBox = document.getElementById('rankBox');
+        const rankIcon = document.getElementById('rankIcon');
+        const currentRankDisplay = document.getElementById('currentRank');
+        const rankProgressDisplay = document.getElementById('rankProgress');
+        const rankRequirementsDisplay = document.getElementById('rankRequirements');
+        const rankUpContainer = document.getElementById('rankUpContainer');
+        const rankUpTitle = document.getElementById('rankUpTitle');
+        const rankUpMessage = document.getElementById('rankUpMessage');
+        const rankUpIcon = document.getElementById('rankUpIcon');
+        const particlesContainer = document.getElementById('particles');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Estado do quiz
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let currentRankIndex = 0;
+        let timeLeft = TIME_PER_QUESTION;
+        let timer;
+        let answeredQuestions = [];
+        let quizCompleted = false;
+        let allQuestions = [];
+        
+        // Banco de questões
+        const questions = [
+
+          {
+            "numero": 1,
+            "question": "Considere as proposições:\n● p: \"Todos os matemáticos são lógicos.\"\n● q: \"Alguns lógicos são filósofos.\"\nAnalise a proposição p→q (se p então q) e determine se é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p→q é verdadeira se p for falso ou q for verdadeiro. Dado que p é \"Todos os matemáticos são lógicos\" e q é \"Alguns lógicos são filósofos\", a proposição p→q se torna verdadeira por padrão se a proposição p não puder ser provada verdadeira, ou seja, se houver pelo menos um matemático que não seja lógico. Neste contexto, como não temos informação suficiente para negar a veracidade de q, e a implicação lógica não é violada, a proposição é considerada verdadeira. Exemplo: Se não pudermos encontrar uma contra-exemplo de um matemático que não seja lógico, p→q mantém-se verdadeira."
+},
+
+{
+            "numero": 2,
+            "question": "Considere as proposições:\n● p: \"Se está chovendo, então o solo está molhado.\"\n● q: \"O solo não está molhado.\"\nAnalise a proposição p∧q (p e q) e determine se é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p∧q é uma conjunção que é verdadeira apenas se ambas as proposições p e q forem verdadeiras simultaneamente. No entanto, p afirma \"Se está chovendo, então o solo está molhado\" e q afirma \"O solo não está molhado\". Se assumirmos que p é verdadeira, a proposição q contradiz p. Portanto, p∧q é falsa. Exemplo: Se é verdade que \"Se está chovendo, então o solo está molhado\", não podemos afirmar que \"O solo não está molhado\" ao mesmo tempo, pois isso violaria a lógica de implicação.   43"
+},
+
+{
+            "numero": 3,
+            "question": "Dadas as proposições:\n● p: \"Se eu estudo, então eu passo na prova.\"\n● q: \"Eu estudei.\"\nDeterminar se a proposição p→q é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q não faz sentido lógico neste contexto, pois p→q se lê \"Se eu estudo, então eu estudei\", o que é uma tautologia (uma proposição verdadeira por definição lógica), mas não faz uma ligação lógica válida que pode ser usada como uma implicação em raciocínio prático. Em implicações úteis, o antecedente e o consequente devem ter relação causal ou lógica significativa. Exemplo: Uma proposição válida seria q→p, onde “Eu estudei” implica que “Eu passo na prova”, mas o inverso p→q é tautológico e trivial."
+},
+
+{
+            "numero": 4,
+            "question": "Considere as proposições:\n● p: \"A lógica é uma ciência.\"\n● q: \"A matemática é uma arte.\"\nAnalise a proposição ¬(p∧¬q) e determine se é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧¬q) nega a conjunção p∧¬q. Isto é, a proposição p∧¬q é verdadeira se \"A lógica é uma ciência\" e \"A matemática não é uma arte\". Negando isto, temos \"Não é verdade que a lógica é uma ciência e que a matemática não é uma arte\". A negação de uma conjunção é verdadeira se pelo menos uma das proposições componentes for falsa. Exemplo: Se p é verdadeira e q também for verdadeira, então ¬q é falsa, e consequentemente p∧¬q é falsa, tornando ¬(p∧¬q) verdadeira."
+},
+
+{
+            "numero": 5,
+            "question": "Dadas as proposições:\n● p: \"Todos os alunos estudam.\"\n● q: \"Nenhum aluno é reprovado.\"\nDeterminar se a proposição p→¬q (se p então não q) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→¬q seria lida como \"Se todos os alunos estudam, então algum aluno é reprovado\", o que é uma contradição. Se todos os alunos estudam, esperamos que nenhum aluno seja reprovado. Portanto, a proposição p→¬q é falsa, pois a relação causal lógica é contrária ao esperado.   44 Exemplo: Se realmente \"Todos os alunos estudam\", seria ilógico afirmar que isso implica que algum aluno será reprovado."
+},
+
+{
+            "numero": 6,
+            "question": "Dadas as proposições:\n● p: \"A cidade está em festa.\"\n● q: \"As pessoas estão felizes.\"\nDetermine se a proposição ¬p∨q (não p ou q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição ¬p∨q é verdadeira se pelo menos uma das proposições componentes for verdadeira. Se \"A cidade está em festa\" ( p ) for falsa, então ¬p é verdadeira. Se \"As pessoas estão felizes\" ( q ) for verdadeira, então a proposição inteira ¬p∨q é verdadeira. Exemplo: Se a cidade não está em festa ( ¬p é verdadeira), ou se as pessoas estão felizes ( q é verdadeira), a proposição ¬p∨q é verdadeira."
+},
+
+{
+            "numero": 7,
+            "question": "Considere as proposições:\n● p: \"Se há sol, então está quente.\"\n● q: \"Há sol.\"\nDetermine se a proposição q→p é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→p lê-se \"Se há sol, então se há sol, está quente\", o que é uma proposição condicionalmente verdadeira, pois não há violação da lógica da implicação original p (se há sol, então está quente). Assim, q→p mantém a validade lógica. Exemplo: Se sabemos que \"Há sol\" ( q ) e que \"Se há sol, então está quente\" ( p ), a proposição composta q→p é verdade."
+},
+
+{
+            "numero": 8,
+            "question": "Considere as proposições:\n● p: \"Os números pares são divisíveis por 2.\"\n● q: \"Os números ímpares são divisíveis por 2.\"\nDetermine se a proposição ¬p→¬ é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição ¬p→¬q lê-se \"Se os números pares não são divisíveis por 2, então os números ímpares não são divisíveis por 2\". p é uma tautologia matemática verdadeira, logo ¬p é falsa. Em lógica, uma implicação com antecedente falso é sempre verdadeira, no entanto, aqui a análise é semântica: a proposição não faz sentido lógico ao relacionar p e q, pois ambos são independentes em termos de suas negações.   45 Exemplo: A relação entre a divisibilidade dos números pares e ímpares por 2 é mutuamente exclusiva e não depende logicamente uma da outra."
+},
+
+{
+            "numero": 9,
+            "question": "Considere as proposições:\n● p: \"Maria estuda e João trabalha.\"\n● q: \"Maria estuda.\"\nDetermine se a proposição q→p é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p seria lida como \"Se Maria estuda, então Maria estuda e João trabalha\". Esta implicação não é logicamente válida, pois a afirmação que \"Maria estuda\" não garante necessariamente que \"João trabalha\". Portanto, q→p é falsa. Exemplo: Se sabemos que \"Maria estuda\" ( q ), não podemos inferir diretamente que \"Maria estuda e João trabalha\" ( p )."
+},
+
+{
+            "numero": 10,
+            "question": "Dadas as proposições:\n● p: \"Se eu corro, então eu fico cansado.\"\n● q: \"Eu não corro.\"\nDetermine se a proposição q→¬p é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não corro, então não é verdade que, se eu corro, eu fico cansado\", que pode ser interpretada como uma proposição condicionalmente válida, já que não correr não impacta na implicação dada em p. Portanto, a proposição é verdadeira por padrão, pois q garante que o antecedente de p nunca se realiza. Exemplo: Se \"Eu não corro\" ( q ), então a implicação original p ( \"Se eu corro, então eu fico cansado\" ) nunca é testada, mantendo q→¬p verdadeira."
+},
+
+{
+            "numero": 11,
+            "question": "Considere as proposições:\n● p: \"Todos os pássaros voam.\"\n● q: \"Alguns pássaros não voam.\"\nDetermine se a proposição p∨q é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p∨q seria lida como \"Todos os pássaros voam ou alguns pássaros não voam\". Estas proposições são mutuamente exclusivas; portanto, se uma for verdadeira, a outra deve ser falsa. Portanto, p∨q não pode ser verdadeira ao mesmo tempo, dado que p e q se contradizem diretamente.   46 Exemplo: Se \"Todos os pássaros voam\" ( p ) for verdadeira, então \"Alguns pássaros não voam\" ( q ) deve ser falsa, e vice-versa."
+},
+
+{
+            "numero": 12,
+            "question": "Dadas as proposições:\n● p: \"A água é necessária para a vida.\"\n● q: \"Sem água, a vida não existe.\"\nDetermine se a proposição p↔q é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p↔q lê-se \"A água é necessária para a vida se e somente se sem água, a vida não existe\". Esta é uma proposição bicondicional que é verdadeira se ambos os lados da bicondicional são verdadeiros ou ambos são falsos. Neste contexto, ambas as proposições são logicamente equivalentes, o que torna p↔q verdadeira. Exemplo: A afirmação \"A água é necessária para a vida\" implica que \"Sem água, a vida não existe\", e vice-versa, mantendo a bicondicional verdadeira."
+},
+
+{
+            "numero": 13,
+            "question": "Considere as proposições:\n● p: \"O fogo queima.\"\n● q: \"A água molha.\"\nDetermine se a proposição p→q é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se o fogo queima, então a água molha\". Não há uma relação causal ou lógica direta entre \"O fogo queima\" e \"A água molha\", tornando a implicação sem sentido lógico. Portanto, p→q é falsa devido à falta de relação lógica entre as proposições. Exemplo: A veracidade de \"O fogo queima\" não depende da veracidade de \"A água molha\", e vice-versa."
+},
+
+{
+            "numero": 14,
+            "question": "Dadas as proposições:\n● p: \"Todos os cães são animais.\"\n● q: \"Todos os cães são mamíferos.\"\nDetermine se a proposição p→q é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p→q lê-se \"Se todos os cães são animais, então todos os cães são mamíferos\". Embora p e q sejam verdadeiras independentemente, a implicação mantém-se verdadeira pois não há violação lógica. Todo cão sendo animal não contradiz todos os cães serem mamíferos, o que sustenta a veracidade de p→q.   47 Exemplo: Se \"Todos os cães são animais\" ( p ) é verdadeiro, isto não contradiz \"Todos os cães são mamíferos\" ( q ), mantendo p→q verdadeiro."
+},
+
+{
+            "numero": 15,
+            "question": "Considere as proposições:\n● p: \"Se a lâmpada está ligada, então há eletricidade.\"\n● q: \"A lâmpada está desligada.\"\nDetermine se a proposição q→¬p é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se a lâmpada está desligada, então não é verdade que se a lâmpada está ligada, há eletricidade\". Neste contexto, q implica que a premissa para p não ocorre, mantendo q→¬p verdadeira por padrão, pois a antecedência de p é nunca testada. Exemplo: Se \"A lâmpada está desligada\" ( q ), a implicação original p (\"Se a lâmpada está ligada, então há eletricidade\") não é aplicável, validando q→¬p."
+},
+
+{
+            "numero": 16,
+            "question": "Considere as proposições:\n● p: \"Se Pedro estuda, então ele passa no exame.\"\n● q: \"Pedro não estuda.\"\nDetermine se a proposição q→¬p é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→¬p lê-se \"Se Pedro não estuda, então não é verdade que, se Pedro estuda, ele passa no exame\". Este tipo de implicação é incorreta porque p e q tratam de estados diferentes. A ausência de estudo de Pedro não invalida a proposição p. A implicação correta seria diretamente q→¬(Pedro passa no exame), que logicamente faria sentido. Exemplo: A implicação correta deveria abordar diretamente a relação causal esperada entre as ações e resultados, não negando proposições complexas."
+},
+
+{
+            "numero": 17,
+            "question": "Dadas as proposições:\n● p: \"Todos os peixes nadam.\"\n● q: \"Alguns peixes não nadam.\"\nDetermine se a proposição ¬(p∨q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q) lê-se \"Não é verdade que todos os peixes nadam ou que alguns peixes não nadam\". Aqui, p∨q é contraditório, e negar uma disjunção contraditória resulta numa proposição verdadeira, pois se ambos não podem ser verdade ao mesmo tempo, sua negação é válida.   48 Exemplo: Se \"Todos os peixes nadam\" é falso e \"Alguns peixes não nadam\" também é falso, então ¬(p∨q) é verdadeira."
+},
+
+{
+            "numero": 18,
+            "question": "Considere as proposições:\n● p: \"Se chove, então o chão está molhado.\"\n● q: \"O chão está seco.\"\nDetermine se a proposição q→¬p é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se o chão está seco, então não é verdade que, se chove, o chão está molhado\". Neste contexto, se q é verdadeiro (o chão está seco), então necessariamente p não pode ser verdadeira, mantendo a implicação q→¬p verdadeira. Exemplo: Se sabemos que \"O chão está seco\" ( q ), então não podemos ter \"Se chove, o chão está molhado\" ( p ), validando q→¬p."
+},
+
+{
+            "numero": 19,
+            "question": "Considere as proposições:\n● p: \"Todos os homens são mortais.\"\n● q: \"Sócrates é um homem.\"\nDetermine se a proposição p∧q→ Sócrates é mortal é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p∧q→ Sócrates é mortal é verdadeira, pois combina as proposições \"Todos os homens são mortais\" e \"Sócrates é um homem\" para inferir corretamente que \"Sócrates é mortal\". Esta é uma implicação lógica válida baseada em premissas verdadeiras. Exemplo: Se \"Todos os homens são mortais\" ( p ) e \"Sócrates é um homem\" ( q ), então a conclusão lógica é que \"Sócrates é mortal\"."
+},
+
+{
+            "numero": 20,
+            "question": "Dadas as proposições:\n● p: \"Se há fogo, então há fumaça.\"\n● q: \"Não há fumaça.\"\nDetermine se a proposição q→¬p é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se não há fumaça, então não é verdade que, se há fogo, há fumaça\". Neste contexto, se q (não há fumaça) é verdadeiro, a ausência de fumaça implica a ausência de fogo, validando a implicação q→¬p. Exemplo: Se sabemos que \"Não há fumaça\" ( q ), então \"Se há fogo, há fumaça\" ( p ) não é verdadeiro, mantendo q→¬p.   49"
+},
+
+{
+            "numero": 1,
+            "question": "Considere o argumento:\n● Premissa 1: \"Se chove, então a rua fica molhada.\"\n● Premissa 2: \"A rua está molhada.\"\n● Conclusão: \"Portanto, choveu.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido porque comete a falácia da afirmação do consequente. A partir de \"Se chove, então a rua fica molhada\" (P1) e \"A rua está molhada\" (P2), não podemos concluir logicamente que choveu, pois existem outras causas possíveis para a rua estar molhada, como um caminhão-pipa ou uma pessoa lavando a rua. Exemplo: Para ser um argumento válido, precisaríamos de uma premissa adicional que afirme que a rua só pode ficar molhada se chover."
+},
+
+{
+            "numero": 2,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Todos os filósofos são pensadores.\"\n● Premissa 2: \"Aristóteles é um filósofo.\"\n● Conclusão: \"Portanto, Aristóteles é um pensador.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. A conclusão segue logicamente das premissas. A premissa 1 estabelece uma relação universal entre filósofos e pensadores. Dado que Aristóteles é um filósofo (Premissa 2), ele deve ser um pensador. Exemplo: Este é um exemplo de silogismo categórico, onde a conclusão é deduzida de duas premissas que compartilham um termo comum."
+},
+
+{
+            "numero": 3,
+            "question": "Considere o argumento:\n● Premissa 1: \"Se Maria estuda, então ela passa no exame.\"\n● Premissa 2: \"Maria passou no exame.\"\n● Conclusão: \"Portanto, Maria estudou.\"\n\n 50\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da afirmação do consequente. Da premissa \"Se Maria estuda, então ela passa no exame\" e \"Maria passou no exame\", não podemos concluir que Maria estudou, pois ela poderia ter passado por outros motivos, como sorte ou facilidade do exame. Exemplo: Um argumento válido precisaria da premissa adicional de que Maria só passa no exame se ela estudar."
+},
+
+{
+            "numero": 4,
+            "question": "Analise o seguinte argumento:\n● Premissa 1: \"Todos os gatos são mamíferos.\"\n● Premissa 2: \"Alguns animais são gatos.\"\n● Conclusão: \"Portanto, alguns animais são mamíferos.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. A premissa 1 afirma que todos os gatos são mamíferos, e a premissa 2 afirma que alguns animais são gatos. Portanto, é lógico concluir que alguns animais são mamíferos. Exemplo: Este é outro exemplo de silogismo categórico, onde a conclusão é deduzida diretamente das premissas."
+},
+
+{
+            "numero": 5,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se João está em casa, então a luz está acesa.\"\n● Premissa 2: \"A luz está acesa.\"\n● Conclusão: \"Portanto, João está em casa.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido porque comete a falácia da afirmação do consequente. A premissa 1 estabelece uma condição suficiente, mas não necessária. A luz pode estar acesa por outros motivos além da presença de João. Exemplo: A validade do argumento requer uma premissa que indique que a luz só pode estar acesa se João estiver em casa."
+},
+
+{
+            "numero": 6,
+            "question": "Analise o seguinte argumento:\n● Premissa 1: \"Se o número é par, então ele é divisível por 2.\"\n● Premissa 2: \"O número não é divisível por 2.\"\n● Conclusão: \"Portanto, o número não é par.\"\n\n 51\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se o número é par, então ele é divisível por 2\" é verdadeiro, então \"Se o número não é divisível por 2, então ele não é par\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 7,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Todos os mamíferos têm coração.\"\n● Premissa 2: \"O golfinho é um mamífero.\"\n● Conclusão: \"Portanto, o golfinho tem coração.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. A premissa 1 estabelece uma característica universal dos mamíferos. Dado que o golfinho é um mamífero (Premissa 2), ele deve ter um coração. Exemplo: Este argumento é um exemplo claro de silogismo categórico, onde a conclusão é deduzida diretamente das premissas."
+},
+
+{
+            "numero": 8,
+            "question": "Considere o argumento:\n● Premissa 1: \"Se a planta recebe luz solar, então ela realiza fotossíntese.\"\n● Premissa 2: \"A planta não realiza fotossíntese.\"\n● Conclusão: \"Portanto, a planta não recebe luz solar.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se a planta recebe luz solar, então ela realiza fotossíntese\" é verdadeiro, então \"Se a planta não realiza fotossíntese, então ela não recebe luz solar\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 9,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se hoje é domingo, então o banco está fechado.\"\n● Premissa 2: \"Hoje não é domingo.\"\n● Conclusão: \"Portanto, o banco não está fechado.\"\n\n 52\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido porque comete a falácia da negação do antecedente. Da premissa \"Se hoje é domingo, então o banco está fechado\" e \"Hoje não é domingo\", não podemos concluir que o banco não está fechado, pois ele pode estar fechado por outros motivos. Exemplo: A validade do argumento requer uma premissa que indique que o banco só está fechado se for domingo."
+},
+
+{
+            "numero": 10,
+            "question": "Analise o seguinte argumento:\n● Premissa 1: \"Se Maria é médica, então ela estudou medicina.\"\n● Premissa 2: \"Maria estudou medicina.\"\n● Conclusão: \"Portanto, Maria é médica.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da afirmação do consequente. Da premissa \"Se Maria é médica, então ela estudou medicina\" e \"Maria estudou medicina\", não podemos concluir que Maria é médica, pois ela pode ter estudado medicina e seguido outra carreira. Exemplo: Para um argumento válido, seria necessário afirmar que Maria só pode estudar medicina se ela for médica."
+},
+
+{
+            "numero": 11,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se o céu está nublado, então pode chover.\"\n● Premissa 2: \"O céu não está nublado.\"\n● Conclusão: \"Portanto, não pode chover.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da negação do antecedente. Da premissa \"Se o céu está nublado, então pode chover\" e \"O céu não está nublado\", não podemos concluir que não pode chover, pois a chuva pode ocorrer por outros motivos. Exemplo: Para um argumento válido, seria necessário afirmar que só pode chover se o céu estiver nublado."
+},
+
+{
+            "numero": 12,
+            "question": "Analise o seguinte argumento:\n● Premissa 1: \"Se o carro tem gasolina, então ele pode funcionar.\"\n● Premissa 2: \"O carro não tem gasolina.\"\n\n 53\n● Conclusão: \"Portanto, o carro não pode funcionar.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se o carro tem gasolina, então ele pode funcionar\" é verdadeiro, então \"Se o carro não tem gasolina, então ele não pode funcionar\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 13,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se a lâmpada está queimada, então não há luz.\"\n● Premissa 2: \"Há luz.\"\n● Conclusão: \"Portanto, a lâmpada não está queimada.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se a lâmpada está queimada, então não há luz\" é verdadeiro, então \"Se há luz, então a lâmpada não está queimada\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 14,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se o relógio está quebrado, então ele não funciona.\"\n● Premissa 2: \"O relógio não está quebrado.\"\n● Conclusão: \"Portanto, o relógio funciona.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da negação do antecedente. Da premissa \"Se o relógio está quebrado, então ele não funciona\" e \"O relógio não está quebrado\", não podemos concluir que o relógio funciona, pois ele pode não funcionar por outros motivos. Exemplo: Para um argumento válido, seria necessário afirmar que o relógio só não funciona se estiver quebrado."
+},
+
+{
+            "numero": 15,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Todos os animais de estimação são amados.\"\n\n 54\n● Premissa 2: \"Alguns animais são animais de estimação.\"\n● Conclusão: \"Portanto, alguns animais são amados.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. A premissa 1 estabelece uma relação universal entre animais de estimação e serem amados. Dado que alguns animais são animais de estimação (Premissa 2), é lógico concluir que alguns animais são amados. Exemplo: Este é um exemplo de silogismo categórico, onde a conclusão é deduzida diretamente das premissas."
+},
+
+{
+            "numero": 16,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se o computador está ligado, então ele consome energia.\"\n● Premissa 2: \"O computador está desligado.\"\n● Conclusão: \"Portanto, ele não consome energia.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se o computador está ligado, então ele consome energia\" é verdadeiro, então \"Se o computador está desligado, então ele não consome energia\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 17,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se eu corro, então eu fico cansado.\"\n● Premissa 2: \"Eu não corro.\"\n● Conclusão: \"Portanto, eu não fico cansado.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da negação do antecedente. Da premissa \"Se eu corro, então eu fico cansado\" e \"Eu não corro\", não podemos concluir que eu não fico cansado, pois posso ficar cansado por outros motivos. Exemplo: Para um argumento válido, seria necessário afirmar que eu só fico cansado se eu correr."
+},
+
+{
+            "numero": 18,
+            "question": "Analise o seguinte argumento:\n\n 55\n● Premissa 1: \"Se está nevando, então está frio.\"\n● Premissa 2: \"Não está frio.\"\n● Conclusão: \"Portanto, não está nevando.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Certo",
+            "comment": "O argumento é válido. Este argumento utiliza a contrapositiva da premissa inicial. Se \"Se está nevando, então está frio\" é verdadeiro, então \"Se não está frio, então não está nevando\" também deve ser verdadeiro. Exemplo: A contrapositiva é logicamente equivalente à proposição original, garantindo a validade do argumento."
+},
+
+{
+            "numero": 19,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se eu trabalho, então eu ganho dinheiro.\"\n● Premissa 2: \"Eu ganho dinheiro.\"\n● Conclusão: \"Portanto, eu trabalho.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da afirmação do consequente. Da premissa \"Se eu trabalho, então eu ganho dinheiro\" e \"Eu ganho dinheiro\", não podemos concluir que eu trabalho, pois posso ganhar dinheiro por outros motivos, como investimentos ou doações. Exemplo: Para um argumento válido, seria necessário afirmar que eu só ganho dinheiro se eu trabalhar."
+},
+
+{
+            "numero": 20,
+            "question": "Considere o seguinte argumento:\n● Premissa 1: \"Se a planta é saudável, então ela está verde.\"\n● Premissa 2: \"A planta está verde.\"\n● Conclusão: \"Portanto, a planta é saudável.\"\nDetermine se o argumento é válido ou inválido.",
+            "correct": "Errado",
+            "comment": "O argumento é inválido devido à falácia da afirmação do consequente. Da premissa \"Se a planta é saudável, então ela está verde\" e \"A planta está verde\", não podemos concluir que a planta é saudável, pois ela pode estar verde por outros motivos, como ser artificialmente pintada ou estar verde mas doente. Exemplo: Para um argumento válido, seria necessário afirmar que a planta só está verde se for saudável.   56   57"
+},
+
+{
+            "numero": 1,
+            "question": "Considere as proposições:\n● p: \"O céu está azul.\"\n● q: \"Está calor.\"\nDetermine se a proposição p→q (se p então q) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se o céu está azul, então está calor\". Não há uma relação lógica necessária entre o céu estar azul e estar calor. Portanto, sem uma relação causal ou lógica explícita entre p e q, a proposição é falsa, pois a implicação não pode ser garantida. Exemplo: O céu pode estar azul e ainda assim pode não estar calor, por exemplo, em um dia de inverno."
+},
+
+{
+            "numero": 2,
+            "question": "Considere as proposições:\n● p: \"A Terra é um planeta.\"\n● q: \"A Terra gira em torno do Sol.\"\nDetermine se a proposição p→q (se p então q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p→q lê-se \"Se a Terra é um planeta, então a Terra gira em torno do Sol\". Esta é uma proposição verdadeira porque, segundo o modelo heliocêntrico do sistema solar, um dos critérios que definem a Terra como um planeta é o fato de ela girar em torno do Sol. Exemplo: A definição de um planeta no contexto do sistema solar inclui a Terra girar em torno do Sol, logo a implicação é verdadeira."
+},
+
+{
+            "numero": 3,
+            "question": "Considere as proposições:\n● p: \"Se eu estudo, então passo na prova.\"\n● q: \"Eu não estudo.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não estudo, então não é verdade que se eu estudo, então passo na prova\". Neste contexto, q é verdadeiro, e se p fosse verdadeiro, seria uma contradição, pois a ausência de estudo implicaria na falsidade de p. Exemplo: Se eu não estudo ( q ), não há suporte para afirmar que se eu estudar, passarei na prova ( p ).   58"
+},
+
+{
+            "numero": 4,
+            "question": "Considere as proposições:\n● p: \"Se chove, então a rua fica molhada.\"\n● q: \"Não chove.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→¬p lê-se \"Se não chove, então não é verdade que se chove, então a rua fica molhada\". No entanto, q não implica necessariamente ¬p porque p pode ser verdadeiro independentemente de q. Exemplo: Mesmo que não esteja chovendo ( q ), a proposição \"Se chove, então a rua fica molhada\" ( p ) pode ser verdadeira, portanto q→¬p não se sustenta."
+},
+
+{
+            "numero": 5,
+            "question": "Considere as proposições:\n● p: \"Se Pedro estuda, então ele passa no exame.\"\n● q: \"Pedro passa no exame.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se Pedro passa no exame, então Pedro estuda\". Este argumento é inválido, pois comete a falácia da afirmação do consequente. Pedro pode passar no exame por outros motivos além de estudar. Exemplo: Pedro pode ter passado no exame devido à sorte ou à facilidade do exame, sem necessariamente ter estudado."
+},
+
+{
+            "numero": 6,
+            "question": "Considere as proposições:\n● p: \"A grama está molhada.\"\n● q: \"Choveu ontem.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→p lê-se \"Se choveu ontem, então a grama está molhada\". Este argumento pode ser considerado verdadeiro, assumindo que a chuva de ontem deixou a grama molhada. A causalidade é plausível e lógica neste contexto. Exemplo: Se sabemos que choveu ontem ( q ), é lógico supor que a grama está molhada (p)."
+},
+
+{
+            "numero": 7,
+            "question": "Considere as proposições:\n\n 59\n● p: \"Se eu compro um carro novo, então eu gasto dinheiro.\"\n● q: \"Eu não gasto dinheiro.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não gasto dinheiro, então não é verdade que se eu compro um carro novo, então eu gasto dinheiro\". Neste contexto, se q (não gastar dinheiro) é verdadeiro, isso implica que p (gastar dinheiro ao comprar um carro novo) é falso, validando a implicação. Exemplo: Se não gasto dinheiro ( q ), é impossível ter comprado um carro novo, pois comprar um carro novo implica gasto."
+},
+
+{
+            "numero": 8,
+            "question": "Considere as proposições:\n● p: \"Todos os estudantes estudam.\"\n● q: \"Todos os estudantes passam no exame.\"\nDetermine se a proposição p→q (se p então q) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se todos os estudantes estudam, então todos os estudantes passam no exame\". Esta implicação é falsa, pois estudar não garante necessariamente passar no exame; outros fatores, como a dificuldade do exame e a compreensão do material, podem afetar o resultado. Exemplo: Mesmo que todos os estudantes estudem, alguns ainda podem falhar devido à complexidade do exame."
+},
+
+{
+            "numero": 9,
+            "question": "Considere as proposições:\n● p: \"Se é domingo, então eu vou ao parque.\"\n● q: \"Eu não vou ao parque.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não vou ao parque, então não é verdade que se é domingo, então eu vou ao parque\". Neste contexto, se q (não vou ao parque) é verdadeiro, então p deve ser falso, pois se fosse domingo, eu iria ao parque. Exemplo: Se não vou ao parque ( q ), podemos concluir que não é domingo, dado que eu sempre vou ao parque aos domingos."
+},
+
+{
+            "numero": 10,
+            "question": "Considere as proposições:\n● p: \"Se eu ganho na loteria, então eu compro uma casa nova.\"\n● q: \"Eu não compro uma casa nova.\"\n\n 60\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não compro uma casa nova, então não é verdade que se eu ganho na loteria, então eu compro uma casa nova\". Neste contexto, se q (não compro uma casa nova) é verdadeiro, então p deve ser falso, pois se eu ganhasse na loteria, eu compraria uma casa nova. Exemplo: Se eu não compro uma casa nova ( q ), podemos concluir que eu não ganhei na loteria, dado que eu compraria uma casa nova se ganhasse."
+},
+
+{
+            "numero": 11,
+            "question": "Considere as proposições:\n● p: \"Todos os carros são veículos.\"\n● q: \"Todos os veículos são automóveis.\"\nDetermine se a proposição p→q (se p então q) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se todos os carros são veículos, então todos os veículos são automóveis\". Esta implicação é falsa, pois nem todos os veículos são automóveis; existem veículos como bicicletas e barcos. Exemplo: A veracidade de \"Todos os carros são veículos\" não implica que todos os veículos sejam automóveis."
+},
+
+{
+            "numero": 12,
+            "question": "Considere as proposições:\n● p: \"Se eu acordo cedo, então eu tomo café da manhã.\"\n● q: \"Eu não tomo café da manhã.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não tomo café da manhã, então não é verdade que se eu acordo cedo, então eu tomo café da manhã\". Neste contexto, se q (não tomo café da manhã) é verdadeiro, então p deve ser falso, pois se eu acordasse cedo, eu tomaria café da manhã. Exemplo: Se eu não tomo café da manhã ( q ), podemos concluir que eu não acordei cedo, dado que eu tomo café da manhã quando acordo cedo."
+},
+
+{
+            "numero": 13,
+            "question": "Considere as proposições:\n● p: \"Se o computador está ligado, então ele consome energia.\"\n● q: \"O computador consome energia.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se o computador consome energia, então o computador está ligado\". Este argumento é inválido, pois comete a falácia da   61 afirmação do consequente. O computador pode consumir energia mesmo estando desligado, por exemplo, em modo de espera. Exemplo: O consumo de energia não necessariamente indica que o computador está ligado."
+},
+
+{
+            "numero": 14,
+            "question": "Considere as proposições:\n● p: \"Se eu faço exercícios, então eu fico saudável.\"\n● q: \"Eu não fico saudável.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não fico saudável, então não é verdade que se eu faço exercícios, então eu fico saudável\". Neste contexto, se q (não fico saudável) é verdadeiro, então p deve ser falso, pois se eu fizesse exercícios, eu ficaria saudável. Exemplo: Se eu não fico saudável ( q ), podemos concluir que eu não faço exercícios, dado que fazer exercícios me manteria saudável."
+},
+
+{
+            "numero": 15,
+            "question": "Considere as proposições:\n● p: \"Se eu corro, então eu fico cansado.\"\n● q: \"Eu fico cansado.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se eu fico cansado, então eu corro\". Este argumento é inválido, pois comete a falácia da afirmação do consequente. Eu posso ficar cansado por outros motivos além de correr. Exemplo: Ficar cansado não necessariamente implica que eu tenha corrido."
+},
+
+{
+            "numero": 16,
+            "question": "Considere as proposições:\n● p: \"Se eu compro um carro, então eu tenho um carro.\"\n● q: \"Eu tenho um carro.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se eu tenho um carro, então eu comprei um carro\". Este argumento é inválido, pois comete a falácia da afirmação do consequente. Eu posso ter um carro por outros motivos além de comprá-lo, como ganhá-lo de presente ou alugá-lo. Exemplo: Ter um carro não necessariamente implica que eu o tenha comprado.   62"
+},
+
+{
+            "numero": 17,
+            "question": "Considere as proposições:\n● p: \"Se eu sou aprovado no concurso, então eu estudei muito.\"\n● q: \"Eu não estudei muito.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não estudei muito, então não é verdade que se eu sou aprovado no concurso, então eu estudei muito\". Neste contexto, se q (não estudei muito) é verdadeiro, então p deve ser falso, pois se eu tivesse estudado muito, seria aprovado no concurso. Exemplo: Se eu não estudei muito ( q ), podemos concluir que eu não fui aprovado no concurso, dado que ser aprovado implicaria estudo intenso."
+},
+
+{
+            "numero": 18,
+            "question": "Considere as proposições:\n● p: \"Se eu ganho na loteria, então eu viajo pelo mundo.\"\n● q: \"Eu não viajo pelo mundo.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não viajo pelo mundo, então não é verdade que se eu ganho na loteria, então eu viajo pelo mundo\". Neste contexto, se q (não viajo pelo mundo) é verdadeiro, então p deve ser falso, pois se eu ganhasse na loteria, eu viajaria pelo mundo. Exemplo: Se eu não viajo pelo mundo ( q ), podemos concluir que eu não ganhei na loteria, dado que ganhar na loteria implicaria em viajar."
+},
+
+{
+            "numero": 19,
+            "question": "Considere as proposições:\n● p: \"Se eu sou feliz, então eu sorrio.\"\n● q: \"Eu sorrio.\"\nDetermine se a proposição q→p (se q então p) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se eu sorrio, então eu sou feliz\". Este argumento é inválido, pois comete a falácia da afirmação do consequente. Eu posso sorrir por outros motivos além de ser feliz. Exemplo: Sorrir não necessariamente implica que eu seja feliz; posso sorrir por educação ou em resposta a um estímulo social."
+},
+
+{
+            "numero": 20,
+            "question": "Considere as proposições:\n● p: \"Se é verão, então faz calor.\"\n\n 63\n● q: \"Não faz calor.\"\nDetermine se a proposição q→¬p (se q então não p) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se não faz calor, então não é verdade que se é verão, então faz calor\". Neste contexto, se q (não faz calor) é verdadeiro, então p deve ser falso, pois se fosse verão, estaria fazendo calor. Exemplo: Se não faz calor ( q ), podemos concluir que não é verão, dado que no verão geralmente faz calor. 3.1. PROPOSIÇÕES SIMPLES E COMPOSTAS"
+},
+
+{
+            "numero": 1,
+            "question": "Considere as proposições simples:\n● p: \"A Terra é um planeta.\"\n● q: \"O Sol é uma estrela.\"\nDetermine se a proposição composta p∧q ( p e q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição composta p∧q é verdadeira se ambas as proposições simples p e q forem verdadeiras. Neste caso, p (\"A Terra é um planeta\") é verdadeira, e q (\"O Sol é uma estrela\") também é verdadeira. Portanto, a proposição p∧q é verdadeira. Exemplo: A Terra ser um planeta e o Sol ser uma estrela são fatos cientificamente aceitos."
+},
+
+{
+            "numero": 2,
+            "question": "Considere as proposições simples:\n● p: \"2 + 2 = 4.\"\n● q: \"A Lua é um planeta.\"\nDetermine se a proposição composta p∧q ( p e q) é verdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição composta p∧q é verdadeira se ambas as proposições simples p e q forem verdadeiras. Neste caso, p (\"2 + 2 = 4\") é verdadeira, mas q (\"A Lua é um planeta\") é falsa, pois a Lua é um satélite natural. Portanto, a proposição p∧q é falsa. Exemplo: A verdade matemática de p não compensa a falsidade factual de q."
+},
+
+{
+            "numero": 3,
+            "question": "Considere as proposições simples:\n● p: \"O céu é azul.\"\n\n 64\n● q: \"Está chovendo.\"\nDetermine se a proposição composta p∨q ( p ou q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição composta p∨q é verdadeira se pelo menos uma das proposições simples p ou q for verdadeira. Neste caso, p (\"O céu é azul\") pode ser verdadeira em um dia claro, mesmo que q (\"Está chovendo\") seja falsa. Portanto, a proposição p∨q pode ser verdadeira. Exemplo: Em um dia parcialmente nublado, pode não estar chovendo, mas o céu ainda pode parecer azul em algumas áreas."
+},
+
+{
+            "numero": 4,
+            "question": "Considere as proposições simples:\n● p: \"O fogo é quente.\"\n● q: \"A neve é fria.\"\nDetermine se a proposição composta ¬(p∨q) (não p ou q) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∨q) nega a disjunção de p e q. A disjunção p∨q é verdadeira se pelo menos uma das proposições simples p ou q for verdadeira. Como ambas p (\"O fogo é quente\") e q (\"A neve é fria\") são verdadeiras, p∨q é verdadeira. Portanto, ¬(p∨q) é falsa. Exemplo: Ambas as proposições p e q são fatos comuns e aceitos."
+},
+
+{
+            "numero": 5,
+            "question": "Considere as proposições simples:\n● p: \"Todos os pássaros voam.\"\n● q: \"Pinguins são pássaros.\"\nDetermine se a proposição composta p→q (se p então q) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se todos os pássaros voam, então pinguins são pássaros\". A proposição p é falsa, pois nem todos os pássaros voam (por exemplo, pinguins). Em lógica, uma implicação com antecedente falso é sempre verdadeira, mas a proposição p é falsificável, o que torna a implicação inválida no sentido factual. Exemplo: Um exemplo mais lógico seria \"Se um pássaro voa, então ele é um pássaro que pode voar.\""
+},
+
+{
+            "numero": 6,
+            "question": "Considere as proposições simples:\n● p: \"Se está chovendo, então o chão está molhado.\"\n\n 65\n● q: \"O chão está molhado.\"\nDetermine se a proposição composta q→p (se q então p) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se o chão está molhado, então se está chovendo, o chão está molhado\". Isso é uma falácia da afirmação do consequente. O chão pode estar molhado por outros motivos além da chuva, como a rega de plantas. Portanto, a proposição q→p é falsa. Exemplo: A validade do argumento requer uma premissa adicional que afirme que o chão só pode estar molhado se chover."
+},
+
+{
+            "numero": 7,
+            "question": "Considere as proposições simples:\n● p: \"Os números pares são divisíveis por 2.\"\n● q: \"Os números ímpares não são divisíveis por 2.\"\nDetermine se a proposição composta p∧q ( p e q) é verdadeira ou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição p∧q é verdadeira se ambas as proposições simples p e q forem verdadeiras. Neste caso, p (\"Os números pares são divisíveis por 2\") é verdadeira, e q (\"Os números ímpares não são divisíveis por 2\") também é verdadeira. Portanto, a proposição p∧q é verdadeira. Exemplo: Ambos os enunciados são verdades matemáticas bem conhecidas."
+},
+
+{
+            "numero": 8,
+            "question": "Considere as proposições simples:\n● p: \"Se eu estudo, então eu passo no exame.\"\n● q: \"Eu passo no exame.\"\nDetermine se a proposição composta p↔q ( p se e somente se q) é\nverdadeira ou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição p↔q lê-se \"Eu estudo se e somente se eu passo no exame\". Esta proposição é falsa porque não estabelece uma relação bidirecional lógica. Passar no exame pode ocorrer devido a outros fatores além do estudo, como facilidade do exame ou sorte. Exemplo: Para que p↔q seja verdadeira, seria necessário afirmar que passar no exame é exclusivamente dependente de estudar, o que não é garantido."
+},
+
+{
+            "numero": 9,
+            "question": "Considere as proposições simples:\n● p: \"Se a água ferve, então ela está a 100°C.\"\n● q: \"A água está a 100°C.\"\n\n 66\nDetermine se a proposição composta q→p (se q então p) é verdadeira ou\nfalsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→p lê-se \"Se a água está a 100°C, então se a água ferve, ela está a 100°C\". Neste caso, a relação é lógica e factual, pois a fervura da água a nível do mar ocorre a 100°C. Portanto, a proposição q→p é verdadeira. Exemplo: A relação entre a temperatura de 100°C e a fervura da água é um fato científico bem estabelecido."
+},
+
+{
+            "numero": 10,
+            "question": "Considere as proposições simples:\n● p: \"O céu é azul.\"\n● q: \"A grama é verde.\"\nDetermine se a proposição composta p→q (se p então q) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se o céu é azul, então a grama é verde\". Não há uma relação lógica necessária entre o céu ser azul e a grama ser verde. Portanto, a proposição p→q é falsa, pois a implicação não pode ser garantida. Exemplo: O céu ser azul e a grama ser verde são verdades independentes uma da outra."
+},
+
+{
+            "numero": 11,
+            "question": "Considere as proposições simples:\n● p: \"Se é inverno, então está frio.\"\n● q: \"Não está frio.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se não está frio, então não é verdade que se é inverno, então está frio\". Neste caso, se q (não está frio) é verdadeiro, então p (se é inverno, está frio) é falso. Portanto, a proposição q→¬p é verdadeira. Exemplo: Se não está frio ( q ), podemos concluir que não é inverno, dado que no inverno geralmente faz frio."
+},
+
+{
+            "numero": 12,
+            "question": "Considere as proposições simples:\n● p: \"Se o carro está ligado, então ele consome combustível.\"\n● q: \"O carro não consome combustível.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.\n\n 67",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se o carro não consome combustível, então não é verdade que se o carro está ligado, ele consome combustível\". Neste caso, se q (o carro não consome combustível) é verdadeiro, então p (se o carro está ligado, ele consome combustível) é falso. Portanto, a proposição q→¬p é verdadeira. Exemplo: Se o carro não consome combustível ( q ), podemos concluir que o carro não está ligado, pois carros consomem combustível quando estão ligados."
+},
+
+{
+            "numero": 13,
+            "question": "Considere as proposições simples:\n● p: \"Se João corre, então ele fica cansado.\"\n● q: \"João não corre.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→¬p lê-se \"Se João não corre, então não é verdade que se João corre, então ele fica cansado\". No entanto, q não implica necessariamente ¬p porque p pode ser verdadeiro independentemente de q. Exemplo: Mesmo que João não corra ( q ), a proposição \"Se João corre, então ele fica cansado\" ( p ) pode ser verdadeira, portanto q→¬p não se sustenta."
+},
+
+{
+            "numero": 14,
+            "question": "Considere as proposições simples:\n● p: \"Todos os seres humanos são mortais.\"\n● q: \"Sócrates é um ser humano.\"\nDetermine se a proposição composta p→q (se p então q) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição p→q lê-se \"Se todos os seres humanos são mortais, então Sócrates é um ser humano\". Esta proposição é inválida porque não estabelece uma relação lógica. A mortalidade dos seres humanos não implica que Sócrates é um ser humano. Exemplo: A proposição correta seria \"Se Sócrates é um ser humano, então ele é mortal.\""
+},
+
+{
+            "numero": 15,
+            "question": "Considere as proposições simples:\n● p: \"Se eu como muito, então eu engordo.\"\n● q: \"Eu não engordo.\"\n\n 68\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não engordo, então não é verdade que se eu como muito, então eu engordo\". Neste contexto, se q (não engordo) é verdadeiro, então p deve ser falso, pois se eu comesse muito, eu engordaria. Exemplo: Se eu não engordo ( q ), podemos concluir que eu não como muito, dado que comer muito implicaria engordar."
+},
+
+{
+            "numero": 16,
+            "question": "Considere as proposições simples:\n● p: \"Se eu corro, então eu fico cansado.\"\n● q: \"Eu fico cansado.\"\nDetermine se a proposição composta q→p (se q então p) é verdadeira ou\nfalsa.",
+            "correct": "Errado",
+            "comment": "A proposição q→p lê-se \"Se eu fico cansado, então eu corro\". Este argumento é inválido, pois comete a falácia da afirmação do consequente. Eu posso ficar cansado por outros motivos além de correr. Exemplo: Ficar cansado não necessariamente implica que eu tenha corrido."
+},
+
+{
+            "numero": 17,
+            "question": "Considere as proposições simples:\n● p: \"Se eu trabalho, então eu ganho dinheiro.\"\n● q: \"Eu não ganho dinheiro.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não ganho dinheiro, então não é verdade que se eu trabalho, então eu ganho dinheiro\". Neste contexto, se q (não ganho dinheiro) é verdadeiro, então p deve ser falso, pois se eu trabalhasse, eu ganharia dinheiro. Exemplo: Se eu não ganho dinheiro ( q ), podemos concluir que eu não trabalho, dado que trabalhar implica ganhar dinheiro."
+},
+
+{
+            "numero": 18,
+            "question": "Considere as proposições simples:\n● p: \"Se eu tenho febre, então estou doente.\"\n● q: \"Eu não estou doente.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.\n\n 69",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não estou doente, então não é verdade que se eu tenho febre, então estou doente\". Neste contexto, se q (não estou doente) é verdadeiro, então p deve ser falso, pois se eu tivesse febre, estaria doente. Exemplo: Se eu não estou doente ( q ), podemos concluir que eu não tenho febre, dado que ter febre implica estar doente."
+},
+
+{
+            "numero": 19,
+            "question": "Considere as proposições simples:\n● p: \"Se eu ganho na loteria, então eu compro uma casa.\"\n● q: \"Eu não compro uma casa.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se eu não compro uma casa, então não é verdade que se eu ganho na loteria, então eu compro uma casa\". Neste contexto, se q (não compro uma casa) é verdadeiro, então p deve ser falso, pois se eu ganhasse na loteria, eu compraria uma casa. Exemplo: Se eu não compro uma casa ( q ), podemos concluir que eu não ganhei na loteria, dado que ganhar na loteria implicaria em comprar uma casa."
+},
+
+{
+            "numero": 20,
+            "question": "Considere as proposições simples:\n● p: \"Se é verão, então faz calor.\"\n● q: \"Não faz calor.\"\nDetermine se a proposição composta q→¬p (se q então não p) é verdadeira\nou falsa.",
+            "correct": "Certo",
+            "comment": "A proposição q→¬p lê-se \"Se não faz calor, então não é verdade que se é verão, então faz calor\". Neste contexto, se q (não faz calor) é verdadeiro, então p deve ser falso, pois se fosse verão, estaria fazendo calor. Exemplo: Se não faz calor ( q ), podemos concluir que não é verão, dado que no verão geralmente faz calor. 3.2. TABELAS-VERDADE   70"
+},
+
+{
+            "numero": 1,
+            "question": "Considere as proposições p e q. O valor lógico da proposição p∧¬q se p for\nverdadeira e q for falsa é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p∧¬q é verdadeira se p for verdadeira e ¬q for verdadeira. Dado que p é verdadeira e q é falsa, ¬q é verdadeira. Portanto, p∧¬q é verdadeira. Exemplo: Se p representa \"Está ensolarado\" e q representa \"Está chovendo\", então \"Está ensolarado e não está chovendo\" é verdadeira se \"Está ensolarado\" for verdadeira e \"Está chovendo\" for falsa."
+},
+
+{
+            "numero": 2,
+            "question": "O valor lógico da proposição ¬(p∨q) se p for falsa e q for verdadeira é\nverdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∨q) é verdadeira se p∨q for falsa. Dado que p é falsa e q é verdadeira, p∨q é verdadeira. Portanto, ¬(p∨q) é falsa. Exemplo: Se p representa \"É dia\" e q representa \"É noite\", então \"Não é dia ou é noite\" é verdadeira, mas sua negação \"Não (Não é dia ou é noite)\" é falsa."
+},
+
+{
+            "numero": 3,
+            "question": "O valor lógico da proposição p↔q se p for verdadeira e q for verdadeira é\nverdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p↔q é verdadeira se p e q tiverem o mesmo valor lógico. Dado que p é verdadeira e q é verdadeira, p↔q é verdadeira. Exemplo: Se p representa \"Eu estou em casa\" e q representa \"Eu estou lendo um livro\", então \"Eu estou em casa se e somente se eu estou lendo um livro\" é verdadeira se ambas as proposições forem verdadeiras."
+},
+
+{
+            "numero": 4,
+            "question": "O valor lógico da proposição p→q se p for falsa e q for verdadeira é\nverdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p→q é verdadeira se p for falsa ou q for verdadeira. Dado que p é falsa, p→q é verdadeira independentemente do valor lógico de q. Exemplo: Se p representa \"Se chover\" e q representa \"Então a rua está molhada\", a proposição é verdadeira se não chover, independentemente da rua estar molhada ou não."
+},
+
+{
+            "numero": 5,
+            "question": "O valor lógico da proposição ¬(p∧q) se p for verdadeira e q for verdadeira\né verdadeiro.\n\n 71",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∧q) é verdadeira se p∧q for falsa. Dado que p é verdadeira e q é verdadeira, p∧q é verdadeira. Portanto, ¬(p∧q) é falsa. Exemplo: Se p representa \"Eu estou estudando\" e q representa \"Eu estou em casa\", então \"Eu não estou estudando e não estou em casa\" é falsa se ambas as proposições originais forem verdadeiras."
+},
+
+{
+            "numero": 6,
+            "question": "Considere a tabela-verdade para a proposição p∨q. O valor lógico da\nproposição se p for falsa e q for falsa é verdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição p∨q é verdadeira se pelo menos uma das proposições p ou q for verdadeira. Dado que p é falsa e q é falsa, p∨q é falsa. Exemplo: Se p representa \"Eu estou feliz\" e q representa \"Eu estou saudável\", então \"Eu estou feliz ou eu estou saudável\" é falsa se ambas as proposições forem falsas."
+},
+
+{
+            "numero": 7,
+            "question": "O valor lógico da proposição ¬p∧q se p for verdadeira e q for falsa é\nverdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição ¬p∧q é verdadeira se ¬p for verdadeira e q for verdadeira. Dado que p é verdadeira, ¬p é falsa. Portanto, ¬p∧q é falsa. Exemplo: Se p representa \"Está quente\" e q representa \"Está ensolarado\", então \"Não está quente e está ensolarado\" é falsa se \"Está quente\" for verdadeira e \"Está ensolarado\" for falso. 8 O valor lógico da proposição p→¬q se p for verdadeira e q for falsa é verdadeira. Certo. A proposição p→¬q é verdadeira se p for falsa ou ¬q for verdadeira. Dado que q é falsa, ¬q é verdadeira, tornando p→¬q verdadeira. Exemplo: Se p representa \"Se eu estudo\" e q representa \"Eu passo no exame\", a proposição \"Se eu estudo, então eu não passo no exame\" é verdadeira se \"Eu passo no exame\" for falso."
+},
+
+{
+            "numero": 9,
+            "question": "O valor lógico da proposição ¬(p↔q) se p for falsa e q for verdadeira é\nverdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p↔q) é verdadeira se p↔q for falsa. Dado que p e q têm valores lógicos diferentes, p↔q é falso, tornando ¬(p↔q) verdadeira.   72 Exemplo: Se p representa \"Eu estou dormindo\" e q representa \"Eu estou acordado\", então \"Não é verdade que eu estou dormindo se e somente se eu estou acordado\" é verdadeira, pois dormir e estar acordado são estados mutuamente exclusivos. 10 O valor lógico da proposição ¬p∨¬q se p for verdadeira e q for falsa é verdadeiro. Certo. A proposição ¬p∨¬q é verdadeira se pelo menos uma das proposições ¬p ou ¬q for verdadeira. Dado que p é verdadeira, ¬p é falsa, e dado que q é falsa, ¬q é verdadeira. Portanto, ¬p∨¬q é verdadeira. Exemplo: Se p representa \"Está chovendo\" e q representa \"Está nevando\", então \"Não está chovendo ou não está nevando\" é verdadeira se \"Está chovendo\" for verdadeira e \"Está nevando\" for falsa."
+},
+
+{
+            "numero": 11,
+            "question": "O valor lógico da proposição p∧(q∨¬q) se p for falsa e q for verdadeira é\nverdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição q∨¬ q é uma tautologia e é sempre verdadeira. Portanto, p∧(q∨¬q) depende apenas do valor de p. Dado que p é falsa, p∧(q∨¬q) é falsa. Exemplo: Se p representa \"Estou feliz\" e q representa \"Estou cansado\", então \"Estou feliz e (estou cansado ou não estou cansado)\" é falsa se \"Estou feliz\" for falsa."
+},
+
+{
+            "numero": 12,
+            "question": "Considere a tabela-verdade para a proposição ¬(p∧¬q). O valor lógico da\nproposição se p for verdadeira e q for verdadeira é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p∧¬q é verdadeira se p for verdadeira e ¬q for verdadeira. Dado que q é verdadeira, ¬q é falsa, tornando p∧¬q falsa. Portanto, ¬(p∧¬q) é verdadeira. Exemplo: Se p representa \"Eu estou estudando\" e q representa \"Eu estou em casa\", então \"Eu não estou estudando e não estou em casa\" é falsa se ambas as proposições originais forem verdadeiras, tornando sua negação verdadeira."
+},
+
+{
+            "numero": 13,
+            "question": "O valor lógico da proposição ¬p↔q se p for falsa e q for verdadeira é\nverdadeiro.\n\n 73",
+            "correct": "Errado",
+            "comment": "A proposição ¬p↔q é verdadeira se ¬p e q tiverem o mesmo valor lógico. Dado que p é falsa, ¬p é verdadeira, e dado que q é verdadeira, ¬p↔q é verdadeira. Portanto, a proposição não é errada. Exemplo: Se p representa \"Estou dormindo\" e q representa \"Estou acordado\", então \"Não estou dormindo se e somente se estou acordado\" é verdadeira."
+},
+
+{
+            "numero": 14,
+            "question": "Considere a tabela-verdade para a proposição p∨(q∧r). O valor lógico da\nproposição se p for falsa, q for verdadeira e r for verdadeira é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição q∧r é verdadeira se ambas q e r forem verdadeiras. Dado que q é verdadeira e r é verdadeira, q∧r é verdadeira. Portanto, p∨(q∧r) é verdadeira se p for falsa, pois a disjunção é verdadeira se pelo menos uma das proposições for verdadeira. Exemplo: Se p representa \"Estou feliz\", q representa \"Estou saudável\" e r representa \"Estou forte\", então \"Estou feliz ou (estou saudável e estou forte)\" é verdadeira se \"Estou feliz\" for falsa, mas \"Estou saudável\" e \"Estou forte\" forem verdadeiras."
+},
+
+{
+            "numero": 15,
+            "question": "O valor lógico da proposição (p∧q)∨¬r se p for verdadeira, q for verdadeira\ne r for verdadeira é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p∧q é verdadeira se ambas p e q forem verdadeiras. Dado que p e q são verdadeiras, p∧q é verdadeira. Portanto, (p∧q)∨¬r é verdadeira se pelo menos uma das proposições for verdadeira. Dado que ¬r é falsa (porque r é verdadeira), a disjunção é verdadeira. Exemplo: Se p representa \"Estou estudando\", q representa \"Estou em casa\" e r representa \"Estou com fome\", então \"Estou estudando e estou em casa ou não estou com fome\" é verdadeira se \"Estou estudando\" e \"Estou em casa\" forem verdadeiras, independentemente de \"Estou com fome\"."
+},
+
+{
+            "numero": 16,
+            "question": "Considere a tabela-verdade para a proposição ¬(p∨¬q). O valor lógico da\nproposição se p for verdadeira e q for falsa é verdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição p∨¬q é verdadeira se pelo menos uma das proposições p ou ¬q for verdadeira. Dado que p é verdadeira, p∨¬q é verdadeira. Portanto, ¬(p∨¬q) é falsa.   74 Exemplo: Se p representa \"Estou feliz\" e q representa \"Estou saudável\", então \"Não estou feliz ou não estou saudável\" é falsa se \"Estou feliz\" for verdadeira e \"Estou saudável\" for falso."
+},
+
+{
+            "numero": 17,
+            "question": "Considere a tabela-verdade para a proposição p∨q∨r. O valor lógico da\nproposição se p for falsa, q for falsa e r for verdadeira é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição p∨q∨r é verdadeira se pelo menos uma das proposições p, q ou r for verdadeira. Dado que r é verdadeira, a disjunção é verdadeira. Exemplo: Se p representa \"Estou feliz\", q representa \"Estou saudável\" e r representa \"Estou forte\", então \"Estou feliz ou estou saudável ou estou forte\" é verdadeira se \"Estou forte\" for verdadeira, independentemente das outras proposições."
+},
+
+{
+            "numero": 18,
+            "question": "Considere a tabela-verdade para a proposição ¬p∧(q∨r). O valor lógico da\nproposição se p for verdadeira, q for falsa e r for verdadeira é verdadeiro.",
+            "correct": "Errado",
+            "comment": "A proposição ¬p∧(q∨r) é verdadeira se ¬p for verdadeira e q∨r for verdadeira. Dado que p é verdadeira, ¬p é falsa, tornando a conjunção ¬p∧(q∨r) falsa. Exemplo: Se p representa \"Estou feliz\", q representa \"Estou saudável\" e r representa \"Estou forte\", então \"Não estou feliz e (estou saudável ou estou forte)\" é falsa se \"Estou feliz\" for verdadeira."
+},
+
+{
+            "numero": 19,
+            "question": "Considere a tabela-verdade para a proposição p→(q→r). O valor lógico da\nproposição se p for verdadeira, q for falsa e r for verdadeira é verdadeiro.",
+            "correct": "Certo",
+            "comment": "A proposição q→r é verdadeira se q for falsa ou r for verdadeira. Dado que q é falsa, q→r é verdadeira, tornando p→(q→r) verdadeira, independentemente do valor lógico de p. Exemplo: Se p representa \"Estou estudando\", q representa \"Estou cansado\" e r representa \"Estou descansando\", então \"Se estou estudando, então se estou cansado, estou descansando\" é verdadeira se \"Estou cansado\" for falso."
+},
+
+{
+            "numero": 20,
+            "question": "Considere a tabela-verdade para a proposição (p∧q)→(r∨s). O valor lógico\nda proposição se p for verdadeira, q for verdadeira, r for falsa e s for\nverdadeira é verdadeiro.\n\n 75",
+            "correct": "Certo",
+            "comment": "A proposição r∨s é verdadeira se pelo menos uma das proposições rrr ou sss for verdadeira. Dado que sss é verdadeira, r∨s é verdadeira. Portanto, (p∧q)→(r∨s) é verdadeira independentemente do valor lógico de p∧q. Exemplo: Se p representa \"Estou feliz\", q representa \"Estou saudável\", r representa \"Estou cansado\" e s representa \"Estou descansando\", então \"Estou feliz e estou saudável implica estou cansado ou estou descansando\" é verdadeira se \"Estou descansando\" for verdadeira. 3.3. EQUIVALÊNCIAS"
+},
+
+{
+            "numero": 1,
+            "question": "Considere as proposições p e q. A proposição ¬(p∨q) é logicamente\nequivalente a ¬p∧¬q",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q) é logicamente equivalente a ¬p∧¬q. Isso segue da lei de De Morgan, que afirma que a negação de uma disjunção é a conjunção das negações. Exemplo: Se p representa \"Está chovendo\" e q representa \"Está nevando\", então \"Não está chovendo ou está nevando\" é equivalente a \"Não está chovendo e não está nevando\". 2 A equivalência lógica de ¬(p∧q) é a ¬p∨¬q. Certo. A proposição ¬(p∧q) é logicamente equivalente a ¬p∨¬q. Isso segue da lei de De Morgan, que afirma que a negação de uma conjunção é a disjunção das negações. Exemplo: Se p representa \"Eu estou estudando\" e q representa \"Eu estou em casa\", então \"Não estou estudando e não estou em casa\" é equivalente a \"Não estou estudando ou não estou em casa\"."
+},
+
+{
+            "numero": 3,
+            "question": "A equivalência lógica de p→q é ¬p∨q.",
+            "correct": "Certo",
+            "comment": "A proposição p→q é logicamente equivalente a ¬p∨q. Isso segue da definição de implicação lógica, onde p→q é verdadeiro se p for falso ou q for verdadeiro.   76 Exemplo: Se p representa \"Se eu estudo\" e q representa \"Eu passo no exame\", então \"Se eu estudo, então eu passo no exame\" é equivalente a \"Eu não estudo ou eu passo no exame\"."
+},
+
+{
+            "numero": 4,
+            "question": "A equivalência lógica de ¬(p↔q) é (p∧¬q)∨(¬p∧q).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p↔q) é logicamente equivalente a (p∧¬q)∨(¬p∧q). Isso segue da definição de bicondicional, onde p↔q é verdadeiro se p e q têm o mesmo valor lógico. Exemplo: Se p representa \"Eu estou feliz\" e q representa \"Eu estou saudável\", então \"Não é verdade que estou feliz se e somente se estou saudável\" é equivalente a \"Estou feliz e não estou saudável ou não estou feliz e estou saudável\"."
+},
+
+{
+            "numero": 5,
+            "question": "A equivalência lógica de p↔q é (p→q)∧(q→p).",
+            "correct": "Certo",
+            "comment": "A proposição p↔q é logicamente equivalente a (p→q)∧(q→p). Isso segue da definição de bicondicional, onde p↔q é verdadeiro se p implica q e q implica p. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Eu estudo se e somente se eu passo no exame\" é equivalente a \"Se eu estudo, então eu passo no exame e se eu passo no exame, então eu estudo\"."
+},
+
+{
+            "numero": 6,
+            "question": "Considere a proposição ¬(p∧q)∨(p∧¬q). Existe equivalência direta com as\nLeis de De Morgan?",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∧q)∨(p∧¬q) não tem uma equivalência direta com as leis clássicas de De Morgan ou a implicação lógica direta, e é, portanto, difícil de simplificar diretamente sem uma análise mais profunda. Portanto, não é correto afirmar que há uma equivalência simples com as leis conhecidas. Exemplo: Um exemplo para demonstrar isso seria avaliar todos os possíveis valores de p e q e verificar que não simplifica de maneira conhecida."
+},
+
+{
+            "numero": 7,
+            "question": "A proposição lógica de ¬p∨(p∧q) pode ser simplificada usando leis de De\nMorgan.",
+            "correct": "Errado",
+            "comment": "A proposição ¬p∨(p∧q) não pode ser simplificada diretamente para uma equivalência lógica mais simples usando leis de De Morgan ou definições   77 de implicações e bicondicionais. Portanto, não é correto afirmar uma equivalência lógica direta. Exemplo: A avaliação direta dos valores de verdade mostra que esta proposição não se simplifica de maneira trivial."
+},
+
+{
+            "numero": 8,
+            "question": "A equivalência lógica de p∨(q∧r) é (p∨q)∧(p∨r).",
+            "correct": "Certo",
+            "comment": "A proposição p∨(q∧r) pode ser equivalente a (p∨q)∧(p∨r) pelo uso da distributividade da disjunção sobre a conjunção. Exemplo: Se p representa \"Está chovendo\", q representa \"Está ventando\" e rrr representa \"Está frio\", então \"Está chovendo ou está ventando e está frio\" é equivalente a \"(Está chovendo ou está ventando) e (Está chovendo ou está frio)\"."
+},
+
+{
+            "numero": 9,
+            "question": "Considere a proposição p→(q∨r). A equivalência lógica desta proposição é\n(¬p∨q)∨(¬p∨r).",
+            "correct": "Certo",
+            "comment": "A proposição p→(q∨r) é logicamente equivalente a (¬p∨q)∨(¬p∨r). Isso segue da definição de implicação e da distributividade da disjunção. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu passo no exame\" e rrr representa \"Eu ganho um prêmio\", então \"Se eu estudo, então eu passo no exame ou ganho um prêmio\" é equivalente a \"(Eu não estudo ou eu passo no exame) ou (Eu não estudo ou eu ganho um prêmio)\"."
+},
+
+{
+            "numero": 10,
+            "question": "Considere a proposição (p∧q)→r. A equivalência lógica desta proposição\né ¬(p∧q)∨r.",
+            "correct": "Certo",
+            "comment": "A proposição (p∧q)→r é logicamente equivalente a ¬(p∧q)∨r. Isso segue da definição de implicação. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu durmo cedo\" e rrr representa \"Eu passo no exame\", então \"Se eu estudo e durmo cedo, então eu passo no exame\" é equivalente a \"Eu não estudo ou não durmo cedo ou eu passo no exame\"."
+},
+
+{
+            "numero": 11,
+            "question": "A equivalência lógica de ¬(p→q) é p∧¬q.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p→q) é logicamente equivalente a p∧¬q. Isso segue da definição de implicação, onde p→q é ¬p∨q, e a negação de ¬p∨q é p∧¬q.   78 Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Não é verdade que se eu estudo, eu passo no exame\" é equivalente a \"Eu estudo e eu não passo no exame\"."
+},
+
+{
+            "numero": 12,
+            "question": "A proposição ¬(p∧¬q)∨r\\neg (p \\land \\neg q) \\lor r¬(p∧¬q)∨r pode ser\nsimplificada diretamente para uma equivalência mais simples usando leis de\nDe Morgan.",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∧¬q)∨r\\neg (p \\land \\neg q) \\lor r¬(p∧¬q)∨r não pode ser simplificada diretamente para uma equivalência lógica mais simples usando leis de De Morgan ou definições de implicações e bicondicionais. Portanto, não é correto afirmar uma equivalência lógica direta. Exemplo: A avaliação direta dos valores de verdade mostra que esta proposição não se simplifica de maneira trivial."
+},
+
+{
+            "numero": 13,
+            "question": "Considere a proposição p∧¬(q∨r)p \\land \\neg (q \\lor r)p∧¬(q∨r). A\nequivalência lógica desta proposição é p∧(¬q∧¬r)p \\land (\\neg q \\land \\neg\nr)p∧(¬q∧¬r).",
+            "correct": "Certo",
+            "comment": "A proposição p∧¬(q∨r)p \\land \\neg (q \\lor r)p∧¬(q∨r) é logicamente equivalente a p∧(¬q∧¬r)p \\land (\\neg q \\land \\neg r)p∧(¬q∧¬r). Isso segue da lei de De Morgan. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu durmo cedo\" e rrr representa \"Eu passo no exame\", então \"Eu estudo e não durmo cedo ou passo no exame\" é equivalente a \"Eu estudo e não durmo cedo e não passo no exame\"."
+},
+
+{
+            "numero": 14,
+            "question": "Considere a proposição p→(q∧r)p \\rightarrow (q \\land r)p→(q∧r). A\nequivalência lógica desta proposição é (¬p∨q)∧(¬p∨r)(\\neg p \\lor q) \\land\n(\\neg p \\lor r)(¬p∨q)∧(¬p∨r).",
+            "correct": "Certo",
+            "comment": "A proposição p→(q∧r)p \\rightarrow (q \\land r)p→(q∧r) é logicamente equivalente a (¬p∨q)∧(¬p∨r)(\\neg p \\lor q) \\land (\\neg p \\lor r)(¬p∨q)∧(¬p∨r). Isso segue da definição de implicação e da distributividade da disjunção. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu passo no exame\" e rrr representa \"Eu ganho um prêmio\", então \"Se eu estudo, então eu passo no exame e ganho um prêmio\" é equivalente a \"(Eu não estudo ou eu passo no exame) e (Eu não estudo ou eu ganho um prêmio)\".   79"
+},
+
+{
+            "numero": 15,
+            "question": "A equivalência lógica de p∧(q∨r)p \\land (q \\lor r)p∧(q∨r) pode ser\nsimplificada usando leis de De Morgan.",
+            "correct": "Errado",
+            "comment": "A proposição p∧(q∨r)p \\land (q \\lor r)p∧(q∨r) não pode ser simplificada diretamente para uma equivalência lógica mais simples usando leis de De Morgan ou definições de implicações e bicondicionais. Portanto, não é correto afirmar uma equivalência lógica direta. Exemplo: A avaliação direta dos valores de verdade mostra que esta proposição não se simplifica de maneira trivial."
+},
+
+{
+            "numero": 16,
+            "question": "Considere a proposição (p∨q)∧(p∨¬q). A equivalência lógica desta\nproposição é p∨(q∧¬q).",
+            "correct": "Certo",
+            "comment": "A proposição (p∨q)∧(p∨¬q) é logicamente equivalente a p∨(q∧¬q). Isso segue da distributividade da conjunção e da disjunção. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu durmo cedo\", então \"Eu estudo ou eu durmo cedo e eu estudo ou não durmo cedo\" é equivalente a \"Eu estudo ou (eu durmo cedo e não durmo cedo)\"."
+},
+
+{
+            "numero": 17,
+            "question": "Considere a proposição (p∧q)∨(¬p∧r). A equivalência lógica desta\nproposição é (p∧q).",
+            "correct": "Errado",
+            "comment": "A proposição (p∧q)∨(¬p∧r) não pode ser simplificada diretamente para uma equivalência lógica mais simples usando leis de De Morgan ou definições de implicações e bicondicionais. Portanto, não é correto afirmar uma equivalência lógica direta. Exemplo: A avaliação direta dos valores de verdade mostra que esta proposição não se simplifica de maneira trivial."
+},
+
+{
+            "numero": 18,
+            "question": "Considere a proposição p→(¬q→r). A equivalência lógica desta proposição\né p→(q∨r).",
+            "correct": "Certo",
+            "comment": "A proposição p→(¬q→r) é logicamente equivalente a p→(q∨r). Isso segue da definição de implicação e da dupla negação. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu passo no exame\" e rrr representa \"Eu ganho um prêmio\", então \"Se eu estudo, então se eu não passo no exame, então eu ganho um prêmio\" é equivalente a \"Se eu estudo, então eu passo no exame ou eu ganho um prêmio\".   80"
+},
+
+{
+            "numero": 19,
+            "question": "Considere a proposição ¬(p→q). A equivalência lógica desta proposição é\na p∧¬q",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p→q) é logicamente equivalente a p∧¬q. Isso segue da definição de implicação, onde p→q é ¬p∨q, e a negação de ¬p∨q é p∧¬q. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Não é verdade que se eu estudo, eu passo no exame\" é equivalente a \"Eu estudo e eu não passo no exame\"."
+},
+
+{
+            "numero": 20,
+            "question": "Considere a proposição (p∧q)∨(p∧¬q). A equivalência lógica desta\nproposição é p.",
+            "correct": "Certo",
+            "comment": "A proposição (p∧q)∨(p∧¬q) é logicamente equivalente a p. Isso segue da distributividade da conjunção sobre a disjunção. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Eu estudo e eu passo no exame ou eu estudo e não passo no exame\" é equivalente a \"Eu estudo\". 3.4. LEIS DE MORGAN"
+},
+
+{
+            "numero": 1,
+            "question": "Considere a proposição ¬(p∨q). A equivalência lógica dessa proposição de\nacordo com as Leis de Morgan é ¬p∧¬q.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q) é logicamente equivalente a ¬p∧¬q. Segundo a primeira Lei de Morgan, a negação de uma disjunção é igual à conjunção das negações. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Não é verdade que eu estudo ou passo no exame\" é equivalente a \"Eu não estudo e eu não passo no exame\"."
+},
+
+{
+            "numero": 2,
+            "question": "Considere a proposição ¬(p∧q). A equivalência lógica dessa proposição de\nacordo com as Leis de Morgan é ¬p∨¬q\n\n 81",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧q) é logicamente equivalente a ¬p∨¬q. Segundo a segunda Lei de Morgan, a negação de uma conjunção é igual à disjunção das negações. Exemplo: Se p representa \"Eu estou feliz\" e q representa \"Eu estou saudável\", então \"Não é verdade que estou feliz e estou saudável\" é equivalente a \"Eu não estou feliz ou eu não estou saudável\"."
+},
+
+{
+            "numero": 3,
+            "question": "Considere a proposição ¬(p∨¬q). A equivalência lógica dessa proposição de\nacordo com as Leis de Morgan é ¬p∧q.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨¬q) é logicamente equivalente a ¬p∧q. Segundo a primeira Lei de Morgan, a negação de uma disjunção é igual à conjunção das negações. Exemplo: Se p representa \"Eu estudo\" e q representa \"Eu passo no exame\", então \"Não é verdade que eu estudo ou não passo no exame\" é equivalente a \"Eu não estudo e eu passo no exame\"."
+},
+
+{
+            "numero": 4,
+            "question": "Considere a proposição ¬(p∧¬q). A equivalência lógica dessa proposição de\nacordo com as Leis de Morgan é a ¬p∨q.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧¬q) é logicamente equivalente a ¬p∨q. Segundo a segunda Lei de Morgan, a negação de uma conjunção é igual à disjunção das negações. Exemplo: Se p representa \"Eu estou feliz\" e q representa \"Eu estou saudável\", então \"Não é verdade que estou feliz e não estou saudável\" é equivalente a \"Eu não estou feliz ou eu estou saudável\"."
+},
+
+{
+            "numero": 5,
+            "question": "Considere a proposição ¬(p∨q∨r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬p∧¬q∧¬r.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q∨r) é logicamente equivalente a ¬p∧¬q∧¬r. Segundo a primeira Lei de Morgan, a negação de uma disjunção é igual à conjunção das negações. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu trabalho\" e r representa \"Eu descanso\", então \"Não é verdade que eu estudo, trabalho ou descanso\" é equivalente a \"Eu não estudo, eu não trabalho e eu não descanso\".   82"
+},
+
+{
+            "numero": 6,
+            "question": "Considere a proposição ¬(p∧q∧r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬p∨¬q∨¬r.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧q∧r) é logicamente equivalente a ¬p∨¬q∨¬r. Segundo a segunda Lei de Morgan, a negação de uma conjunção é igual à disjunção das negações. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\" e r representa \"Eu estou descansado\", então \"Não é verdade que estou feliz, saudável e descansado\" é equivalente a \"Eu não estou feliz, ou eu não estou saudável, ou eu não estou descansado\"."
+},
+
+{
+            "numero": 7,
+            "question": "Considere a proposição ¬(p∨(q∧r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬p∧(¬q∨¬r).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨(q∧r) é logicamente equivalente a ¬p∧(¬q∨¬r). Isso segue da aplicação da primeira Lei de Morgan primeiro à disjunção e depois à conjunção dentro dos parênteses. Exemplo: Se p representa \"Eu estudo\", q representa \"Eu trabalho\" e r representa \"Eu descanso\", então \"Não é verdade que eu estudo ou (trabalho e descanso)\" é equivalente a \"Eu não estudo e (eu não trabalho ou eu não descanso)\"."
+},
+
+{
+            "numero": 8,
+            "question": "Considere a proposição ¬((p∨q)∧r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬(p∨q)∨¬r.",
+            "correct": "Certo",
+            "comment": "A proposição ¬((p∨q)∧r) é logicamente equivalente a ¬(p∨q)∨¬r. Isso segue da aplicação da segunda Lei de Morgan à conjunção externa e depois à disjunção interna. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\" e r representa \"Eu estou descansado\", então \"Não é verdade que estou feliz ou saudável e descansado\" é equivalente a \"Não é verdade que estou feliz ou saudável ou eu não estou descansado\"."
+},
+
+{
+            "numero": 9,
+            "question": "Considere a proposição ¬(p∧(q∨r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬p∨(¬q∧¬r).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧(q∨r) é logicamente equivalente a ¬p∨(¬q∧¬r). Isso segue da aplicação da segunda Lei de Morgan à conjunção externa e depois à disjunção interna.   83 Exemplo: Se p representa \"Eu estudo\", q representa \"Eu trabalho\" e r representa \"Eu descanso\", então \"Não é verdade que eu estudo e (trabalho ou descanso)\" é equivalente a \"Eu não estudo ou (eu não trabalho e eu não descanso)\"."
+},
+
+{
+            "numero": 10,
+            "question": "Considere a proposição ¬(p∧q)∨(r∧s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é (r∧s).",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∧q)∨(r∧s) não pode ser simplificada diretamente usando as Leis de Morgan, pois estas leis tratam da negação de conjunções e disjunções, e não há uma estrutura aninhada que permita uma aplicação direta. Exemplo: A proposição não simplifica diretamente com as Leis de Morgan, mas requer uma análise mais aprofundada ou o uso de outras leis de equivalência lógica."
+},
+
+{
+            "numero": 11,
+            "question": "Considere a proposição ¬(p∨q)∧(r∨s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é )∨(r∧s).",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∨q)∧(r∨s) não pode ser simplificada diretamente usando as Leis de Morgan, pois estas leis tratam da negação de conjunções e disjunções, e não há uma estrutura aninhada que permita uma aplicação direta. Exemplo: A proposição não simplifica diretamente com as Leis de Morgan, mas requer uma análise mais aprofundada ou o uso de outras leis de equivalência lógica."
+},
+
+{
+            "numero": 12,
+            "question": "Considere a proposição ¬(p∧q)∧(r∨¬s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é (¬p∨¬q)∧(r∨¬s).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧q)∧(r∨¬s) é logicamente equivalente a (¬p∨¬q)∧(r∨¬s). Isso segue da aplicação da segunda Lei de Morgan à conjunção p∧q. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\" e s representa \"Eu estou tranquilo\", então \"Não é verdade que estou feliz e saudável e (eu estou descansado ou não estou tranquilo)\" é equivalente a \"Eu não estou feliz ou eu não estou saudável e (eu estou descansado ou eu não estou tranquilo)\".   84"
+},
+
+{
+            "numero": 13,
+            "question": "Considere a proposição ¬(p∨q)∧(r∨s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é ¬(p∨q).",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∨q)∧(r∨s) não pode ser simplificada diretamente usando as Leis de Morgan, pois estas leis tratam da negação de conjunções e disjunções, e não há uma estrutura aninhada que permita uma aplicação direta. Exemplo: A proposição não simplifica diretamente com as Leis de Morgan, mas requer uma análise mais aprofundada ou o uso de outras leis de equivalência lógica."
+},
+
+{
+            "numero": 14,
+            "question": "Considere a proposição ¬((p∧q)∨(r∧s). A a equivalência lógica dessa\nproposição de acordo com as Leis de Morga é ¬(p∧q)∧¬(r∧s).",
+            "correct": "Certo",
+            "comment": "A proposição ¬((p∧q)∨(r∧s) é logicamente equivalente a ¬(p∧q)∧¬(r∧s). Isso segue da aplicação da primeira Lei de Morgan à disjunção de duas conjunções. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\" e s representa \"Eu estou tranquilo\", então \"Não é verdade que estou feliz e saudável ou estou descansado e tranquilo\" é equivalente a \"Não é verdade que estou feliz e saudável e não é verdade que estou descansado e tranquilo\"."
+},
+
+{
+            "numero": 15,
+            "question": "Considere a proposição ¬((p∨q)∧(r∨s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é ¬(p∨q)∨¬(r∨s).",
+            "correct": "Certo",
+            "comment": "A proposição ¬((p∨q)∧(r∨s) é logicamente equivalente a ¬(p∨q)∨¬(r∨s). Isso segue da aplicação da segunda Lei de Morgan à conjunção de duas disjunções. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\" e s representa \"Eu estou tranquilo\", então \"Não é verdade que estou feliz ou saudável e estou descansado ou tranquilo\" é equivalente a \"Não é verdade que estou feliz ou saudável ou não é verdade que estou descansado ou tranquilo\".   85"
+},
+
+{
+            "numero": 16,
+            "question": "Considere a proposição ¬(p∧q)∨(r∧s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é ¬(p∧q).",
+            "correct": "Errado",
+            "comment": "A proposição ¬(p∧q)∨(r∧s) não pode ser simplificada diretamente usando as Leis de Morgan, pois estas leis tratam da negação de conjunções e disjunções, e não há uma estrutura aninhada que permita uma aplicação direta. Exemplo: A proposição não simplifica diretamente com as Leis de Morgan, mas requer uma análise mais aprofundada ou o uso de outras leis de equivalência lógica."
+},
+
+{
+            "numero": 17,
+            "question": "Considere a proposição ¬(p∨q)∧(r∧s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é ¬p∧¬q∧r∧s.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q)∧(r∧s) é logicamente equivalente a ¬p∧¬q∧r∧s. Isso segue da aplicação da primeira Lei de Morgan à disjunção p∨q. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\" e s representa \"Eu estou tranquilo\", então \"Não é verdade que estou feliz ou saudável e estou descansado e tranquilo\" é equivalente a \"Eu não estou feliz e eu não estou saudável e estou descansado e tranquilo\"."
+},
+
+{
+            "numero": 18,
+            "question": "Considere a proposição ¬(p∧q)∧(r∨s). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é (¬p∨¬q)∧(r∨s).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∧q)∧(r∨s) é logicamente equivalente a (¬p∨¬q)∧(r∨s). Isso segue da aplicação da segunda Lei de Morgan à conjunção p∧q. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\" e s representa \"Eu estou tranquilo\", então \"Não é verdade que estou feliz e saudável e (eu estou descansado ou eu estou tranquilo)\" é equivalente a \"Eu não estou feliz ou eu não estou saudável e (eu estou descansado ou eu estou tranquilo)\"."
+},
+
+{
+            "numero": 19,
+            "question": "Considere a proposição ¬(p∨(q∧r). A equivalência lógica dessa proposição\nde acordo com as Leis de Morgan é ¬p∧(¬q∨¬r.",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨(q∧r) é logicamente equivalente a ¬p∧(¬q∨¬r). Isso segue da aplicação da primeira Lei de Morgan primeiro à disjunção e depois à conjunção dentro dos parênteses.   86 Exemplo: Se p representa \"Eu estudo\", q representa \"Eu trabalho\" e r representa \"Eu descanso\", então \"Não é verdade que eu estudo ou (trabalho e descanso)\" é equivalente a \"Eu não estudo e (eu não trabalho ou eu não descanso)\"."
+},
+
+{
+            "numero": 20,
+            "question": "Considere a proposição ¬(p∨q∨r)∧(s∨t). A equivalência lógica dessa\nproposição de acordo com as Leis de Morgan é (¬p∧¬q∧¬r)∧(s∨t).",
+            "correct": "Certo",
+            "comment": "A proposição ¬(p∨q∨r)∧(s∨t) é logicamente equivalente a (¬p∧¬q∧¬r)∧(s∨t). Isso segue da aplicação da primeira Lei de Morgan à disjunção p∨q∨r. Exemplo: Se p representa \"Eu estou feliz\", q representa \"Eu estou saudável\", r representa \"Eu estou descansado\", sss representa \"Eu estou tranquilo\" e t representa \"Eu estou satisfeito\", então \"Não é verdade que estou feliz ou saudável ou descansado e (estou tranquilo ou satisfeito)\" é equivalente a \"Eu não estou feliz e eu não estou saudável e eu não estou descansado e (eu estou tranquilo ou eu estou satisfeito)\". 3.5. DIAGRAMAS LÓGICOS"
+},
+
+{
+            "numero": 1,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os B são C. Conclui-se que\ntodos os A são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "No diagrama lógico, se todos os elementos do conjunto A estão contidos no conjunto B, e todos os elementos do conjunto B estão contidos no conjunto C, então todos os elementos do conjunto A também estão contidos no conjunto C. Este é um exemplo clássico de silogismo. Exemplo: Se todos os cães são mamíferos, e todos os mamíferos são animais, então todos os cães são animais."
+},
+
+{
+            "numero": 2,
+            "question": "Em um diagrama lógico, alguns A são B, e alguns B são C. Conclui-se que\nalguns A são C. Esta conclusão está correta?\n\n 87",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque alguns elementos de A são B, e alguns elementos de B são C, não se pode inferir que há necessariamente elementos comuns entre A e C. A relação pode não ser transitiva nesse caso. Exemplo: Se alguns carros são vermelhos, e alguns objetos vermelhos são maçãs, não podemos concluir que alguns carros são maçãs."
+},
+
+{
+            "numero": 3,
+            "question": "Em um diagrama lógico, todos os A são B, e alguns B são C. Conclui-se que\nalguns A são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os elementos do conjunto A estão contidos no conjunto B, e alguns elementos do conjunto B estão contidos no conjunto C, então, pelo menos alguns dos elementos do conjunto A também estarão contidos no conjunto C. Exemplo: Se todos os cães são mamíferos, e alguns mamíferos são animais de estimação, então alguns cães são animais de estimação."
+},
+
+{
+            "numero": 4,
+            "question": "Em um diagrama lógico, nenhum A é B, e todos os B são C. Conclui-se que\nnenhum A é C. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. O fato de nenhum A ser B e todos os B serem C não proporciona informação suficiente para afirmar que nenhum A é C. É possível que alguns A sejam C independentemente de sua relação com B. Exemplo: Se nenhum pássaro é um peixe, e todos os peixes são animais aquáticos, não podemos concluir que nenhum pássaro é um animal aquático, pois há aves que vivem em ambientes aquáticos, como patos."
+},
+
+{
+            "numero": 5,
+            "question": "Em um diagrama lógico, todos os A são B, e nenhum B é C. Conclui-se que\nnenhum A é C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os elementos do conjunto A estão contidos no conjunto B, e nenhum elemento do conjunto B está contido no conjunto C, então nenhum elemento do conjunto A pode estar contido no conjunto C. Exemplo: Se todos os cães são mamíferos, e nenhum mamífero é um peixe, então nenhum cão é um peixe."
+},
+
+{
+            "numero": 6,
+            "question": "Em um diagrama lógico, alguns A são B, e todos os B são C. Conclui-se que\nalguns A são C. Esta conclusão está correta?\n\n 88",
+            "correct": "Certo",
+            "comment": "Se alguns elementos do conjunto A estão contidos no conjunto B, e todos os elementos do conjunto B estão contidos no conjunto C, então, pelo menos alguns dos elementos do conjunto A também estarão contidos no conjunto C. Exemplo: Se alguns animais são cães, e todos os cães são mamíferos, então alguns animais são mamíferos."
+},
+
+{
+            "numero": 7,
+            "question": "Em um diagrama lógico, todos os A são B, e alguns B não são C. Conclui-se\nque alguns A não são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os elementos do conjunto A estão contidos no conjunto B, e alguns elementos do conjunto B não estão contidos no conjunto C, então é possível que alguns elementos do conjunto A também não estejam contidos no conjunto C. Exemplo: Se todos os professores são educadores, e alguns educadores não são professores universitários, então alguns professores não são professores universitários."
+},
+
+{
+            "numero": 8,
+            "question": "Em um diagrama lógico, todos os A são B, e nenhum B é C. Conclui-se que\nnenhum C é A. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os elementos do conjunto A estão contidos no conjunto B, e nenhum elemento do conjunto B está contido no conjunto C, então nenhum elemento do conjunto C pode estar contido no conjunto A. Exemplo: Se todos os cães são mamíferos, e nenhum mamífero é um peixe, então nenhum peixe é um cão."
+},
+
+{
+            "numero": 9,
+            "question": "Em um diagrama lógico, alguns A são B, e nenhum B é C. Conclui-se que\nalguns A não são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se alguns elementos do conjunto A estão contidos no conjunto B, e nenhum elemento do conjunto B está contido no conjunto C, então os elementos de A que são B não podem ser C. Portanto, alguns A não são C. Exemplo: Se alguns animais são cães, e nenhum cão é uma ave, então alguns animais não são aves."
+},
+
+{
+            "numero": 10,
+            "question": "Em um diagrama lógico, alguns A são B, e alguns B não são C. Conclui-se\nque alguns A não são C. Esta conclusão está correta?\n\n 89",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque alguns elementos de A são B, e alguns elementos de B não são C, não se pode inferir que há necessariamente elementos de A que não são C. A relação pode não ser transitiva nesse caso. Exemplo: Se alguns carros são vermelhos, e alguns objetos vermelhos não são maçãs, não podemos concluir que alguns carros não são maçãs, pois a relação entre os conjuntos pode não ser suficiente para fazer essa inferência."
+},
+
+{
+            "numero": 11,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os B são C. Conclui-se\nque todos os C são A. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque todos os A são B e todos os B são C, não podemos inferir que todos os C são A. A relação de inclusão é unidirecional. Exemplo: Se todos os cães são mamíferos, e todos os mamíferos são animais, não podemos concluir que todos os animais são cães."
+},
+
+{
+            "numero": 12,
+            "question": "Em um diagrama lógico, nenhum A é B, e nenhum B é C. Conclui-se que\nnenhum A é C. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque nenhum A é B e nenhum B é C, não se pode inferir que nenhum A é C. A relação de exclusão entre A e B e entre B e C não implica uma exclusão entre A e C. Exemplo: Se nenhum pássaro é um peixe, e nenhum peixe é um mamífero, não podemos concluir que nenhum pássaro é um mamífero."
+},
+
+{
+            "numero": 13,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os C são B. Conclui-se\nque todos os A são C. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque todos os A são B e todos os C são B, não podemos inferir que todos os A são C. Os conjuntos A e C podem ser subconjuntos distintos de B. Exemplo: Se todos os gatos são animais, e todos os cães são animais, não podemos concluir que todos os gatos são cães."
+},
+
+{
+            "numero": 14,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os B são C. Conclui-se\nque todos os C são B. Esta conclusão está correta?\n\n 90",
+            "correct": "Certo",
+            "comment": "A conclusão está correta. Se todos os A são B e todos os B são C, então todos os elementos do conjunto B estão contidos no conjunto C. Portanto, todos os C são B. Exemplo: Se todos os carros são veículos e todos os veículos são máquinas, então todos os carros são máquinas."
+},
+
+{
+            "numero": 15,
+            "question": "Em um diagrama lógico, todos os A são B, e alguns B são C. Conclui-se que\ntodos os A são C. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque todos os A são B e alguns B são C, não podemos inferir que todos os A são C. A relação de inclusão não é completa. Exemplo: Se todos os cães são mamíferos, e alguns mamíferos são animais de estimação, não podemos concluir que todos os cães são animais de estimação."
+},
+
+{
+            "numero": 16,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os B são C. Conclui-se\nque todos os C são B. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Se todos os A são B e todos os B são C, não podemos inferir que todos os C são B. A relação de inclusão é unidirecional. Exemplo: Se todos os cães são mamíferos, e todos os mamíferos são animais, não podemos concluir que todos os animais são mamíferos."
+},
+
+{
+            "numero": 17,
+            "question": "Em um diagrama lógico, todos os A são B, e alguns B não são C. Conclui-se\nque alguns A não são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os A estão contidos em B, e alguns B não estão contidos em C, então esses B que não estão contidos em C podem incluir alguns A, o que significa que alguns A não são C. Exemplo: Se todos os professores são educadores, e alguns educadores não são professores universitários, então alguns professores não são professores universitários."
+},
+
+{
+            "numero": 18,
+            "question": "Em um diagrama lógico, todos os A são B, e nenhum B é C. Conclui-se que\nnenhum A é C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os A estão contidos em B, e nenhum B está contido em C, então nenhum A pode estar contido em C.   91 Exemplo: Se todos os cães são mamíferos, e nenhum mamífero é um peixe, então nenhum cão é um peixe."
+},
+
+{
+            "numero": 19,
+            "question": "Em um diagrama lógico, todos os A são B, e alguns B são C. Conclui-se que\nalguns A são C. Esta conclusão está correta?",
+            "correct": "Certo",
+            "comment": "Se todos os A estão contidos em B, e alguns B estão contidos em C, então alguns A também estarão contidos em C. Exemplo: Se todos os cães são mamíferos, e alguns mamíferos são animais de estimação, então alguns cães são animais de estimação."
+},
+
+{
+            "numero": 20,
+            "question": "Em um diagrama lógico, todos os A são B, e todos os C são B. Conclui-se\nque todos os A são C. Esta conclusão está correta?",
+            "correct": "Errado",
+            "comment": "A conclusão está incorreta. Apenas porque todos os A são B e todos os C são B, não podemos inferir que todos os A são C. Os conjuntos A e C podem ser subconjuntos distintos de B. Exemplo: Se todos os gatos são animais, e todos os cães são animais, não podemos concluir que todos os gatos são cães.   92"
+},
+
+{
+            "numero": 1,
+            "question": "Considere a seguinte sentença na lógica de primeira ordem: ∀x(P(x)→Q(x)).\nSuponha que P(a) é verdadeiro e Q(a) é falso. A sentença ∀x(P(x)→Q(x)) é\nverdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∀x(P(x)→Q(x)) afirma que para todo x, se P(x) é verdadeiro, então Q(x) também deve ser verdadeiro. No entanto, se P(a) é verdadeiro e Q(a) é falso, então P(a)→Q(a) é falso, o que torna a sentença ∀x(P(x)→Q(x)) falsa. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então se houver um pássaro que não pode voar (por exemplo, um pinguim), a sentença ∀x(P(x)→Q(x)) é falsa."
+},
+
+{
+            "numero": 2,
+            "question": "Considere a sentença na lógica de primeira ordem: ∃x(P(x)∧¬Q(x)). Se P(a)\né verdadeiro e Q(a) é falso, a sentença ∃x(P(x)∧¬Q(x)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∃x(P(x)∧¬Q(x)) afirma que existe pelo menos um x tal que P(x) é verdadeiro e Q(x) é falso. Se P(a) é verdadeiro e Q(a) é falso, então existe pelo menos um x (no caso, a) que satisfaz P(x)∧¬Q(x), tornando a sentença verdadeira. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então se há pelo menos um pássaro que não pode voar (por exemplo, um pinguim), a sentença ∃x(P(x)∧¬Q(x)) é verdadeira."
+},
+
+{
+            "numero": 3,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∀x(P(x)→Q(x)) é verdadeira e ¬Q(a) é verdadeira, então ¬P(a) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)→Q(x)) implica que para todo x, se P(x) é verdadeiro, então Q(x) também deve ser verdadeiro. Se ¬Q(a) é verdadeira, então Q(a) é falso. Para que a implicação P(a)→Q(a) seja verdadeira, dado que Q(a) é falso, P(a) deve ser falso, ou seja, ¬P(a) é verdadeira. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", e sabemos que existe um pássaro a que não pode voar, então ¬P(a) deve ser verdadeiro.   93"
+},
+
+{
+            "numero": 4,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∃x(P(x)∧Q(x)) é verdadeira, então ∀x(P(x)→Q(x)) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∃x(P(x)∧Q(x)) afirma que existe pelo menos um x tal que P(x) e Q(x) são verdadeiros. No entanto, isso não implica que para todos os x, se P(x) é verdadeiro, então Q(x) também é verdadeiro. A existência de um exemplo não é suficiente para generalizar para todos os x. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", a existência de um pássaro que pode voar não implica que todos os pássaros podem voar."
+},
+
+{
+            "numero": 5,
+            "question": "Se ∀x(P(x)∧Q(x)) é verdadeira, então ∀xP(x)∧∀xQ(x) também é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)∧Q(x)) afirma que para todo x, P(x) e Q(x) são verdadeiros. Isso implica que para todo x, P(x) é verdadeiro e para todo x, Q(x) é verdadeiro. Portanto, ∀xP(x) e ∀xQ(x) são ambas verdadeiras. Exemplo: Se P(x) representa \"x é um número natural\" e Q(x) representa \"x é maior que 0\", então se para todo número natural x, x é maior que 0, então todos os números naturais são maiores que 0."
+},
+
+{
+            "numero": 6,
+            "question": "Se ∀xP(x)∧∀xQ(x) é verdadeira, então ∀x(P(x)∧Q(x)) também é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀xP(x)∧∀xQ(x) afirma que para todo x, P(x) é verdadeiro e para todo x, Q(x) é verdadeiro. Isso implica que para todo x, P(x) e Q(x) são ambos verdadeiros. Portanto, ∀x(P(x)∧Q(x)) é verdadeira. Exemplo: Se P(x) representa \"x é um número natural\" e Q(x) representa \"x é maior que 0\", então se para todos os números naturais x, x é maior que 0, então todos os números naturais são maiores que 0."
+},
+
+{
+            "numero": 7,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n¬∃x(P(x)∧Q(x)) é verdadeira, então ∀x(P(x)→¬Q(x)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ¬∃x(P(x)∧Q(x)) afirma que não existe nenhum x tal que P(x) e Q(x) sejam ambos verdadeiros. Isso implica que para todo x, se P(x) é verdadeiro, então Q(x) deve ser falso, ou seja, ∀x(P(x)→¬Q(x)) é verdadeira. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x é um mamífero\", então a inexistência de qualquer x que seja simultaneamente um pássaro e um mamífero implica que para todos os pássaros, eles não são mamíferos.   94"
+},
+
+{
+            "numero": 8,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∀x(P(x)∨Q(x)) é verdadeira, então ∀xP(x)∨∀xQ(x) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∀x(P(x)∨Q(x)) afirma que para todo x, P(x) ou Q(x) são verdadeiros. No entanto, isso não implica que P(x) seja verdadeiro para todos os x ou Q(x) seja verdadeiro para todos os x. A disjunção distribuída não se aplica nesse caso. Exemplo: Se P(x) representa \"x é um número par\" e Q(x) representa \"x é um número ímpar\", então para todos os x, x é par ou ímpar, mas não significa que todos os x são pares ou todos os x são ímpares."
+},
+
+{
+            "numero": 9,
+            "question": "Se ∀x(P(x)→Q(x)) é verdadeira, então ∃xP(x)→∃xQ(x) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)→Q(x)) afirma que para todo x, se P(x) é verdadeiro, então Q(x) também é verdadeiro. Isso implica que se existe um x para o qual P(x) é verdadeiro, então existe um x para o qual Q(x) é verdadeiro. Portanto, ∃xP(x)→∃xQ(x) é verdadeira. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então se para todos os pássaros x, x pode voar, então se existe um pássaro, existe um pássaro que pode voar."
+},
+
+{
+            "numero": 10,
+            "question": "Se ∃x(P(x)→Q(x)) é verdadeira, então ∀xP(x)→∃xQ(x) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∃x(P(x)→Q(x)) afirma que existe pelo menos um x tal que P(x)→Q(x) é verdadeiro. No entanto, isso não implica que para todos os x, P(x) seja verdadeiro implica que existe um x para o qual Q(x) é verdadeiro. A implicação distribuída não se aplica nesse caso. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então a existência de pelo menos um pássaro que pode voar não implica que para todos os pássaros, a existência de um pássaro que pode voar."
+},
+
+{
+            "numero": 11,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∀x(P(x)∧Q(x)) é verdadeira, então ∃xP(x)∧∃xQ(x) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)∧Q(x)) afirma que para todo x, P(x) e Q(x) são verdadeiros. Isso implica que existe pelo menos um x tal que P(x) é verdadeiro e existe pelo menos um x tal que Q(x) é verdadeiro. Portanto, ∃xP(x)∧∃xQ(x) é verdadeira.   95 Exemplo: Se P(x) representa \"x é um número natural\" e Q(x) representa \"x é maior que 0\", então se para todo número natural x, x é maior que 0, então existe pelo menos um número natural que é maior que 0."
+},
+
+{
+            "numero": 12,
+            "question": "Se ∃x(P(x)∧Q(x)) é verdadeira, então ∃xP(x)∧∃xQ(x) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∃x(P(x)∧Q(x)) afirma que existe pelo menos um x tal que P(x) e Q(x) são verdadeiros simultaneamente. No entanto, isso não implica que existe um x tal que P(x) é verdadeiro e, separadamente, existe um x tal que Q(x) é verdadeiro. Pode ser que o mesmo x satisfaça ambos os predicados. Exemplo: Se P(x) representa \"x é um estudante\" e Q(x) representa \"x é um atleta\", a existência de pelo menos um estudante-atleta não implica que existam estudantes e, separadamente, atletas."
+},
+
+{
+            "numero": 13,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∃x(P(x)∨Q(x)) é verdadeira, então ∃xP(x)∨∃xQ(x) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∃x(P(x)∨Q(x)) afirma que existe pelo menos um x tal que P(x) ou Q(x) é verdadeiro. Isso implica que existe pelo menos um x tal que P(x) é verdadeiro ou existe pelo menos um x tal que Q(x) é verdadeiro. Portanto, ∃xP(x)∨∃xQ(x) é verdadeira. Exemplo: Se P(x) representa \"x é um estudante\" e Q(x) representa \"x é um atleta\", a existência de pelo menos um estudante ou atleta implica que existe pelo menos um estudante ou existe pelo menos um atleta."
+},
+
+{
+            "numero": 14,
+            "question": "Se ∀x(P(x)∨Q(x)) é verdadeira, então ∀xP(x)∨∀xQ(x) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∀x(P(x)∨Q(x)) afirma que para todo x, P(x) ou Q(x) é verdadeiro. No entanto, isso não implica que P(x) seja verdadeiro para todos os x ou Q(x) seja verdadeiro para todos os x. A disjunção distribuída não se aplica nesse caso. Exemplo: Se P(x) representa \"x é um número par\" e Q(x) representa \"x é um número ímpar\", então para todos os x, x é par ou ímpar, mas não significa que todos os x são pares ou todos os x são ímpares.   96"
+},
+
+{
+            "numero": 15,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n¬∃x(P(x)∨Q(x)) é verdadeira, então ∀x(¬P(x)∧¬Q(x)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ¬∃x(P(x)∨Q(x)) afirma que não existe nenhum x tal que P(x) ou Q(x) sejam verdadeiros. Isso implica que para todo x, P(x) e Q(x) são falsos, ou seja, ∀x(¬P(x)∧¬Q(x)) é verdadeira. Exemplo: Se P(x) representa \"x é um estudante\" e Q(x) representa \"x é um atleta\", a inexistência de qualquer x que seja estudante ou atleta implica que para todos os x, eles não são estudantes e não são atletas."
+},
+
+{
+            "numero": 16,
+            "question": "Se ∀x(P(x)→Q(x)) é verdadeira, então ¬∃x(P(x)∧¬Q(x)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)→Q(x)) afirma que para todo x, se P(x) é verdadeiro, então Q(x) também é verdadeiro. Isso implica que não existe nenhum x tal que P(x) seja verdadeiro e Q(x) seja falso, ou seja, ¬∃x(P(x)∧¬Q(x)) é verdadeira. Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então se para todos os pássaros x, x pode voar, então não existe um pássaro que não pode voar."
+},
+
+{
+            "numero": 17,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∀x(P(x)∧Q(x)) é verdadeira, então ∃x(P(x)∧∃yQ(y)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)∧Q(x)) afirma que para todo x, P(x) e Q(x) são verdadeiros. Isso implica que existe pelo menos um x tal que P(x) é verdadeiro e existe pelo menos um y tal que Q(y) é verdadeiro. Portanto, ∃x(P(x)∧∃yQ(y)) é verdadeira. Exemplo: Se P(x) representa \"x é um número natural\" e Q(x) representa \"x é maior que 0\", então se para todos os números naturais x, x é maior que 0, então existe pelo menos um número natural que é maior que 0."
+},
+
+{
+            "numero": 18,
+            "question": "Se ∃x(P(x)→Q(x)) é verdadeira, então ∀xP(x)→∃xQ(x) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∃x(P(x)→Q(x)) afirma que existe pelo menos um x tal que P(x)→Q(x) é verdadeiro. No entanto, isso não implica que para todos os x, P(x) seja verdadeiro implica que existe um x para o qual Q(x) é verdadeiro. A implicação distribuída não se aplica nesse caso.   97 Exemplo: Se P(x) representa \"x é um pássaro\" e Q(x) representa \"x pode voar\", então a existência de pelo menos um pássaro que pode voar não implica que para todos os pássaros, a existência de um pássaro que pode voar."
+},
+
+{
+            "numero": 19,
+            "question": "Se ∀x(P(x)→Q(x)) é verdadeira, então ∃x(P(x)→∃yQ(y)) é verdadeira?",
+            "correct": "Certo",
+            "comment": "A sentença ∀x(P(x)→Q(x)) afirma que para todo x, se P(x) é verdadeiro, então Q(x) também é verdadeiro. Isso implica que existe pelo menos um x tal que P(x)→Q(x) é verdadeiro, e assim, ∃x(P(x)→∃yQ(y)) é verdadeira. Exemplo: Se P(x) representa \"x é um estudante\" e Q(x) representa \"x estuda\", então se para todos os estudantes x, x estuda, então existe pelo menos um estudante que estuda."
+},
+
+{
+            "numero": 20,
+            "question": "Suponha que P(x) e Q(x) são predicados na lógica de primeira ordem. Se\n∃x(P(x)∧¬Q(x)) é verdadeira, então ∀x(P(x)→¬Q(x)) é verdadeira?",
+            "correct": "Errado",
+            "comment": "A sentença ∃x(P(x)∧¬Q(x)) afirma que existe pelo menos um x tal que P(x) é verdadeiro e Q(x) é falso. No entanto, isso não implica que para todos os x, se P(x) é verdadeiro, então Q(x) é falso. A existência de um contraexemplo não implica uma generalização universal. Exemplo: Se P(x) representa \"x é um estudante\" e Q(x) representa \"x estuda\", a existência de pelo menos um estudante que não estuda não implica que todos os estudantes não estudam.   98"
+},
+
+{
+            "numero": 1,
+            "question": "Quantas diferentes sequências de 5 cartas podem ser formadas a partir de\num baralho padrão de 52 cartas?",
+            "correct": "Certo",
+            "comment": "Para calcular o número de diferentes sequências de 5 cartas a partir de um baralho padrão de 52 cartas, usamos o princípio da contagem, onde a ordem das cartas importa. O cálculo é feito através da permutação: Exemplo: A primeira carta pode ser qualquer uma das 52, a segunda qualquer uma das 51 restantes, e assim por diante."
+},
+
+{
+            "numero": 2,
+            "question": "Em uma sala com 10 pessoas, de quantas maneiras diferentes podemos\nescolher um comitê de 4 pessoas?",
+            "correct": "Certo",
+            "comment": "Para calcular o número de maneiras diferentes de escolher um comitê de 4 pessoas a partir de um grupo de 10, usamos combinações, pois a ordem não importa: Exemplo: A escolha de pessoas para um comitê não depende da ordem em que são selecionadas."
+},
+
+{
+            "numero": 3,
+            "question": "A probabilidade de obter exatamente 3 caras ao lançar uma moeda justa 5\nvezes é dada por",
+            "correct": "Certo",
+            "comment": "A probabilidade de obter exatamente 3 caras em 5 lançamentos de uma moeda é calculada usando o binômio: Exemplo: Cada sequência de 5 lançamentos tem probabilidade igual de ocorrer, e existem (5/3) maneiras de escolher 3 caras em 5 lançamentos.   99"
+},
+
+{
+            "numero": 4,
+            "question": "Quantos números de 4 dígitos podem ser formados usando os dígitos de 0\na 9, sem repetição?",
+            "correct": "Certo",
+            "comment": "Para formar números de 4 dígitos sem repetição, a primeira posição pode ter qualquer um dos 9 dígitos (1 a 9), a segunda qualquer um dos 9 restantes (0 a 9, exceto o primeiro), e assim por diante: 9 X 9 X 8 X 7 = 4536. Exemplo: O número 1234 é uma das possíveis combinações."
+},
+
+{
+            "numero": 5,
+            "question": "Em uma urna com 5 bolas vermelhas e 3 bolas azuis, a probabilidade de se\nretirar uma bola vermelha é 5/8.",
+            "correct": "Certo",
+            "comment": "A probabilidade de retirar uma bola vermelha de uma urna com 5 bolas vermelhas e 3 bolas azuis é dada pela razão entre o número de bolas vermelhas e o total de bolas: Exemplo: Se retirarmos uma bola aleatoriamente, a chance de ela ser vermelha é 5 em 8."
+},
+
+{
+            "numero": 6,
+            "question": "A probabilidade de obter um número par ao lançar um dado justo é ½.",
+            "correct": "Certo",
+            "comment": "Um dado justo tem 6 faces numeradas de 1 a 6. Os números pares são 2, 4 e 6, portanto, há 3 números pares: Exemplo: Lançando um dado justo, metade das vezes obteremos um número par."
+},
+
+{
+            "numero": 7,
+            "question": "Se duas cartas são retiradas sem reposição de um baralho de 52 cartas, a\nprobabilidade de ambas serem ases é (1/13).",
+            "correct": "Errado",
+            "comment": "A probabilidade de a primeira carta ser um ás é 4/52 = 1/13. Se a primeira carta é um ás, a probabilidade de a segunda carta também ser um ás é 3/51. Portanto, a probabilidade de ambas as cartas serem ases é: Exemplo: Retirando duas cartas consecutivas, a probabilidade de ambas serem ases não é o produto direto das probabilidades de serem ases em cada retirada, pois as retiradas são dependentes.   100"
+},
+
+{
+            "numero": 8,
+            "question": "Quantos anagramas distintos podem ser formados com a palavra\n\"PROBABILIDADE\"?",
+            "correct": "Certo",
+            "comment": "A palavra \"PROBABILIDADE\" tem 13 letras, com repetições de algumas letras. O número de anagramas distintos é dado por: Exemplo: Considerando as repetições das letras B, I e D."
+},
+
+{
+            "numero": 9,
+            "question": "A probabilidade de obter ao menos uma cara ao lançar duas moedas justas\né ¾.",
+            "correct": "Certo",
+            "comment": "Existem 4 possíveis resultados ao lançar duas moedas: CC, CC, CC e CC. Apenas 1 desses resultados não contém cara (CC). Portanto, a probabilidade de obter pelo menos uma cara é: Exemplo: Os eventos com pelo menos uma cara são CC, CC e CC."
+},
+
+{
+            "numero": 10,
+            "question": "Em uma classe de 30 alunos, a probabilidade de que pelo menos dois\nalunos compartilhem o mesmo aniversário é maior que 50%.",
+            "correct": "Certo",
+            "comment": "Este é um clássico problema da probabilidade do aniversário. A probabilidade de pelo menos duas pessoas compartilharem o mesmo aniversário em um grupo de 30 pessoas é maior que 50%. Esse resultado é contra-intuitivo, mas pode ser demonstrado matematicamente. Exemplo: Calculando a probabilidade complementar de que todos os aniversários sejam diferentes e subtraindo de 1."
+},
+
+{
+            "numero": 11,
+            "question": "Em um concurso com 5 perguntas, cada uma com 4 alternativas, a\nprobabilidade de acertar todas as perguntas ao acaso é",
+            "correct": "Certo",
+            "comment": "Se cada pergunta tem 4 alternativas e apenas uma é correta, a probabilidade de acertar uma pergunta ao acaso é ¼. A probabilidade de acertar todas as 5 perguntas é: Exemplo: Escolhendo uma resposta ao acaso para cada pergunta.   101"
+},
+
+{
+            "numero": 12,
+            "question": "Quantos números de 4 dígitos podem ser formados usando os dígitos de\n0 a 9, com repetição?",
+            "correct": "Certo",
+            "comment": "Para formar números de 4 dígitos com repetição, cada posição pode ser ocupada por qualquer um dos 10 dígitos. Portanto, o número total de números de 4 dígitos é: Exemplo: Incluindo números como 0001, 1234 e 9999."
+},
+
+{
+            "numero": 13,
+            "question": "A probabilidade de tirar uma bola vermelha de uma urna contendo 4 bolas\nvermelhas e 6 bolas azuis é 4/10.",
+            "correct": "Certo",
+            "comment": "A probabilidade de tirar uma bola vermelha é a razão entre o número de bolas vermelhas e o total de bolas na urna: Exemplo: Se houver 4 bolas vermelhas e 6 bolas azuis, a chance de retirar uma vermelha é de 40%."
+},
+
+{
+            "numero": 14,
+            "question": "Em um baralho padrão de 52 cartas, a probabilidade de tirar uma carta de\nespadas ou um rei é 17/52.",
+            "correct": "Errado",
+            "comment": "A probabilidade de tirar uma carta de espadas é 13/52, e a probabilidade de tirar um rei é 4/52. No entanto, há uma carta que é tanto de espadas quanto um rei (rei de espadas), que foi contada duas vezes. Portanto, a probabilidade correta é: Exemplo: Contando adequadamente as cartas."
+},
+
+{
+            "numero": 15,
+            "question": "A probabilidade de tirar uma bola azul de uma urna contendo 5 bolas\nvermelhas e 5 bolas azuis é ½.",
+            "correct": "Certo",
+            "comment": "A probabilidade de tirar uma bola azul é a razão entre o número de bolas azuis e o total de bolas na urna: Exemplo: Se houver 5 bolas vermelhas e 5 bolas azuis, a chance de retirar uma azul é de 50%.   102"
+},
+
+{
+            "numero": 16,
+            "question": "Se uma senha consiste em 3 letras (A-Z) seguidas por 3 dígitos (0-9), o\nnúmero total de senhas possíveis é",
+            "correct": "Certo",
+            "comment": "O número total de senhas possíveis é dado pela combinação de letras e dígitos. Existem 26 possíveis letras para cada uma das 3 posições, e 10 possíveis dígitos para cada uma das 3 posições: Exemplo: Considerando todas as combinações possíveis de letras e dígitos."
+},
+
+{
+            "numero": 17,
+            "question": "A probabilidade de tirar duas cartas consecutivas de naipes diferentes de\num baralho padrão de 52 cartas é 36/51.",
+            "correct": "Errado",
+            "comment": "Para calcular essa probabilidade, devemos considerar a distribuição dos naipes. A probabilidade de a segunda carta ser de um naipe diferente da primeira depende do naipe da primeira carta. A análise detalhada de todas as possibilidades é complexa, e a probabilidade exata não é 36/51. Exemplo: Deve-se considerar todas as combinações possíveis para naipes diferentes."
+},
+
+{
+            "numero": 18,
+            "question": "Se uma moeda justa é lançada 3 vezes, a probabilidade de obter\nexatamente 2 caras é",
+            "correct": "Certo",
+            "comment": "A probabilidade de obter exatamente 2 caras em 3 lançamentos de uma moeda é calculada usando o binômio: Exemplo: Cada sequência de 3 lançamentos tem probabilidade igual de ocorrer, e existem (3/2) maneiras de escolher 2 caras em 3 lançamentos."
+},
+
+{
+            "numero": 19,
+            "question": "Quantas maneiras diferentes existem para organizar 6 livros em uma\nprateleira?",
+            "correct": "Certo",
+            "comment": "O número de maneiras diferentes de organizar 6 livros em uma prateleira é dado pela permutação de 6 elementos: 6! = 720. Exemplo: Considerando todas as possíveis disposições dos livros."
+},
+
+{
+            "numero": 20,
+            "question": "Em uma urna com 4 bolas vermelhas, 3 bolas azuis e 2 bolas verdes, a\nprobabilidade de tirar uma bola verde é 2/9.\n\n 103",
+            "correct": "Errado",
+            "comment": "A probabilidade de tirar uma bola verde é a razão entre o número de bolas verdes e o total de bolas na urna: Exemplo: Se houver 4 bolas vermelhas, 3 bolas azuis e 2 bolas verdes, a chance de retirar uma verde é de 2/9."
+},
+
+{
+            "numero": 5,
+            "question": "A mediana dos números 3, 7, 9, 5 e 1 é 7.",
+            "correct": "Errado",
+            "comment": "A mediana de um conjunto de números é o valor do meio quando os números são organizados em ordem crescente. Para 1, 3, 5, 7 e 9, a mediana é 5, pois é o terceiro número na sequência ordenada. Exemplo: A mediana dos números 2, 4, 6, 8 e 10 é 6."
+},
+
+{
+            "numero": 6,
+            "question": "A soma dos ângulos internos de um triângulo é sempre 180 graus.",
+            "correct": "Certo",
+            "comment": "Em qualquer triângulo, a soma dos ângulos internos é sempre 180 graus. Este é um fato fundamental da geometria euclidiana. Exemplo: Em um triângulo com ângulos de 60, 60 e 60 graus, a soma é 180 graus."
+},
+
+{
+            "numero": 7,
+            "question": "Em um triângulo retângulo, a soma dos quadrados dos catetos é igual ao\nquadrado da hipotenusa (Teorema de Pitágoras).",
+            "correct": "Certo",
+            "comment": "O Teorema de Pitágoras afirma que, em um triângulo retângulo com catetos a e b e hipotenusa c, a relação sempre vale. Exemplo: Em um triângulo retângulo com catetos de 3 e 4 unidades, a hipotenusa é 5 unidades ."
+},
+
+{
+            "numero": 8,
+            "question": "A soma dos ângulos externos de qualquer polígono é sempre 360 graus.",
+            "correct": "Certo",
+            "comment": "A soma dos ângulos externos de qualquer polígono, independentemente do número de lados, é sempre 360 graus. Exemplo: Em um pentágono, cada ângulo externo é suplementar ao ângulo interno, e a soma dos ângulos externos é 360 graus.   111   112   113"
+}
+
+         
+          
+        ];
+        
+      // Função de busca corrigida
+        function setupSearch() {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.trim().toLowerCase();
+                
+                if (searchTerm.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                const results = allQuestions.filter(q => {
+                    return q.question.toLowerCase().includes(searchTerm) || 
+                           q.numero.toString().includes(searchTerm);
+                }).slice(0, 10);
+                
+                displaySearchResults(results);
+            });
+
+            // Fechar resultados ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        // Exibir resultados da busca
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (!results || results.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'search-item';
+                noResults.textContent = 'Nenhuma questão encontrada';
+                searchResults.appendChild(noResults);
+            } else {
+                results.forEach(q => {
+                    const item = document.createElement('div');
+                    item.className = 'search-item';
+                    item.innerHTML = `<strong>#${q.numero}</strong>: ${q.question.substring(0, 70)}${q.question.length > 70 ? '...' : ''}`;
+                    item.addEventListener('click', () => {
+                        goToQuestion(q.numero - 1);
+                        searchResults.style.display = 'none';
+                    });
+                    searchResults.appendChild(item);
+                });
+            }
+            
+            searchResults.style.display = results.length ? 'block' : 'none';
+        }
+
+        // Ir para questão específica
+        function goToQuestion(index) {
+            if (index >= 0 && index < allQuestions.length) {
+                currentQuestionIndex = index;
+                displayQuestion();
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+            }
+        }
+        
+        // Inicialização
+        function init() {
+            createParticles();
+            loadQuestions();
+            loadProgress();
+            setupSearch();
+            displayQuestion();
+        }
+        
+        // Carregar questões
+        function loadQuestions() {
+            allQuestions = questions;
+            
+            // Preencher com questões fictícias se necessário
+            for (let i = questions.length + 1; i <= TOTAL_QUESTIONS; i++) {
+                allQuestions.push({
+                    "numero": i,
+                    "question": `Questão ${i}: Exemplo de pergunta sobre conceitos avançados de TI.`,
+                    "correct": i % 2 === 0 ? "Certo" : "Errado",
+                    "comment": `Explicação detalhada para a questão ${i}.`
+                });
+            }
+        }
+        
+        // Criar partículas flutuantes
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Carregar progresso salvo
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('quizProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                currentQuestionIndex = progress.currentQuestionIndex || 0;
+                correctCount = progress.correctCount || 0;
+                wrongCount = progress.wrongCount || 0;
+                currentRankIndex = progress.currentRankIndex || 0;
+                answeredQuestions = progress.answeredQuestions || [];
+                quizCompleted = progress.quizCompleted || false;
+                
+                correctDisplay.textContent = correctCount;
+                wrongDisplay.textContent = wrongCount;
+                
+                updateRank();
+                
+                if (quizCompleted) {
+                    showCompletionMessage();
+                }
+            }
+        }
+        
+        // Salvar progresso
+        function saveProgress() {
+            const progress = {
+                currentQuestionIndex,
+                correctCount,
+                wrongCount,
+                currentRankIndex,
+                answeredQuestions,
+                quizCompleted
+            };
+            localStorage.setItem('quizProgress', JSON.stringify(progress));
+        }
+        
+        // Resetar progresso
+        function resetProgress() {
+            localStorage.removeItem('quizProgress');
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            currentRankIndex = 0;
+            answeredQuestions = [];
+            quizCompleted = false;
+            
+            correctDisplay.textContent = '0';
+            wrongDisplay.textContent = '0';
+            
+            updateRank();
+            displayQuestion();
+        }
+        
+        // Atualizar rank do jogador
+        function updateRank() {
+            let newRankIndex = 0;
+            
+            // Determinar o rank atual baseado nos acertos
+            for (let i = RANKS.length - 1; i >= 0; i--) {
+                if (correctCount >= RANKS[i].minCorrect) {
+                    newRankIndex = i;
+                    break;
+                }
+            }
+            
+            // Verificar se houve promoção
+            if (newRankIndex > currentRankIndex) {
+                currentRankIndex = newRankIndex;
+                showRankUp();
+            }
+            
+            // Atualizar display do rank
+            const currentRank = RANKS[currentRankIndex];
+            const nextRank = currentRankIndex < RANKS.length - 1 ? RANKS[currentRankIndex + 1] : null;
+            
+            rankDisplay.textContent = currentRank.name;
+            currentRankDisplay.textContent = currentRank.name;
+            currentRankDisplay.style.color = currentRank.color;
+            
+            // Atualizar cor do rank box
+            rankBox.style.setProperty('--current-rank-color', currentRank.color);
+            rankBox.style.background = `linear-gradient(135deg, ${currentRank.color}, rgba(0, 0, 0, 0.5))`;
+            rankBox.style.borderColor = currentRank.color;
+            rankBox.style.boxShadow = `0 0 15px ${currentRank.color}`;
+            
+            // Atualizar ícone
+            rankIcon.className = `fas ${currentRank.icon}`;
+            
+            // Atualizar progresso para o próximo rank
+            if (nextRank) {
+                const progress = correctCount - currentRank.minCorrect;
+                const needed = nextRank.minCorrect - currentRank.minCorrect;
+                const percent = Math.round((progress / needed) * 100);
+                
+                rankProgressDisplay.textContent = `${progress}/${needed} acertos (${percent}%) para o próximo nível`;
+                rankRequirementsDisplay.textContent = `Próximo nível: ${nextRank.name} (${nextRank.minCorrect} acertos)`;
+            } else {
+                rankProgressDisplay.textContent = "Rank máximo alcançado!";
+                rankRequirementsDisplay.textContent = "Você dominou todas as questões!";
+            }
+        }
+        
+        // Mostrar tela de promoção
+        function showRankUp() {
+            const rank = RANKS[currentRankIndex];
+            
+            // Atualizar elementos da tela de promoção
+            rankUpTitle.textContent = `Promovido a ${rank.name}!`;
+            rankUpMessage.textContent = `Você alcançou ${correctCount} acertos e subiu de nível!`;
+            rankUpIcon.className = `fas ${rank.icon}`;
+            
+            // Aplicar cor do rank atual
+            rankUpContainer.style.setProperty('--current-rank-color', rank.color);
+            rankUpBox.style.background = `linear-gradient(135deg, ${rank.color}, #162447)`;
+            rankUpBox.style.borderColor = rank.color;
+            rankUpBox.style.boxShadow = `0 0 25px ${rank.color}`;
+            rankUpTitle.style.color = rank.color;
+            rankUpTitle.style.textShadow = `0 0 10px ${rank.color}`;
+            rankUpIcon.style.color = rank.color;
+            
+            // Mostrar tela de promoção
+            rankUpContainer.style.display = 'flex';
+        }
+        
+        // Fechar tela de promoção
+        function closeRankUp() {
+            rankUpContainer.style.display = 'none';
+        }
+        
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progressPercentage = (currentQuestionIndex / TOTAL_QUESTIONS) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+            progressDisplay.textContent = `Progresso: ${Math.round(progressPercentage)}%`;
+            questionNumberDisplay.textContent = `Questão ${currentQuestionIndex + 1}/${TOTAL_QUESTIONS}`;
+        }
+        
+        // Iniciar temporizador
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_PER_QUESTION;
+            timerDisplay.textContent = timeLeft;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+        
+        // Tempo esgotado
+        function handleTimeout() {
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            checkAnswer('Errado', true);
+        }
+        
+        // Verificar resposta
+        function checkAnswer(answer, isTimeout = false) {
+            clearInterval(timer);
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            const isCorrect = answer === currentQuestion.correct;
+            
+            // Registrar resposta
+            answeredQuestions.push({
+                questionIndex: currentQuestionIndex,
+                question: currentQuestion.question,
+                userAnswer: answer,
+                correctAnswer: currentQuestion.correct,
+                isCorrect,
+                isTimeout
+            });
+            
+            // Atualizar contadores
+            if (isCorrect) {
+                correctCount++;
+                correctDisplay.textContent = correctCount;
+            } else {
+                wrongCount++;
+                wrongDisplay.textContent = wrongCount;
+            }
+            
+            // Mostrar resultado
+            resultDiv.style.display = 'block';
+            
+            if (isTimeout) {
+                resultMessage.textContent = "⏰ Tempo esgotado!";
+                resultMessage.style.color = "#FF9800";
+            } else if (isCorrect) {
+                resultMessage.textContent = "✅ Resposta Correta!";
+                resultMessage.style.color = "#4CAF50";
+            } else {
+                resultMessage.textContent = "❌ Resposta Incorreta!";
+                resultMessage.style.color = "#F44336";
+            }
+            
+            commentDiv.innerHTML = `<b>Explicação:</b> ${currentQuestion.comment}`;
+            nextBtn.disabled = false;
+            
+            // Atualizar rank e salvar progresso
+            updateRank();
+            saveProgress();
+        }
+        
+        // Próxima questão
+        function nextQuestion() {
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                quizCompleted = true;
+                showCompletionMessage();
+                saveProgress();
+            }
+        }
+        
+        // Mostrar mensagem de conclusão
+        function showCompletionMessage() {
+            const accuracy = Math.round((correctCount / allQuestions.length) * 100);
+            const rank = RANKS[currentRankIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question" style="text-align: center;">
+                    <h2>Quiz Concluído!</h2>
+                    <p>Você respondeu a todas as ${allQuestions.length} questões.</p>
+                    <p>Pontuação final: ${correctCount} acertos (${accuracy}%)</p>
+                    <p style="color: ${rank.color}; font-weight: bold;">Rank Final: ${rank.name}</p>
+                    <button onclick="resetQuiz()" style="margin-top: 20px;">Reiniciar Quiz</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+        
+        // Reiniciar quiz
+        function resetQuiz() {
+            resetProgress();
+            nextBtn.style.display = 'block';
+            displayQuestion();
+        }
+        
+        // Exibir questão
+        function displayQuestion() {
+            if (quizCompleted) {
+                showCompletionMessage();
+                return;
+            }
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question">
+                    <p>${currentQuestion.numero}. ${currentQuestion.question}</p>
+                </div>
+                <div class="answer-buttons">
+                    <button onclick="checkAnswer('Certo')">Certo</button>
+                    <button onclick="checkAnswer('Errado')">Errado</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.disabled = true;
+            updateProgress();
+            startTimer();
+        }
+        
+        // Iniciar o quiz
+        init();
+    </script>
+</body>
+</html>

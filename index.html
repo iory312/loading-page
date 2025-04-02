@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Jurídico - Página Inicial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00FFFF;
+            --secondary-color: #0A192F;
+            --accent-color: #1F4068;
+            --dark-accent: #162447;
+            --text-color: #E6F1FF;
+            --card-bg: rgba(31, 64, 104, 0.7);
+            --neon-glow: 0 0 10px rgba(0, 255, 255, 0.8);
+            --portuguese-color: #4CAF50;
+            --logic-color: #9C27B0;
+            --penal-color: #F44336;
+            --admin-color: #FF9800;
+            --constitutional-color: #2196F3;
+            --special-law-color: #00BCD4;
+            --specific-color: #E91E63;
+            --forensic-color: #8BC34A;
+            --legal-med-color: #607D8B;
+            --progress-color: #00FF88;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary-color);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--neon-glow);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color), 
+                var(--dark-accent), 
+                var(--primary-color));
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 16px;
+            animation: borderGlow 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--primary-color);
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .banner {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .banner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .subject-card {
+            background: rgba(10, 25, 47, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px var(--subject-glow);
+            border-color: var(--subject-color);
+        }
+        
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--subject-color);
+            box-shadow: 0 0 15px var(--subject-color);
+        }
+        
+        .subject-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .subject-card:hover::after {
+            opacity: 1;
+        }
+        
+        .subject-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--subject-color);
+            text-shadow: 0 0 10px var(--subject-glow);
+            transition: all 0.3s ease;
+        }
+        
+        .subject-card:hover .subject-icon {
+            transform: scale(1.1);
+        }
+        
+        .subject-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--subject-color);
+            letter-spacing: 1px;
+        }
+        
+        .subject-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .subject-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--progress-color);
+            border-radius: 3px;
+            width: 30%;
+            transition: width 1s ease;
+        }
+        
+        .subject-stats {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-item i {
+            margin-right: 5px;
+            color: var(--subject-color);
+        }
+        
+        .start-btn {
+            background: linear-gradient(45deg, var(--subject-color), rgba(0, 255, 255, 0.8));
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin-top: 15px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--subject-glow);
+        }
+        
+        .start-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Cores específicas para cada matéria */
+        .portuguese {
+            --subject-color: var(--portuguese-color);
+            --subject-glow: rgba(76, 175, 80, 0.4);
+        }
+        
+        .logic {
+            --subject-color: var(--logic-color);
+            --subject-glow: rgba(156, 39, 176, 0.4);
+        }
+        
+        .penal {
+            --subject-color: var(--penal-color);
+            --subject-glow: rgba(244, 67, 54, 0.4);
+        }
+        
+        .admin {
+            --subject-color: var(--admin-color);
+            --subject-glow: rgba(255, 152, 0, 0.4);
+        }
+        
+        .constitutional {
+            --subject-color: var(--constitutional-color);
+            --subject-glow: rgba(33, 150, 243, 0.4);
+        }
+        
+        .special-law {
+            --subject-color: var(--special-law-color);
+            --subject-glow: rgba(0, 188, 212, 0.4);
+        }
+        
+        .specific {
+            --subject-color: var(--specific-color);
+            --subject-glow: rgba(233, 30, 99, 0.4);
+        }
+        
+        .forensic {
+            --subject-color: var(--forensic-color);
+            --subject-glow: rgba(139, 195, 74, 0.4);
+        }
+        
+        .legal-med {
+            --subject-color: var(--legal-med-color);
+            --subject-glow: rgba(96, 125, 139, 0.4);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            to { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+            border: 2px solid white;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .user-rank {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .search-container {
+            position: relative;
+            flex-grow: 1;
+            max-width: 300px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 15px var(--primary-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .footer-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .subjects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .subject-card {
+                padding: 20px;
+            }
+            
+            .subject-icon {
+                font-size: 3rem;
+            }
+            
+            .subject-title {
+                font-size: 1.4rem;
+            }
+            
+            .header-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-particles" id="particles"></div>
+        
+        <div class="header-info">
+            <div class="user-profile">
+                <div class="avatar">U</div>
+                <div>
+                    <div class="user-name">Usuário</div>
+                    <div class="user-rank">Novato Digital</div>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar matéria...">
+            </div>
+        </div>
+        
+        <img src="PF2025.png" alt="Banner do Site" class="banner">
+        <h1>QUIZ JURÍDICO EVOLUTIVO</h1>
+        <p class="subtitle">Domine todas as matérias para concursos públicos com nosso sistema de quiz adaptativo. Evolua seus conhecimentos e alcance o topo!</p>
+        
+        <div class="subjects-grid">
+            <!-- Português -->
+            <div class="subject-card portuguese" onclick="location.href='portugues.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="subject-title">PORTUGUÊS</h3>
+                <p class="subject-description">Domine gramática, interpretação de textos e redação oficial com questões desafiadoras</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 45%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>1.300 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>5 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Raciocínio Lógico -->
+            <div class="subject-card logic" onclick="location.href='raciocinio.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-chess-knight"></i>
+                </div>
+                <h3 class="subject-title">RACIOCÍNIO LÓGICO</h3>
+                <p class="subject-description">Desenvolva sua capacidade lógica com problemas matemáticos e sequências complexas</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 30%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>900 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>4 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Direito Penal e Processual Penal -->
+            <div class="subject-card penal" onclick="location.href='penal.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-handcuffs"></i>
+                </div>
+                <h3 class="subject-title">DIREITO PENAL</h3>
+                <p class="subject-description">Teoria do crime, tipos penais, procedimentos criminais e recursos</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 65%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>1.500 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>6 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Direito Administrativo -->
+            <div class="subject-card admin" onclick="location.href='administrativo.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-landmark"></i>
+                </div>
+                <h3 class="subject-title">DIREITO ADMINISTRATIVO</h3>
+                <p class="subject-description">Princípios, organização do Estado, licitações e processos administrativos</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 25%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>1.200 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>5 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Direito Constitucional -->
+            <div class="subject-card constitutional" onclick="location.href='constitucional.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-balance-scale-right"></i>
+                </div>
+                <h3 class="subject-title">DIREITO CONSTITUCIONAL</h3>
+                <p class="subject-description">CF/88, direitos fundamentais, organização dos poderes e controle de constitucionalidade</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 50%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>1.100 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>5 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lei Especial -->
+            <div class="subject-card special-law" onclick="location.href='lei-especial.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-file-signature"></i>
+                </div>
+                <h3 class="subject-title">LEI ESPECIAL</h3>
+                <p class="subject-description">Leis específicas para concursos policiais: Estatuto do Desarmamento, Drogas, Abuso de Autoridade</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 15%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>800 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>4 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Parte Específica -->
+            <div class="subject-card specific" onclick="location.href='especifica.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="subject-title">PARTE ESPECÍFICA</h3>
+                <p class="subject-description">Conhecimentos técnicos para carreiras policiais: investigação, provas, legislação especializada</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 70%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>1.000 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>5 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Criminalística -->
+            <div class="subject-card forensic" onclick="location.href='criminalistica.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-fingerprint"></i>
+                </div>
+                <h3 class="subject-title">CRIMINALÍSTICA</h3>
+                <p class="subject-description">Perícia, locais de crime, análise de provas e técnicas investigativas modernas</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 40%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>750 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>4 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Medicina Legal -->
+            <div class="subject-card legal-med" onclick="location.href='medicina-legal.html'">
+                <div class="subject-icon">
+                    <i class="fas fa-skull"></i>
+                </div>
+                <h3 class="subject-title">MEDICINA LEGAL</h3>
+                <p class="subject-description">Tanatologia, traumatologia, sexologia forense e exames periciais</p>
+                
+                <div class="subject-progress">
+                    <div class="progress-bar" style="width: 35%"></div>
+                </div>
+                
+                <button class="start-btn">INICIAR DESAFIO</button>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>600 QUESTÕES</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>3 NÍVEIS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 QUIZ JURÍDICO EVOLUTIVO - Prepare-se para dominar seu concurso!</p>
+            <div class="footer-links">
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Contato</a>
+                <a href="#">Sobre Nós</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Criar partículas flutuantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                const duration = Math.random() * 25 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                const hue = Math.random() * 60 + 180;
+                particle.style.backgroundColor = `hsla(${hue}, 100%, 50%, ${Math.random() * 0.5 + 0.3})`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Simular progresso do usuário
+        function simulateUserProgress() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const randomProgress = Math.floor(Math.random() * 30) + 10;
+                bar.style.width = `${randomProgress}%`;
+                
+                setTimeout(() => {
+                    bar.style.transition = 'width 1.5s ease';
+                }, 100);
+            });
+        }
+        
+        // Efeito de digitação no subtítulo
+        function typeWriterEffect() {
+            const subtitle = document.querySelector('.subtitle');
+            const originalText = subtitle.textContent;
+            subtitle.textContent = '';
+            
+            let i = 0;
+            function typeWriter() {
+                if (i < originalText.length) {
+                    subtitle.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 20);
+                }
+            }
+            setTimeout(typeWriter, 1000);
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            createParticles();
+            simulateUserProgress();
+            typeWriterEffect();
+            
+            // Efeito ao clicar nos cards
+            document.querySelectorAll('.subject-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'translateY(-5px) scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-8px) scale(1)';
+                    }, 200);
+                    
+                    const subject = this.querySelector('.subject-title').textContent;
+                    localStorage.setItem('selectedSubject', subject);
+                });
+            });
+        };
+    </script>
+</body>
+</html>

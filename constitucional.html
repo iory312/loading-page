@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direito Consitucional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00FFFF;
+            --secondary-color: #0A192F;
+            --accent-color: #1F4068;
+            --dark-accent: #162447;
+            --text-color: #E6F1FF;
+            --correct-color: #4CAF50;
+            --wrong-color: #F44336;
+            --card-bg: rgba(31, 64, 104, 0.7);
+            --neon-glow: 0 0 10px rgba(0, 255, 255, 0.8);
+            --reward-color: #FFD700;
+            --rank-1: #8B93FF;
+            --rank-2: #6B8CFF;
+            --rank-3: #4B86FF;
+            --rank-4: #2B80FF;
+            --rank-5: #0B6BFF;
+            --rank-6: #0055CC;
+            --rank-7: #0040AA;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary-color);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--neon-glow);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color), 
+                var(--dark-accent), 
+                var(--primary-color));
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 16px;
+            animation: borderGlow 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--primary-color);
+            letter-spacing: 1px;
+        }
+        
+        .banner {
+            width: 100%;
+            max-width: 882px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .banner:hover {
+            transform: scale(1.01);
+        }
+        
+        .progress-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #00E5FF);
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+            width: 0%;
+        }
+        
+        .rank-marker {
+            position: absolute;
+            height: 15px;
+            width: 2px;
+            background-color: white;
+            top: -2.5px;
+            transform: translateX(-50%);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .rank-box {
+            background: linear-gradient(135deg, var(--current-rank-color), rgba(0, 0, 0, 0.5));
+            border: 1px solid var(--current-rank-color);
+            box-shadow: 0 0 15px var(--current-rank-color);
+        }
+        
+        .timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .timer span {
+            margin-left: 5px;
+        }
+        
+        .quiz-content {
+            margin: 25px 0;
+            min-height: 150px;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+        }
+        
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button.correct {
+            background-color: var(--correct-color);
+            border-color: var(--correct-color);
+            color: white;
+        }
+        
+        button.wrong {
+            background-color: var(--wrong-color);
+            border-color: var(--wrong-color);
+            color: white;
+        }
+        
+        .result-container {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .explanation {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .rank-up-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .rank-up-box {
+            background: linear-gradient(135deg, var(--current-rank-color), #162447);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 25px var(--current-rank-color);
+            border: 2px solid var(--current-rank-color);
+            animation: pulseReward 2s infinite;
+        }
+        
+        @keyframes pulseReward {
+            0% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+            50% { transform: scale(1.02); box-shadow: 0 0 35px var(--current-rank-color); }
+            100% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+        }
+        
+        .rank-up-title {
+            color: var(--current-rank-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--current-rank-color);
+        }
+        
+        .rank-up-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .rank-icon {
+            font-size: 4rem;
+            color: var(--current-rank-color);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .next-btn {
+            display: block;
+            margin: 25px auto 0;
+            min-width: 150px;
+            background: linear-gradient(45deg, var(--primary-color), #00E5FF);
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .next-btn:hover {
+            background: linear-gradient(45deg, #00E5FF, var(--primary-color));
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            to { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        
+        .search-results {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--dark-accent);
+            border-radius: 8px;
+            margin-top: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-item:hover {
+            background: var(--accent-color);
+        }
+        
+        .rank-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 3px solid var(--current-rank-color);
+        }
+        
+        .rank-name {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--current-rank-color);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .rank-progress {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .rank-requirements {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .answer-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .stat-box {
+                min-width: 100%;
+            }
+            
+            .rank-up-title {
+                font-size: 1.5rem;
+            }
+            
+            .rank-up-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-particles" id="particles"></div>
+        <img src="PF2025.png" alt="Banner do Site" class="banner">
+        <h1>Direito Constitucional</h1>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar questão por número ou texto...">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        
+        <div class="rank-info">
+            <div class="rank-name" id="currentRank">Novato Digital</div>
+            <div class="rank-progress" id="rankProgress">0/100 acertos para o próximo nível</div>
+            <div class="rank-requirements" id="rankRequirements">Próximo nível: Aprendiz de Código (100 acertos)</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-info">
+                <span id="progress">Progresso: 0%</span>
+                <span id="question-number">Questão 1/1300</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="rank-marker" style="left: 7.69%;" title="Aprendiz de Código (100)"></div>
+                <div class="rank-marker" style="left: 21.54%;" title="Programador Júnior (280)"></div>
+                <div class="rank-marker" style="left: 38.46%;" title="Desenvolvedor Pleno (500)"></div>
+                <div class="rank-marker" style="left: 53.85%;" title="Sênior de Sistemas (700)"></div>
+                <div class="rank-marker" style="left: 69.23%;" title="Arquiteto Digital (900)"></div>
+                <div class="rank-marker" style="left: 84.62%;" title="Mestre da Nuvem (1100)"></div>
+                <div class="rank-marker" style="left: 100%;" title="Lenda da TI (1300)"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-content">
+            <div id="quiz"></div>
+            <div class="result-container" id="result">
+                <div class="result-message" id="resultMessage"></div>
+                <div class="explanation" id="comment"></div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="timer">⏳ <span id="timer">90</span>s</div>
+                </div>
+                <div class="stat-box">
+                    ✔️ Acertos: <span id="correctCount">0</span>
+                </div>
+                <div class="stat-box">
+                    ❌ Erros: <span id="wrongCount">0</span>
+                </div>
+                <div class="stat-box rank-box" id="rankBox">
+                    <i class="fas fa-user" id="rankIcon"></i> <span id="rankDisplay">Novato</span>
+                </div>
+            </div>
+        </div>
+        
+        <button class="next-btn" onclick="nextQuestion()" id="nextBtn" disabled>Próxima</button>
+    </div>
+    
+    <div class="rank-up-container" id="rankUpContainer">
+        <div class="rank-up-box">
+            <div class="rank-icon">
+                <i class="fas fa-star" id="rankUpIcon"></i>
+            </div>
+            <h2 class="rank-up-title" id="rankUpTitle">Promovido!</h2>
+            <p class="rank-up-message" id="rankUpMessage">Você alcançou um novo nível!</p>
+            <button onclick="closeRankUp()">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de ranks evolutivos
+        const RANKS = [
+            { name: "Novato Digital", minCorrect: 0, color: "var(--rank-1)", icon: "fa-user" },
+            { name: "Aprendiz de Código", minCorrect: 100, color: "var(--rank-2)", icon: "fa-laptop-code" },
+            { name: "Programador Júnior", minCorrect: 280, color: "var(--rank-3)", icon: "fa-code" },
+            { name: "Desenvolvedor Pleno", minCorrect: 500, color: "var(--rank-4)", icon: "fa-file-code" },
+            { name: "Sênior de Sistemas", minCorrect: 700, color: "var(--rank-5)", icon: "fa-server" },
+            { name: "Arquiteto Digital", minCorrect: 900, color: "var(--rank-6)", icon: "fa-network-wired" },
+            { name: "Mestre da Nuvem", minCorrect: 1100, color: "var(--rank-7)", icon: "fa-cloud" },
+            { name: "Lenda da TI", minCorrect: 1300, color: "var(--reward-color)", icon: "fa-crown" }
+        ];
+        
+        // Configurações do quiz
+        const TOTAL_QUESTIONS = 1300;
+        const TIME_PER_QUESTION = 90;
+        
+        // Elementos do DOM
+        const quizDiv = document.getElementById('quiz');
+        const resultDiv = document.getElementById('result');
+        const resultMessage = document.getElementById('resultMessage');
+        const commentDiv = document.getElementById('comment');
+        const progressFill = document.getElementById('progressFill');
+        const progressDisplay = document.getElementById('progress');
+        const questionNumberDisplay = document.getElementById('question-number');
+        const timerDisplay = document.getElementById('timer');
+        const nextBtn = document.getElementById('nextBtn');
+        const correctDisplay = document.getElementById('correctCount');
+        const wrongDisplay = document.getElementById('wrongCount');
+        const rankDisplay = document.getElementById('rankDisplay');
+        const rankBox = document.getElementById('rankBox');
+        const rankIcon = document.getElementById('rankIcon');
+        const currentRankDisplay = document.getElementById('currentRank');
+        const rankProgressDisplay = document.getElementById('rankProgress');
+        const rankRequirementsDisplay = document.getElementById('rankRequirements');
+        const rankUpContainer = document.getElementById('rankUpContainer');
+        const rankUpTitle = document.getElementById('rankUpTitle');
+        const rankUpMessage = document.getElementById('rankUpMessage');
+        const rankUpIcon = document.getElementById('rankUpIcon');
+        const particlesContainer = document.getElementById('particles');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Estado do quiz
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let currentRankIndex = 0;
+        let timeLeft = TIME_PER_QUESTION;
+        let timer;
+        let answeredQuestions = [];
+        let quizCompleted = false;
+        let allQuestions = [];
+        
+        // Banco de questões
+        const questions = [
+
+           {
+            "numero": 1,
+            "question": "A inviolabilidade do direito à vida está garantida pela Constituição Federal\ne inclui a proteção ao nascituro.",
+            "correct": "Certo",
+            "comment": "A Constituição Federal de 1988, em seu artigo 5º, caput, assegura a inviolabilidade do direito à vida. Esta proteção se estende ao nascituro, conforme interpretação sistemática da legislação brasileira, que reconhece direitos ao nascituro desde a concepção, como o direito à herança e ao reconhecimento de paternidade. O Código Civil também ampara essa proteção no artigo 2º."
+},
+
+{
+            "numero": 2,
+            "question": "O direito à igualdade é absoluto e não permite qualquer forma de\ndiscriminação ou diferenciação.",
+            "correct": "Errado",
+            "comment": "O direito à igualdade, previsto no artigo 5º, caput, da Constituição Federal, não é absoluto. A própria Constituição admite diferenciações justificadas, como cotas raciais e ações afirmativas, visando corrigir desigualdades históricas e promover a igualdade substancial. O princípio da igualdade consiste em tratar igualmente os iguais e desigualmente os desiguais na medida de suas desigualdades, conforme estabelecido no artigo 5º, inciso I.   24"
+},
+
+{
+            "numero": 3,
+            "question": "A propriedade atenderá a sua função social, conforme previsto na\nConstituição Federal.",
+            "correct": "Certo",
+            "comment": "A função social da propriedade é um princípio constitucional expressamente previsto no artigo 5º, inciso XXIII. Este princípio impõe que a propriedade deve cumprir um papel que beneficie a coletividade, o que inclui o uso racional dos recursos naturais, o cumprimento das normas ambientais e a contribuição para o bem-estar social."
+},
+
+{
+            "numero": 4,
+            "question": "O direito à segurança inclui a garantia de proteção apenas contra ameaças\nfísicas diretas.",
+            "correct": "Errado",
+            "comment": "O direito à segurança, garantido pelo artigo 5º, caput, da Constituição Federal, é amplo e abrange não apenas a proteção contra ameaças físicas, mas também a proteção jurídica, social e econômica. Isso inclui a segurança pública, a segurança jurídica (previsibilidade e estabilidade das leis) e a segurança social (garantias de direitos sociais como saúde e educação)."
+},
+
+{
+            "numero": 5,
+            "question": "Os direitos sociais, previstos no artigo 6º da Constituição Federal, incluem\neducação, saúde, alimentação, trabalho, moradia, lazer, segurança,\nprevidência social, proteção à maternidade e à infância, e assistência aos\ndesamparados.",
+            "correct": "Certo",
+            "comment": "O artigo 6º da Constituição Federal elenca um rol de direitos sociais que são essenciais para garantir condições de vida dignas para todos os cidadãos. Esses direitos sociais são essenciais para a promoção do bem-estar e para a concretização da justiça social no Brasil."
+},
+
+{
+            "numero": 6,
+            "question": "A liberdade de expressão pode ser exercida independentemente de\nqualquer limitação ou responsabilidade posterior.",
+            "correct": "Errado",
+            "comment": "A liberdade de expressão é garantida pelo artigo 5º, inciso IV, da Constituição Federal, mas não é absoluta. Está sujeita a limites e responsabilidades posteriores, como o respeito à honra, à imagem, à privacidade e aos direitos das demais pessoas. Exemplo disso são as leis que tratam de calúnia, difamação e injúria, estabelecendo sanções para abusos no exercício dessa liberdade.   25"
+},
+
+{
+            "numero": 7,
+            "question": "A liberdade de associação para fins lícitos é plena, vedada a interferência\nestatal.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, incisos XVII e XVIII, da Constituição Federal, garante a plena liberdade de associação para fins lícitos, vedada a interferência estatal em seu funcionamento. No entanto, associações paramilitares são proibidas, conforme inciso XVII, e a criação de associações não pode ser impedida pelo Estado."
+},
+
+{
+            "numero": 8,
+            "question": "O direito de propriedade é absoluto e ilimitado.",
+            "correct": "Errado",
+            "comment": "O direito de propriedade, assegurado pelo artigo 5º, inciso XXII, da Constituição Federal, não é absoluto. Está condicionado ao cumprimento da função social da propriedade, prevista no inciso XXIII do mesmo artigo. Isso significa que a propriedade deve ser utilizada de forma que beneficie a coletividade, e o uso inadequado ou abusivo pode resultar em limitações e até desapropriação."
+},
+
+{
+            "numero": 9,
+            "question": "A tortura é permitida em casos excepcionais, como em situações de\nsegurança nacional.",
+            "correct": "Errado",
+            "comment": "A Constituição Federal, no artigo 5º, inciso III, proíbe expressamente a tortura e o tratamento desumano ou degradante sob quaisquer circunstâncias. Não há exceções permitidas para essa proibição, reafirmando o compromisso do Brasil com os direitos humanos e a dignidade da pessoa humana."
+},
+
+{
+            "numero": 10,
+            "question": "A Constituição assegura o direito à informação, independentemente de\ncensura ou licença.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso XIV, da Constituição Federal, assegura a todos o acesso à informação e o resguardo do sigilo da fonte, quando necessário ao exercício profissional. Esse direito é fundamental para a transparência e o controle social, garantindo que os cidadãos possam acessar informações relevantes sem sofrer censura prévia.   26"
+},
+
+{
+            "numero": 11,
+            "question": "A prisão por dívida é permitida no caso de obrigação alimentícia.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 5º, inciso LXVII, da Constituição Federal, a prisão civil por dívida é vedada, exceto no caso do inadimplemento voluntário e inescusável de obrigação alimentícia. Essa exceção visa garantir o sustento do alimentando, geralmente menores ou incapazes, assegurando o cumprimento das obrigações familiares."
+},
+
+{
+            "numero": 12,
+            "question": "O direito ao sigilo de correspondência pode ser relativizado em situações\nde investigação criminal.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso XII, da Constituição Federal, assegura o sigilo da correspondência, das comunicações telegráficas, de dados e das comunicações telefônicas. No entanto, esse direito pode ser relativizado por ordem judicial, em casos de investigação criminal ou instrução processual penal, conforme o previsto na própria Constituição e regulamentado por leis específicas."
+},
+
+{
+            "numero": 13,
+            "question": "A liberdade de locomoção é restrita apenas em casos de calamidade\npública.",
+            "correct": "Errado",
+            "comment": "A liberdade de locomoção, garantida pelo artigo 5º, inciso XV, da Constituição Federal, pode ser restringida não apenas em casos de calamidade pública, mas também em situações de estado de defesa e estado de sítio, conforme previsto nos artigos 136 e 137 da Constituição. Além disso, medidas judiciais como prisões preventivas ou temporárias podem restringir essa liberdade."
+},
+
+{
+            "numero": 14,
+            "question": "O habeas corpus pode ser impetrado em favor de qualquer pessoa,\nnacional ou estrangeira, em território nacional.",
+            "correct": "Certo",
+            "comment": "O habeas corpus é uma garantia constitucional prevista no artigo 5º, inciso LXVIII, destinada a proteger o direito de locomoção contra ilegalidades e abusos de poder. Pode ser impetrado por qualquer pessoa em favor de si mesma ou de terceiros, independentemente de ser nacional ou estrangeira, desde que esteja no território nacional.   27"
+},
+
+{
+            "numero": 15,
+            "question": "O mandado de segurança é o remédio constitucional cabível para proteger\ndireito líquido e certo, não amparado por habeas corpus ou habeas data.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 5º, inciso LXIX, da Constituição Federal, o mandado de segurança é destinado à proteção de direito líquido e certo, não amparado por habeas corpus ou habeas data, quando o responsável pela ilegalidade ou abuso de poder for uma autoridade pública ou agente de pessoa jurídica no exercício de atribuições do Poder Público."
+},
+
+{
+            "numero": 16,
+            "question": "Os tratados internacionais de direitos humanos aprovados pelo Congresso\nNacional têm status de emenda constitucional.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 5º, § 3º, da Constituição Federal, os tratados e convenções internacionais sobre direitos humanos que forem aprovados, em cada Casa do Congresso Nacional, em dois turnos, por três quintos dos votos dos respectivos membros, serão equivalentes às emendas constitucionais. Isso reforça a proteção aos direitos humanos no Brasil."
+},
+
+{
+            "numero": 17,
+            "question": "A criação de associações e, na forma da lei, a de cooperativas independem\nde autorização, sendo vedada a interferência estatal em seu funcionamento.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, incisos XVII e XVIII, da Constituição Federal, assegura a plena liberdade de associação para fins lícitos, vedada a interferência estatal em seu funcionamento. No entanto, associações paramilitares são proibidas, conforme inciso XVII, e a criação de associações não pode ser impedida pelo Estado."
+},
+
+{
+            "numero": 18,
+            "question": "O direito de reunião em locais abertos ao público depende de autorização\nprévia da autoridade competente.",
+            "correct": "Errado",
+            "comment": "O artigo 5º, inciso XVI, da Constituição Federal, garante a todos o direito de reunião pacífica, sem armas, em locais abertos ao público, independentemente de autorização, desde que não frustre outra reunião anteriormente convocada para o mesmo local, sendo apenas exigido prévio aviso à autoridade competente.   28"
+},
+
+{
+            "numero": 19,
+            "question": "O direito ao sigilo bancário é absoluto e não pode ser quebrado em\nnenhuma hipótese.",
+            "correct": "Errado",
+            "comment": "O sigilo bancário não é absoluto. Pode ser quebrado por ordem judicial, em casos de investigação criminal ou instrução processual penal, conforme estabelecido pela legislação e jurisprudência. Além disso, autoridades fiscais podem ter acesso a informações bancárias para fins de fiscalização tributária, respeitando os princípios constitucionais."
+},
+
+{
+            "numero": 20,
+            "question": "O direito ao meio ambiente ecologicamente equilibrado é garantido pela\nConstituição, sendo um dever do Poder Público e da coletividade defendê-lo\ne preservá-lo para as presentes e futuras gerações.",
+            "correct": "Certo",
+            "comment": "O artigo 225 da Constituição Federal estabelece que todos têm direito ao meio ambiente ecologicamente equilibrado, impondo ao Poder Público e à coletividade o dever de defendê-lo e preservá-lo para as presentes e futuras gerações. Esse artigo também define obrigações específicas do Estado e instrumentos de proteção ambiental."
+},
+
+{
+            "numero": 21,
+            "question": "A propriedade rural que não atenda à função social pode ser\ndesapropriada para fins de reforma agrária.",
+            "correct": "Certo",
+            "comment": "O artigo 184 da Constituição Federal prevê que a União pode desapropriar por interesse social, para fins de reforma agrária, o imóvel rural que não esteja cumprindo sua função social. A desapropriação é feita mediante justa e prévia indenização em títulos da dívida agrária, com cláusula de preservação do valor real."
+},
+
+{
+            "numero": 22,
+            "question": "Os direitos sociais não incluem o direito ao lazer.",
+            "correct": "Errado",
+            "comment": "O artigo 6º da Constituição Federal expressamente inclui o lazer como um dos direitos sociais. Este direito é essencial para o desenvolvimento humano integral, contribuindo para a qualidade de vida e o bem-estar dos indivíduos."
+},
+
+{
+            "numero": 23,
+            "question": "O direito à segurança pública é exclusivamente responsabilidade do\nEstado, sem participação da sociedade.",
+            "correct": "Errado",
+            "comment": "Embora o artigo 144 da Constituição Federal atribua ao Estado a responsabilidade pela segurança pública, a participação da sociedade é   29 fundamental e incentivada. Conselhos comunitários de segurança e programas de policiamento comunitário são exemplos de iniciativas que envolvem a colaboração entre autoridades públicas e a sociedade."
+},
+
+{
+            "numero": 24,
+            "question": "Os direitos individuais e coletivos são absolutos, não podendo ser\nrelativizados em hipótese alguma.",
+            "correct": "Errado",
+            "comment": "Nenhum direito é absoluto. Os direitos individuais e coletivos previstos no artigo 5º da Constituição Federal podem ser relativizados em situações específicas, desde que haja um balanceamento com outros direitos e princípios constitucionais. Por exemplo, o direito à liberdade de expressão pode ser limitado para proteger a honra e a imagem de terceiros."
+},
+
+{
+            "numero": 25,
+            "question": "A gratuidade do registro civil de nascimento e da certidão de óbito para\nos reconhecidamente pobres é um direito assegurado pela Constituição.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso LXXVI, da Constituição Federal assegura a gratuidade do registro civil de nascimento e da certidão de óbito para os reconhecidamente pobres. Essa medida visa garantir a universalidade do acesso a esses serviços essenciais, independentemente da condição econômica dos cidadãos."
+},
+
+{
+            "numero": 26,
+            "question": "O direito de acesso à justiça é garantido pela Constituição, incluindo a\nassistência jurídica integral e gratuita aos que comprovarem insuficiência de\nrecursos.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso LXXIV, da Constituição Federal assegura que o Estado prestará assistência jurídica integral e gratuita aos que comprovarem insuficiência de recursos. Este direito é fundamental para garantir que todos, independentemente de sua condição econômica, possam acessar o sistema de justiça e ter seus direitos protegidos."
+},
+
+{
+            "numero": 27,
+            "question": "O princípio da legalidade para o indivíduo significa que ele só pode fazer o\nque a lei permite.",
+            "correct": "Errado",
+            "comment": "O princípio da legalidade, previsto no artigo 5º, inciso II, da Constituição Federal, estabelece que ninguém será obrigado a fazer ou deixar de fazer alguma coisa senão em virtude de lei. Para o indivíduo, isso significa   30 que ele pode fazer tudo que a lei não proíbe, ao contrário da administração pública, que só pode fazer o que a lei expressamente autoriza."
+},
+
+{
+            "numero": 28,
+            "question": "A vedação ao anonimato na liberdade de manifestação do pensamento\ntem como objetivo proteger a honra e a imagem das pessoas.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso IV, da Constituição Federal assegura a livre manifestação do pensamento, sendo vedado o anonimato. Essa vedação visa permitir a responsabilização por eventuais abusos, como difamação, calúnia e injúria, protegendo assim a honra e a imagem das pessoas."
+},
+
+{
+            "numero": 29,
+            "question": "A Constituição permite a extradição de brasileiro nato em casos de crimes\ncontra a humanidade.",
+            "correct": "Errado",
+            "comment": "O artigo 5º, inciso LI, da Constituição Federal estabelece que nenhum brasileiro será extraditado, salvo o naturalizado, em caso de crime comum praticado antes da naturalização ou de comprovado envolvimento em tráfico ilícito de entorpecentes e drogas afins, na forma da lei. Brasileiros natos não podem ser extraditados em nenhuma hipótese."
+},
+
+{
+            "numero": 30,
+            "question": "Os tratados internacionais sobre direitos humanos que não forem\naprovados pelo Congresso Nacional com quórum de emenda constitucional\ntêm status de norma supralegal.",
+            "correct": "Certo",
+            "comment": "Conforme a jurisprudência do Supremo Tribunal Federal (STF), os tratados internacionais sobre direitos humanos que não forem aprovados com o quórum de emenda constitucional (dois turnos, três quintos dos votos) têm status supralegal, ou seja, estão acima das leis ordinárias, mas abaixo da Constituição."
+},
+
+{
+            "numero": 31,
+            "question": "O direito à privacidade e à intimidade é absoluto e não pode ser\nrelativizado.",
+            "correct": "Errado",
+            "comment": "O direito à privacidade e à intimidade, previsto no artigo 5º, inciso X, da Constituição Federal, não é absoluto. Pode ser relativizado em situações de interesse público, segurança nacional ou ordem pública, desde que respeitados os princípios da razoabilidade e proporcionalidade. Exemplo disso é a quebra de sigilo bancário por ordem judicial em investigação criminal.   31"
+},
+
+{
+            "numero": 32,
+            "question": "O direito à propriedade intelectual é assegurado pela Constituição,\nincluindo a proteção às criações industriais, à propriedade de marcas, aos\nnomes de empresas e a outros signos distintivos.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso XXIX, da Constituição Federal assegura a proteção à propriedade intelectual, incluindo a proteção às criações industriais, à propriedade de marcas, aos nomes de empresas e a outros signos distintivos. Essa proteção visa incentivar a inovação e a criatividade, fundamentais para o desenvolvimento econômico e social."
+},
+
+{
+            "numero": 33,
+            "question": "O direito ao sigilo das comunicações telefônicas é absoluto, não podendo\nser quebrado em nenhuma hipótese.",
+            "correct": "Errado",
+            "comment": "O sigilo das comunicações telefônicas, previsto no artigo 5º, inciso XII, da Constituição Federal, pode ser quebrado por ordem judicial em casos de investigação criminal ou instrução processual penal. Esse mecanismo é fundamental para o combate a crimes graves e à corrupção, desde que respeitados os direitos e garantias individuais."
+},
+
+{
+            "numero": 34,
+            "question": "Os direitos sociais incluem apenas os direitos relacionados ao trabalho e à\neducação.",
+            "correct": "Errado",
+            "comment": "Os direitos sociais, conforme o artigo 6º da Constituição Federal, abrangem uma gama ampla de direitos, incluindo educação, saúde, alimentação, trabalho, moradia, lazer, segurança, previdência social, proteção à maternidade e à infância, e assistência aos desamparados. Esses direitos são essenciais para garantir condições dignas de vida a todos os cidadãos."
+},
+
+{
+            "numero": 35,
+            "question": "A Constituição permite a pena de morte em casos de crimes hediondos\ncometidos em tempos de paz.",
+            "correct": "Errado",
+            "comment": "A Constituição Federal, em seu artigo 5º, inciso XLVII, alínea \"a\", proíbe a pena de morte, exceto em caso de guerra declarada, conforme o artigo 84, inciso XIX. Em tempos de paz, a pena de morte é absolutamente vedada no ordenamento jurídico brasileiro.   32"
+},
+
+{
+            "numero": 36,
+            "question": "O direito ao meio ambiente ecologicamente equilibrado é um direito\nindividual, não havendo previsão de sua defesa coletiva.",
+            "correct": "Errado",
+            "comment": "O artigo 225 da Constituição Federal garante o direito ao meio ambiente ecologicamente equilibrado como um direito de todos, impondo ao Poder Público e à coletividade o dever de defendê-lo e preservá-lo para as presentes e futuras gerações. Além disso, o artigo 129, inciso III, confere ao Ministério Público a função de promover, no âmbito judicial, a defesa do meio ambiente."
+},
+
+{
+            "numero": 37,
+            "question": "O direito ao devido processo legal inclui a ampla defesa e o contraditório.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso LIV, da Constituição Federal assegura o direito ao devido processo legal, que inclui a ampla defesa e o contraditório, conforme estabelecido no inciso LV. Esses princípios são essenciais para garantir um julgamento justo e imparcial, permitindo que as partes possam apresentar suas alegações e provas e contestar as provas contrárias."
+},
+
+{
+            "numero": 38,
+            "question": "A Constituição assegura a liberdade de exercício de qualquer trabalho,\nofício ou profissão, independentemente de qualificações legais.",
+            "correct": "Errado",
+            "comment": "O artigo 5º, inciso XIII, da Constituição Federal assegura a liberdade de exercício de qualquer trabalho, ofício ou profissão, atendidas as qualificações profissionais que a lei estabelecer. Ou seja, o exercício de determinadas profissões pode depender de qualificações específicas previstas em lei, como diplomas, certificações ou exames de ordem."
+},
+
+{
+            "numero": 39,
+            "question": "O direito à informação inclui o direito de resposta, proporcional ao agravo.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso V, da Constituição Federal assegura o direito de resposta, proporcional ao agravo, além da indenização por dano material, moral ou à imagem. Esse direito é fundamental para garantir a correção de informações incorretas ou ofensivas divulgadas na mídia, protegendo a honra e a dignidade das pessoas."
+},
+
+{
+            "numero": 40,
+            "question": "A Constituição permite a prisão civil por dívida em casos de\ninadimplemento contratual.",
+            "correct": "Errado",
+            "comment": "O artigo 5º, inciso LXVII, da Constituição Federal proíbe a prisão civil por dívida, exceto no caso de inadimplemento voluntário e inescusável de   33 obrigação alimentícia e na hipótese de depositário infiel. Em casos de inadimplemento contratual comum, a prisão civil não é permitida. 1.1 NACIONALIDADE; CIDADANIA E DIREITOS POLÍTICOS; PARTIDOS POLÍTICOS; GARANTIAS CONSTITUCIONAIS INDIVIDUAIS; GARANTIAS DOS DIREITOS COLETIVOS, SOCIAIS E POLÍTICOS."
+},
+
+{
+            "numero": 1,
+            "question": "A nacionalidade é um direito absoluto e não pode ser perdido em nenhuma\nhipótese.",
+            "correct": "Errado",
+            "comment": "A nacionalidade pode ser perdida, conforme previsto no artigo 12, § 4º, da Constituição Federal, em casos de cancelamento de naturalização por sentença judicial em virtude de atividade nociva ao interesse nacional ou em caso de aquisição voluntária de outra nacionalidade, salvo nas hipóteses excepcionadas pela Constituição."
+},
+
+{
+            "numero": 2,
+            "question": "Os brasileiros naturalizados têm os mesmos direitos que os brasileiros\nnatos, inclusive no que tange ao acesso a cargos privativos de natos.",
+            "correct": "Errado",
+            "comment": "Embora os brasileiros naturalizados gozem de quase todos os direitos dos brasileiros natos, existem exceções previstas no artigo 12, § 3º, da Constituição Federal. Cargos como Presidente e Vice-Presidente da República, Presidente da Câmara dos Deputados, Presidente do Senado Federal, Ministro do STF, entre outros, são privativos de brasileiros natos."
+},
+
+{
+            "numero": 3,
+            "question": "Os partidos políticos têm autonomia para definir suas próprias normas\ninternas, desde que não contrariem as disposições constitucionais.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 17, § 1º, da Constituição Federal, os partidos políticos têm autonomia para definir sua estrutura interna, organização e funcionamento, desde que respeitem os princípios fundamentais do regime democrático e os direitos fundamentais da pessoa humana.   34"
+},
+
+{
+            "numero": 4,
+            "question": "A cidadania compreende apenas os direitos políticos, sem incluir os\ndeveres.",
+            "correct": "Errado",
+            "comment": "A cidadania compreende tanto direitos quanto deveres políticos. Inclui, por exemplo, o direito ao voto e o dever de votar, conforme previsto no artigo 14 da Constituição Federal. A cidadania também envolve a participação ativa na vida política e comunitária do país."
+},
+
+{
+            "numero": 5,
+            "question": "Os direitos políticos são garantidos a todos os brasileiros, sem restrições.",
+            "correct": "Errado",
+            "comment": "Os direitos políticos podem sofrer restrições, conforme previsto no artigo 15 da Constituição Federal, em casos como condenação criminal transitada em julgado, improbidade administrativa, e incapacidade civil absoluta, entre outros. Essas restrições visam assegurar a integridade e a probidade do processo político."
+},
+
+{
+            "numero": 6,
+            "question": "Os partidos políticos podem receber recursos financeiros de entidades\nestrangeiras, desde que declarem esses valores ao Tribunal Superior Eleitoral.",
+            "correct": "Errado",
+            "comment": "Conforme o artigo 17, § 1º, da Constituição Federal, os partidos políticos são proibidos de receber recursos financeiros de entidades ou governos estrangeiros. Essa proibição visa garantir a autonomia e a soberania nacional, evitando interferências externas no processo político brasileiro."
+},
+
+{
+            "numero": 7,
+            "question": "Os direitos políticos ativos incluem o direito de votar e de ser votado.",
+            "correct": "Certo",
+            "comment": "Os direitos políticos ativos envolvem o direito de participar do processo eleitoral, votando e sendo votado. Esse direito é garantido pelo artigo 14 da Constituição Federal e é fundamental para a democracia, permitindo que os cidadãos influenciem diretamente as decisões políticas do país."
+},
+
+{
+            "numero": 8,
+            "question": "A Constituição Federal veda a criação de partidos políticos de caráter\nregional.",
+            "correct": "Certo",
+            "comment": "O artigo 17, § 1º, da Constituição Federal, veda a criação de partidos políticos que adotem caráter regional. Os partidos políticos devem ter caráter nacional, demonstrando compromisso com a unidade e a integridade territorial do Brasil.   35"
+},
+
+{
+            "numero": 9,
+            "question": "A suspensão dos direitos políticos de uma pessoa condenada criminalmente\nsó ocorre após o trânsito em julgado da sentença condenatória.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 15, inciso III, da Constituição Federal, os direitos políticos são suspensos no caso de condenação criminal transitada em julgado, enquanto durarem seus efeitos. Isso garante que somente após esgotadas todas as possibilidades de recurso a suspensão seja efetivada."
+},
+
+{
+            "numero": 10,
+            "question": "Os direitos de reunião e de associação são garantidos pela Constituição,\nindependentemente de prévio aviso à autoridade competente.",
+            "correct": "Errado",
+            "comment": "O artigo 5º, inciso XVI, da Constituição Federal, assegura o direito de reunião, desde que haja prévio aviso à autoridade competente. Isso visa garantir a ordem pública e a segurança, permitindo a organização das autoridades para a proteção dos participantes e do público em geral."
+},
+
+{
+            "numero": 11,
+            "question": "A Constituição permite que brasileiros natos percam sua nacionalidade ao\nadquirirem outra, salvo nos casos previstos em tratados internacionais.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 12, § 4º, da Constituição Federal, o brasileiro nato pode perder a nacionalidade ao adquirir outra nacionalidade, exceto nas hipóteses de reconhecimento de nacionalidade originária pela lei estrangeira ou de imposição de naturalização, pela norma estrangeira, ao brasileiro residente em estado estrangeiro, como condição para permanência em seu território ou para o exercício de direitos civis."
+},
+
+{
+            "numero": 12,
+            "question": "Os partidos políticos são obrigados a prestar contas de seus recursos ao\nTribunal de Contas da União.",
+            "correct": "Errado",
+            "comment": "Os partidos políticos devem prestar contas ao Tribunal Superior Eleitoral (TSE) e não ao Tribunal de Contas da União (TCU), conforme o artigo 17, § 3º, da Constituição Federal. Essa prestação de contas é essencial para garantir a transparência e a lisura no financiamento das atividades partidárias."
+},
+
+{
+            "numero": 13,
+            "question": "A inelegibilidade pode ser declarada por decisão administrativa, desde que\nhaja previsão legal.",
+            "correct": "Errado",
+            "comment": "A inelegibilidade, conforme previsto no artigo 14, § 9º, da Constituição Federal, só pode ser declarada mediante decisão judicial   36 transitada em julgado ou proferida por órgão colegiado. Isso visa assegurar o devido processo legal e a ampla defesa."
+},
+
+{
+            "numero": 14,
+            "question": "Os direitos políticos podem ser restabelecidos após o cumprimento da\npena, salvo em casos de crimes hediondos.",
+            "correct": "Errado",
+            "comment": "Após o cumprimento da pena, os direitos políticos são automaticamente restabelecidos, conforme previsto no artigo 15, inciso III, da Constituição Federal. Isso inclui casos de crimes hediondos, uma vez cumprida integralmente a pena imposta."
+},
+
+{
+            "numero": 15,
+            "question": "A Constituição assegura a todos o direito de associação para fins lícitos,\nvedada a interferência estatal.",
+            "correct": "Certo",
+            "comment": "O artigo 5º, inciso XVII, da Constituição Federal, assegura o direito de associação para fins lícitos, vedada a interferência estatal em seu funcionamento. Essa garantia visa proteger a liberdade de organização e a pluralidade de ideias e interesses."
+},
+
+{
+            "numero": 16,
+            "question": "A Constituição permite que partidos políticos tenham caráter paramilitar,\ndesde que não pratiquem atos violentos.",
+            "correct": "Errado",
+            "comment": "O artigo 17, § 1º, da Constituição Federal, proíbe expressamente partidos políticos de adotarem caráter paramilitar. Essa proibição visa assegurar a manutenção da ordem democrática e a prevenção de ameaças à segurança nacional e à paz social."
+},
+
+{
+            "numero": 17,
+            "question": "O alistamento eleitoral e o voto são obrigatórios para todos os brasileiros\nmaiores de 18 anos.",
+            "correct": "Errado",
+            "comment": "O alistamento eleitoral e o voto são obrigatórios para os brasileiros maiores de 18 anos e facultativos para os analfabetos, maiores de 70 anos e para os jovens entre 16 e 18 anos, conforme artigo 14, § 1º, da Constituição Federal. Isso garante a inclusão dos jovens e a flexibilização para os mais idosos e analfabetos.   37"
+},
+
+{
+            "numero": 18,
+            "question": "Os partidos políticos têm direito a recursos do fundo partidário e ao acesso\ngratuito ao rádio e à televisão, na forma da lei.",
+            "correct": "Certo",
+            "comment": "O artigo 17, § 3º, da Constituição Federal, assegura aos partidos políticos acesso gratuito ao rádio e à televisão e direito a recursos do fundo partidário, conforme a lei. Esses direitos são essenciais para garantir a igualdade de condições na disputa eleitoral e a divulgação de propostas partidárias."
+},
+
+{
+            "numero": 19,
+            "question": "A nacionalidade brasileira pode ser adquirida por brasileiros natos e\nnaturalizados.",
+            "correct": "Certo",
+            "comment": "A nacionalidade brasileira pode ser adquirida tanto por nascimento (brasileiros natos) quanto por naturalização (brasileiros naturalizados), conforme os critérios estabelecidos no artigo 12 da Constituição Federal. A aquisição da nacionalidade por naturalização é um processo regulado por leis específicas."
+},
+
+{
+            "numero": 20,
+            "question": "A filiação partidária é condição de elegibilidade, salvo para os candidatos\na cargos majoritários.",
+            "correct": "Errado",
+            "comment": "A filiação partidária é condição de elegibilidade para todos os candidatos, tanto para cargos majoritários quanto proporcionais, conforme artigo 14, § 3º, inciso V, da Constituição Federal. Isso visa assegurar a representatividade política e a organização do processo eleitoral. 2 PODER EXECUTIVO: FORMA E SISTEMA DE GOVERNO ; CHEFIA DE ESTADO E CHEFIA DE GOVERNO ."
+},
+
+{
+            "numero": 1,
+            "question": "O Brasil adota o sistema de governo parlamentarista, onde o chefe de\ngoverno é o Primeiro-Ministro e o chefe de Estado é o Presidente da\nRepública.",
+            "correct": "Errado",
+            "comment": "O Brasil adota o sistema de governo presidencialista, conforme disposto no artigo 1º da Constituição Federal de 1988. Nesse sistema, o   38 Presidente da República exerce simultaneamente as funções de chefe de Estado e chefe de governo."
+},
+
+{
+            "numero": 2,
+            "question": "No sistema presidencialista adotado pelo Brasil, o Presidente da República\né eleito por voto direto e majoritário.",
+            "correct": "Certo",
+            "comment": "O Presidente da República no Brasil é eleito por voto direto e majoritário, conforme estabelecido no artigo 77 da Constituição Federal. A eleição ocorre em dois turnos se nenhum candidato alcançar a maioria absoluta dos votos no primeiro turno."
+},
+
+{
+            "numero": 3,
+            "question": "A forma de governo do Brasil é a república, onde os mandatários são eleitos\ne têm mandato por tempo determinado.",
+            "correct": "Certo",
+            "comment": "A forma de governo adotada pelo Brasil é a república, caracterizada pela eleição dos mandatários e pela temporalidade dos mandatos, conforme o artigo 1º da Constituição Federal. Essa forma de governo é distinta da monarquia, onde os líderes podem assumir o poder por herança e de forma vitalícia."
+},
+
+{
+            "numero": 4,
+            "question": "No Brasil, a chefia de Estado é exercida pelo Primeiro-Ministro, que\nrepresenta o país nas relações internacionais.",
+            "correct": "Errado",
+            "comment": "No Brasil, a chefia de Estado é exercida pelo Presidente da República, que também acumula a função de chefe de governo. Essa estrutura é característica do sistema presidencialista, conforme o artigo 84 da Constituição Federal."
+},
+
+{
+            "numero": 5,
+            "question": "O sistema de governo presidencialista permite a dissolução do Congresso\nNacional pelo Presidente da República em caso de grave crise institucional.",
+            "correct": "Errado",
+            "comment": "No sistema presidencialista brasileiro, o Presidente da República não tem a prerrogativa de dissolver o Congresso Nacional. O equilíbrio e a separação dos poderes são princípios fundamentais da Constituição, conforme estabelecido no artigo 2º.   39"
+},
+
+{
+            "numero": 6,
+            "question": "No Brasil, o Vice-Presidente da República substitui o Presidente em caso de\nimpedimento ou sucede-o no caso de vacância do cargo.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 79 da Constituição Federal, o Vice-Presidente da República substitui o Presidente em caso de impedimento e sucede-o no caso de vacância do cargo. Essa norma assegura a continuidade do exercício das funções executivas."
+},
+
+{
+            "numero": 7,
+            "question": "O Presidente da República pode ser reeleito apenas uma vez, segundo a\nConstituição Federal de 1988.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 14, § 5º, da Constituição Federal, o Presidente da República pode ser reeleito para um único período subsequente. Essa regra também se aplica aos governadores de estado e aos prefeitos."
+},
+
+{
+            "numero": 8,
+            "question": "A chefia de governo no Brasil é exercida pelo Presidente da República, que\ntambém desempenha o papel de chefe de Estado.",
+            "correct": "Certo",
+            "comment": "No sistema presidencialista brasileiro, o Presidente da República acumula as funções de chefe de Estado e chefe de governo, conforme o artigo 84 da Constituição Federal. Isso centraliza a liderança do Poder Executivo em uma única figura."
+},
+
+{
+            "numero": 9,
+            "question": "O sistema de governo presidencialista no Brasil implica que o poder\nexecutivo seja responsável perante o legislativo, podendo ser destituído por\nvoto de desconfiança.",
+            "correct": "Errado",
+            "comment": "No sistema presidencialista brasileiro, o Presidente da República não pode ser destituído por voto de desconfiança. A responsabilidade política do Presidente é diferente daquela existente no parlamentarismo, onde o governo depende da confiança do parlamento."
+},
+
+{
+            "numero": 10,
+            "question": "A forma de governo republicana no Brasil é caracterizada pela eleição\ndireta dos representantes e pela periodicidade dos mandatos.",
+            "correct": "Certo",
+            "comment": "A forma de governo republicana é caracterizada pela eleição direta dos representantes e pela temporalidade dos mandatos, conforme o artigo 1º da Constituição Federal. Essa forma de governo promove a renovação periódica das lideranças e a alternância no poder.   40"
+},
+
+{
+            "numero": 11,
+            "question": "O Brasil adota a forma de governo monárquica, onde o chefe de Estado é\num monarca hereditário.",
+            "correct": "Errado",
+            "comment": "O Brasil adota a forma de governo republicana, conforme estabelecido no artigo 1º da Constituição Federal. Na república, o chefe de Estado é eleito e possui mandato temporal, em contraste com a monarquia, onde o monarca assume o cargo por herança e geralmente de forma vitalícia."
+},
+
+{
+            "numero": 12,
+            "question": "O Presidente da República tem a prerrogativa de expedir decretos-leis,\nassim como o Parlamento.",
+            "correct": "Errado",
+            "comment": "O Presidente da República pode expedir medidas provisórias com força de lei, em casos de relevância e urgência, conforme o artigo 62 da Constituição Federal. Decretos-leis não são uma prerrogativa existente na ordem constitucional brasileira atual."
+},
+
+{
+            "numero": 13,
+            "question": "A responsabilidade do Presidente da República no Brasil é exclusivamente\npolítica, sem repercussões jurídicas.",
+            "correct": "Errado",
+            "comment": "A responsabilidade do Presidente da República é tanto política quanto jurídica. Ele pode ser responsabilizado politicamente por crime de responsabilidade (artigo 85 da Constituição Federal) e juridicamente por crimes comuns, processados pelo Supremo Tribunal Federal, conforme o artigo 86."
+},
+
+{
+            "numero": 14,
+            "question": "A eleição presidencial no Brasil utiliza o sistema de voto proporcional.",
+            "correct": "Errado",
+            "comment": "A eleição presidencial no Brasil utiliza o sistema de voto majoritário, conforme o artigo 77 da Constituição Federal. Para ser eleito no primeiro turno, o candidato deve obter a maioria absoluta dos votos válidos. Caso contrário, os dois mais votados disputam um segundo turno."
+},
+
+{
+            "numero": 15,
+            "question": "O Presidente da República pode ser afastado temporariamente por\ndecisão do Congresso Nacional.",
+            "correct": "Certo",
+            "comment": "O Presidente da República pode ser afastado temporariamente por decisão do Congresso Nacional em caso de recebimento de denúncia por crime de responsabilidade, conforme o artigo 86 da Constituição Federal. O afastamento inicial é de até 180 dias enquanto ocorre o julgamento pelo Senado Federal.   41"
+},
+
+{
+            "numero": 16,
+            "question": "No sistema presidencialista, o Presidente da República pode dissolver o\nparlamento e convocar novas eleições.",
+            "correct": "Errado",
+            "comment": "No sistema presidencialista brasileiro, o Presidente da República não possui a prerrogativa de dissolver o parlamento. O princípio da separação dos poderes, conforme o artigo 2º da Constituição Federal, impede tal medida, garantindo a independência entre os poderes executivo, legislativo e judiciário."
+},
+
+{
+            "numero": 17,
+            "question": "A forma de governo republicana no Brasil garante a alternância no poder\ne a periodicidade dos mandatos eletivos.",
+            "correct": "Certo",
+            "comment": "A forma de governo republicana adotada pelo Brasil garante a alternância no poder e a periodicidade dos mandatos, conforme o artigo 1º da Constituição Federal. Essa característica é essencial para a democracia, permitindo a renovação das lideranças e a participação política dos cidadãos."
+},
+
+{
+            "numero": 18,
+            "question": "O Vice-Presidente da República pode substituir o Presidente em caso de\nviagem ao exterior.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 79 da Constituição Federal, o Vice-Presidente da República substitui o Presidente em casos de impedimento temporário, como em viagens ao exterior. Essa substituição assegura a continuidade do exercício das funções executivas."
+},
+
+{
+            "numero": 19,
+            "question": "O Presidente da República pode delegar a atribuição de sancionar leis aos\nministros de Estado.",
+            "correct": "Errado",
+            "comment": "As atribuições de sancionar, promulgar e fazer publicar as leis são indelegáveis e exclusivas do Presidente da República, conforme o artigo 84, inciso IV, da Constituição Federal. O Presidente pode delegar outras atribuições administrativas a ministros de Estado, procurador-geral da República ou ao advogado-geral da União, mas não aquelas que envolvem a sanção de leis.   42"
+},
+
+{
+            "numero": 20,
+            "question": "O sistema presidencialista brasileiro permite ao Presidente da República a\nedição de medidas provisórias com força de lei.",
+            "correct": "Certo",
+            "comment": "O artigo 62 da Constituição Federal permite ao Presidente da República editar medidas provisórias com força de lei em casos de relevância e urgência. Essas medidas provisórias têm eficácia imediata, mas devem ser aprovadas pelo Congresso Nacional para se converterem definitivamente em lei. 3 DEFESA DO ESTADO E DAS INSTITUIÇÕES DEMOCRÁTICAS : SEGURANÇA PÚBLICA; ORGANIZAÇÃO DA SEGURANÇA PÚBLICA."
+},
+
+{
+            "numero": 1,
+            "question": "A segurança pública no Brasil é de responsabilidade exclusiva do governo\nfederal.",
+            "correct": "Errado",
+            "comment": "A segurança pública no Brasil é uma responsabilidade compartilhada entre a União, os Estados, o Distrito Federal e os Municípios, conforme o artigo 144 da Constituição Federal. Cada ente federativo tem atribuições específicas, e a cooperação entre eles é essencial para garantir a segurança pública."
+},
+
+{
+            "numero": 2,
+            "question": "A Constituição Federal de 1988 estabelece que as polícias civis têm a função\nde polícia judiciária e a apuração de infrações penais, exceto as militares.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 144, § 4º, da Constituição Federal, as polícias civis têm a função de polícia judiciária e a apuração de infrações penais, exceto as militares. As polícias civis atuam principalmente na investigação de crimes e na coleta de provas para os processos judiciais."
+},
+
+{
+            "numero": 3,
+            "question": "A Polícia Federal é responsável pela prevenção e repressão ao tráfico ilícito\nde drogas e ao contrabando.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 144, § 1º, da Constituição Federal, a Polícia Federal tem entre suas atribuições a prevenção e repressão ao tráfico ilícito de drogas e ao contrabando. A Polícia Federal atua em crimes de competência federal e em questões que afetam a segurança nacional.   43"
+},
+
+{
+            "numero": 4,
+            "question": "A segurança pública no Brasil inclui apenas a polícia ostensiva e a\npreservação da ordem pública.",
+            "correct": "Errado",
+            "comment": "A segurança pública no Brasil inclui várias instituições, como as polícias federal, rodoviária federal, ferroviária federal, civis, militares e os corpos de bombeiros militares, conforme o artigo 144 da Constituição Federal. Cada uma dessas instituições tem funções específicas para garantir a segurança pública."
+},
+
+{
+            "numero": 5,
+            "question": "A Constituição Federal permite a utilização das Forças Armadas para a\ngarantia da lei e da ordem, mesmo sem decreto de estado de defesa ou de\nsítio.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 142 da Constituição Federal, as Forças Armadas podem ser utilizadas para a garantia da lei e da ordem por iniciativa do Presidente da República, mesmo sem decreto de estado de defesa ou de sítio. Essa medida é excepcional e deve ocorrer dentro dos limites constitucionais."
+},
+
+{
+            "numero": 6,
+            "question": "A Polícia Rodoviária Federal tem como uma de suas atribuições a segurança\nnas rodovias estaduais.",
+            "correct": "Errado",
+            "comment": "Conforme o artigo 144, § 2º, da Constituição Federal, a Polícia Rodoviária Federal tem como atribuição a patrulha ostensiva das rodovias federais. A segurança nas rodovias estaduais é responsabilidade das polícias rodoviárias estaduais."
+},
+
+{
+            "numero": 7,
+            "question": "A Polícia Militar tem a função de polícia ostensiva e de preservação da\nordem pública.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 144, § 5º, da Constituição Federal, as polícias militares têm a função de polícia ostensiva e a preservação da ordem pública. Elas atuam na prevenção de crimes e na manutenção da segurança em áreas públicas."
+},
+
+{
+            "numero": 8,
+            "question": "Os corpos de bombeiros militares têm, além das atribuições definidas em\nlei, a execução de atividades de defesa civil.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 144, § 5º, da Constituição Federal, além das atribuições definidas em lei, os corpos de bombeiros militares executam   44 atividades de defesa civil. Eles são responsáveis por ações de prevenção, mitigação e resposta a desastres e emergências."
+},
+
+{
+            "numero": 9,
+            "question": "A organização da segurança pública é de competência exclusiva dos\nEstados, sem qualquer interferência da União.",
+            "correct": "Errado",
+            "comment": "A organização da segurança pública envolve competências tanto dos Estados quanto da União. Enquanto os Estados têm responsabilidade direta sobre suas polícias civis e militares, a União exerce competências sobre a Polícia Federal, Polícia Rodoviária Federal e Polícia Ferroviária Federal, conforme o artigo 144 da Constituição Federal."
+},
+
+{
+            "numero": 10,
+            "question": "A Constituição Federal não permite que municípios organizem suas\npróprias forças de segurança pública.",
+            "correct": "Errado",
+            "comment": "Embora os municípios não possam organizar forças de segurança como polícias militares ou civis, eles podem criar guardas municipais destinadas à proteção de seus bens, serviços e instalações, conforme o artigo 144, § 8º, da Constituição Federal. As guardas municipais auxiliam na segurança local, mas têm um papel mais limitado em comparação às polícias estaduais e federais."
+},
+
+{
+            "numero": 11,
+            "question": "As Forças Armadas, além de sua função principal, podem ser empregadas\nna garantia da lei e da ordem por determinação do Congresso Nacional.",
+            "correct": "Errado",
+            "comment": "As Forças Armadas podem ser empregadas na garantia da lei e da ordem por determinação do Presidente da República, conforme o artigo 142 da Constituição Federal. O Congresso Nacional não tem competência para determinar diretamente o emprego das Forças Armadas nessa função."
+},
+
+{
+            "numero": 12,
+            "question": "A Polícia Ferroviária Federal tem como principal atribuição a segurança do\ntransporte ferroviário de passageiros e cargas em todo o território nacional.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 144, § 3º, da Constituição Federal, a Polícia Ferroviária Federal tem como principal atribuição a segurança do transporte ferroviário de passageiros e cargas em todo o território nacional. Sua atuação visa proteger a integridade das operações ferroviárias e garantir a segurança dos usuários.   45"
+},
+
+{
+            "numero": 13,
+            "question": "As guardas municipais possuem competência para atuar em atividades de\npoliciamento ostensivo e de repressão criminal em geral.",
+            "correct": "Errado",
+            "comment": "As guardas municipais possuem competência limitada à proteção de bens, serviços e instalações do município, conforme o artigo 144, § 8º, da Constituição Federal. Elas não têm competência para atuar em atividades de policiamento ostensivo ou de repressão criminal em geral, funções estas que são exercidas pelas polícias civis e militares."
+},
+
+{
+            "numero": 14,
+            "question": "O estado de defesa pode ser decretado pelo Presidente da República para\npreservar ou prontamente restabelecer a ordem pública em locais restritos e\ndeterminados.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 136 da Constituição Federal, o estado de defesa pode ser decretado pelo Presidente da República para preservar ou prontamente restabelecer, em locais restritos e determinados, a ordem pública ou a paz social ameaçadas por grave e iminente instabilidade institucional ou atingidas por calamidades de grandes proporções na natureza."
+},
+
+{
+            "numero": 15,
+            "question": "O estado de sítio pode ser decretado pelo Presidente da República em\ncasos de comoção grave de repercussão nacional ou ocorrência de fatos que\ncomprovem a ineficácia do estado de defesa.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 137 da Constituição Federal, o estado de sítio pode ser decretado pelo Presidente da República em casos de comoção grave de repercussão nacional ou ocorrência de fatos que comprovem a ineficácia do estado de defesa. O estado de sítio é uma medida mais drástica, que pode envolver a restrição de vários direitos fundamentais para a preservação da ordem pública."
+},
+
+{
+            "numero": 16,
+            "question": "As polícias militares, subordinadas aos governadores dos estados,\npossuem também atribuições de polícia judiciária.",
+            "correct": "Errado",
+            "comment": "As polícias militares são responsáveis pela polícia ostensiva e pela preservação da ordem pública, conforme o artigo 144, § 5º, da Constituição Federal. A função de polícia judiciária é exclusiva das polícias civis e da Polícia Federal.   46"
+},
+
+{
+            "numero": 17,
+            "question": "A Polícia Rodoviária Federal, além de suas atribuições nas rodovias, possui\ncompetência para atuar em áreas urbanas em casos de emergências.",
+            "correct": "Errado",
+            "comment": "A Polícia Rodoviária Federal tem sua competência limitada à patrulha ostensiva e à segurança das rodovias federais, conforme o artigo 144, § 2º, da Constituição Federal. Atuar em áreas urbanas não está dentro de suas atribuições normais."
+},
+
+{
+            "numero": 18,
+            "question": "A organização e o funcionamento das polícias civis são definidos por\nlegislação federal, sem interferência das unidades federativas.",
+            "correct": "Errado",
+            "comment": "A organização e o funcionamento das polícias civis são definidos por leis estaduais, conforme o artigo 144, § 6º, da Constituição Federal. As polícias civis são subordinadas aos governadores dos estados e do Distrito Federal, e sua estrutura e normas de funcionamento são estabelecidas pelas respectivas unidades federativas."
+},
+
+{
+            "numero": 19,
+            "question": "O estado de defesa deve ser decretado por prazo indeterminado até que\na ordem pública seja restabelecida.",
+            "correct": "Errado",
+            "comment": "Conforme o artigo 136, § 2º, da Constituição Federal, o estado de defesa deve ser decretado por prazo determinado, não superior a 30 dias, podendo ser prorrogado uma vez por igual período. Essa limitação visa evitar abusos e garantir a temporalidade das medidas excepcionais."
+},
+
+{
+            "numero": 20,
+            "question": "O Presidente da República pode decretar o estado de sítio sem consultar\no Congresso Nacional, em casos de urgência extrema.",
+            "correct": "Errado",
+            "comment": "Conforme o artigo 137 da Constituição Federal, para decretar o estado de sítio, o Presidente da República deve solicitar autorização ao Congresso Nacional. Mesmo em casos de urgência extrema, a consulta e a autorização do Congresso são necessárias para garantir a legalidade e a legitimidade da medida.   47 4 ORDEM SOCIAL: BASE E OBJETIVOS DA ORDEM SOCIAL ; SEGURIDADE SOCIAL; MEIO AMBIENTE; FAMÍLIA, CRIANÇA, ADOLESCENTE, IDOSO, ÍNDIO."
+},
+
+{
+            "numero": 1,
+            "question": "A ordem social tem como base o primado do trabalho e como objetivo o\nbem-estar e a justiça sociais.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 193 da Constituição Federal, a ordem social tem como base o primado do trabalho e como objetivo o bem-estar e a justiça sociais. Isso reflete a preocupação do constituinte com a promoção de uma sociedade justa e igualitária, onde o trabalho é valorizado e os direitos sociais são protegidos."
+},
+
+{
+            "numero": 2,
+            "question": "A seguridade social compreende um conjunto integrado de ações de\niniciativa dos poderes públicos e da sociedade, destinado a assegurar os\ndireitos relativos à saúde, à previdência e à assistência social.",
+            "correct": "Certo",
+            "comment": "O artigo 194 da Constituição Federal define a seguridade social como um conjunto integrado de ações de iniciativa dos poderes públicos e da sociedade, destinado a assegurar os direitos relativos à saúde, à previdência e à assistência social. Esse sistema visa garantir a proteção social ampla e integrada para todos os cidadãos."
+},
+
+{
+            "numero": 3,
+            "question": "O financiamento da seguridade social é feito exclusivamente pelas\ncontribuições sociais dos trabalhadores.",
+            "correct": "Errado",
+            "comment": "O financiamento da seguridade social é realizado por meio de recursos provenientes de toda a sociedade, direta e indiretamente, nos termos do artigo 195 da Constituição Federal. Isso inclui contribuições dos trabalhadores, empregadores e do próprio governo, além de outras fontes definidas em lei."
+},
+
+{
+            "numero": 4,
+            "question": "A proteção ao meio ambiente é uma responsabilidade exclusiva do poder\npúblico, sem participação da sociedade.",
+            "correct": "Errado",
+            "comment": "A proteção ao meio ambiente é uma responsabilidade compartilhada entre o poder público e a coletividade, conforme o artigo 225 da Constituição   48 Federal. Todos têm o dever de defender e preservar o meio ambiente para as presentes e futuras gerações, e a participação da sociedade é fundamental nesse processo."
+},
+
+{
+            "numero": 5,
+            "question": "O direito ao meio ambiente ecologicamente equilibrado é considerado um\ndireito coletivo e difuso, essencial à qualidade de vida.",
+            "correct": "Certo",
+            "comment": "O artigo 225 da Constituição Federal assegura o direito ao meio ambiente ecologicamente equilibrado como um direito de todos, incluindo-se aí a coletividade. É um direito difuso, essencial à qualidade de vida, e impõe ao poder público e à coletividade o dever de defendê-lo e preservá-lo."
+},
+
+{
+            "numero": 6,
+            "question": "A Constituição Federal de 1988 não estabelece proteção específica para os\ndireitos dos povos indígenas.",
+            "correct": "Errado",
+            "comment": "A Constituição Federal dedica um capítulo específico aos direitos dos povos indígenas, nos artigos 231 e 232, reconhecendo sua organização social, costumes, línguas, crenças e tradições, e os direitos originários sobre as terras que tradicionalmente ocupam. A proteção desses direitos é essencial para a preservação da cultura e da identidade indígena."
+},
+
+{
+            "numero": 7,
+            "question": "A família, como base da sociedade, tem especial proteção do Estado,\nconforme previsto na Constituição Federal.",
+            "correct": "Certo",
+            "comment": "O artigo 226 da Constituição Federal dispõe que a família, base da sociedade, tem especial proteção do Estado. Isso se reflete em diversas políticas públicas e legislações que visam proteger a instituição familiar, promovendo seu desenvolvimento e estabilidade."
+},
+
+{
+            "numero": 8,
+            "question": "Os direitos da criança e do adolescente são prioritários e devem ser\ngarantidos com absoluta prioridade.",
+            "correct": "Certo",
+            "comment": "O artigo 227 da Constituição Federal assegura que é dever da família, da sociedade e do Estado assegurar à criança, ao adolescente e ao jovem, com absoluta prioridade, o direito à vida, à saúde, à alimentação, à educação, ao lazer, à profissionalização, à cultura, à dignidade, ao respeito, à liberdade e à convivência familiar e comunitária.   49"
+},
+
+{
+            "numero": 9,
+            "question": "A seguridade social não inclui a assistência social aos desamparados.",
+            "correct": "Errado",
+            "comment": "A seguridade social inclui, sim, a assistência social aos desamparados, além da saúde e da previdência, conforme o artigo 194 da Constituição Federal. A assistência social visa garantir mínimos sociais a quem dela necessitar, independente de contribuição, assegurando a dignidade humana."
+},
+
+{
+            "numero": 10,
+            "question": "O Estado deve promover programas de assistência integral à saúde da\ncriança e do adolescente, admitindo a participação de organizações não\ngovernamentais.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 227, § 1º, da Constituição Federal, o Estado deve promover programas de assistência integral à saúde da criança e do adolescente, permitindo e incentivando a participação de organizações não governamentais e outras entidades sociais. Essa cooperação é essencial para a implementação de políticas públicas eficazes."
+},
+
+{
+            "numero": 11,
+            "question": "A previdência social é organizada de forma contributiva e compulsória,\natendendo apenas aos trabalhadores formais.",
+            "correct": "Errado",
+            "comment": "A previdência social, conforme o artigo 201 da Constituição Federal, é organizada de forma contributiva e de filiação obrigatória, mas atende a todos os trabalhadores, incluindo os formais e informais, bem como os segurados facultativos. O objetivo é garantir proteção social em casos de incapacidade, desemprego involuntário, idade avançada, entre outros."
+},
+
+{
+            "numero": 12,
+            "question": "A proteção ao idoso é garantida pela Constituição Federal, incluindo a\nprioridade no atendimento e a gratuidade no transporte público para maiores\nde 60 anos.",
+            "correct": "Certo",
+            "comment": "O artigo 230 da Constituição Federal assegura que a família, a sociedade e o Estado têm o dever de amparar as pessoas idosas, garantindo sua participação na comunidade, defendendo sua dignidade e bem-estar. A legislação específica, como o Estatuto do Idoso, complementa essas garantias, incluindo a prioridade no atendimento e a gratuidade no transporte público.   50"
+},
+
+{
+            "numero": 13,
+            "question": "O direito ao meio ambiente ecologicamente equilibrado não abrange a\nproteção à fauna e à flora.",
+            "correct": "Errado",
+            "comment": "O direito ao meio ambiente ecologicamente equilibrado, conforme o artigo 225 da Constituição Federal, inclui a proteção à fauna e à flora. O poder público deve preservar e restaurar os processos ecológicos essenciais, prover o manejo ecológico das espécies e ecossistemas, e proteger a diversidade biológica."
+},
+
+{
+            "numero": 14,
+            "question": "A Constituição Federal assegura a dignidade da pessoa humana como\nfundamento da República, refletindo-se na proteção de diversos grupos\nvulneráveis, incluindo crianças, adolescentes, idosos e povos indígenas.",
+            "correct": "Certo",
+            "comment": "O artigo 1º, inciso III, da Constituição Federal, estabelece a dignidade da pessoa humana como um dos fundamentos da República. Esse princípio se reflete na proteção constitucional garantida a diversos grupos vulneráveis, como crianças, adolescentes, idosos e povos indígenas, assegurando seus direitos e promovendo a inclusão social."
+},
+
+{
+            "numero": 15,
+            "question": "Os direitos dos povos indígenas são garantidos apenas se suas terras\nestiverem demarcadas oficialmente.",
+            "correct": "Errado",
+            "comment": "Os direitos dos povos indígenas, conforme os artigos 231 e 232 da Constituição Federal, são garantidos independentemente da demarcação oficial de suas terras. A demarcação é um reconhecimento formal dos direitos originários, mas a ausência de demarcação não retira os direitos reconhecidos constitucionalmente."
+},
+
+{
+            "numero": 16,
+            "question": "A seguridade social deve ser organizada com base na descentralização\npolítico-administrativa, com direção única em cada esfera de governo.",
+            "correct": "Certo",
+            "comment": "O artigo 194, inciso VII, da Constituição Federal estabelece que a seguridade social deve ser organizada com base na descentralização político- administrativa, cabendo a cada esfera de governo a direção de suas respectivas competências. Isso visa garantir uma gestão eficiente e adequada às realidades locais.   51"
+},
+
+{
+            "numero": 17,
+            "question": "A educação ambiental deve ser promovida em todos os níveis de ensino e\na conscientização pública deve ser incentivada pelo poder público.",
+            "correct": "Certo",
+            "comment": "O artigo 225, § 1º, inciso VI, da Constituição Federal, determina que todos têm direito ao meio ambiente ecologicamente equilibrado e que o poder público deve promover a educação ambiental em todos os níveis de ensino e a conscientização pública para a preservação do meio ambiente."
+},
+
+{
+            "numero": 18,
+            "question": "A Constituição Federal não estabelece a proteção à família como princípio\nfundamental da ordem social.",
+            "correct": "Errado",
+            "comment": "A Constituição Federal, no artigo 226, estabelece a proteção à família como princípio fundamental da ordem social, reconhecendo sua importância como base da sociedade e garantindo medidas para seu desenvolvimento e proteção."
+},
+
+{
+            "numero": 19,
+            "question": "Os direitos previdenciários incluem apenas a aposentadoria e o auxílio-\ndoença, excluindo outros benefícios como pensão por morte e salário-família.",
+            "correct": "Errado",
+            "comment": "Os direitos previdenciários, conforme o artigo 201 da Constituição Federal, incluem uma ampla gama de benefícios, como aposentadoria, auxílio-doença, pensão por morte, salário-família, auxílio-reclusão e outros. Esses benefícios visam proteger os segurados e seus dependentes em diversas situações de necessidade."
+},
+
+{
+            "numero": 20,
+            "question": "O Estado brasileiro tem o dever de proteger e fomentar as culturas\nindígenas, promovendo sua inclusão social e respeitando sua identidade e\ntradições.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 231 da Constituição Federal, o Estado brasileiro tem o dever de proteger as culturas indígenas, promovendo sua inclusão social e respeitando sua identidade e tradições. Essa proteção abrange o reconhecimento de suas terras, a valorização de suas línguas e costumes, e a garantia de seus direitos."
+},
+
+
+            
+          
+        ];
+        
+      // Função de busca corrigida
+        function setupSearch() {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.trim().toLowerCase();
+                
+                if (searchTerm.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                const results = allQuestions.filter(q => {
+                    return q.question.toLowerCase().includes(searchTerm) || 
+                           q.numero.toString().includes(searchTerm);
+                }).slice(0, 10);
+                
+                displaySearchResults(results);
+            });
+
+            // Fechar resultados ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        // Exibir resultados da busca
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (!results || results.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'search-item';
+                noResults.textContent = 'Nenhuma questão encontrada';
+                searchResults.appendChild(noResults);
+            } else {
+                results.forEach(q => {
+                    const item = document.createElement('div');
+                    item.className = 'search-item';
+                    item.innerHTML = `<strong>#${q.numero}</strong>: ${q.question.substring(0, 70)}${q.question.length > 70 ? '...' : ''}`;
+                    item.addEventListener('click', () => {
+                        goToQuestion(q.numero - 1);
+                        searchResults.style.display = 'none';
+                    });
+                    searchResults.appendChild(item);
+                });
+            }
+            
+            searchResults.style.display = results.length ? 'block' : 'none';
+        }
+
+        // Ir para questão específica
+        function goToQuestion(index) {
+            if (index >= 0 && index < allQuestions.length) {
+                currentQuestionIndex = index;
+                displayQuestion();
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+            }
+        }
+        
+        // Inicialização
+        function init() {
+            createParticles();
+            loadQuestions();
+            loadProgress();
+            setupSearch();
+            displayQuestion();
+        }
+        
+        // Carregar questões
+        function loadQuestions() {
+            allQuestions = questions;
+            
+            // Preencher com questões fictícias se necessário
+            for (let i = questions.length + 1; i <= TOTAL_QUESTIONS; i++) {
+                allQuestions.push({
+                    "numero": i,
+                    "question": `Questão ${i}: Exemplo de pergunta sobre conceitos avançados de TI.`,
+                    "correct": i % 2 === 0 ? "Certo" : "Errado",
+                    "comment": `Explicação detalhada para a questão ${i}.`
+                });
+            }
+        }
+        
+        // Criar partículas flutuantes
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Carregar progresso salvo
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('quizProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                currentQuestionIndex = progress.currentQuestionIndex || 0;
+                correctCount = progress.correctCount || 0;
+                wrongCount = progress.wrongCount || 0;
+                currentRankIndex = progress.currentRankIndex || 0;
+                answeredQuestions = progress.answeredQuestions || [];
+                quizCompleted = progress.quizCompleted || false;
+                
+                correctDisplay.textContent = correctCount;
+                wrongDisplay.textContent = wrongCount;
+                
+                updateRank();
+                
+                if (quizCompleted) {
+                    showCompletionMessage();
+                }
+            }
+        }
+        
+        // Salvar progresso
+        function saveProgress() {
+            const progress = {
+                currentQuestionIndex,
+                correctCount,
+                wrongCount,
+                currentRankIndex,
+                answeredQuestions,
+                quizCompleted
+            };
+            localStorage.setItem('quizProgress', JSON.stringify(progress));
+        }
+        
+        // Resetar progresso
+        function resetProgress() {
+            localStorage.removeItem('quizProgress');
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            currentRankIndex = 0;
+            answeredQuestions = [];
+            quizCompleted = false;
+            
+            correctDisplay.textContent = '0';
+            wrongDisplay.textContent = '0';
+            
+            updateRank();
+            displayQuestion();
+        }
+        
+        // Atualizar rank do jogador
+        function updateRank() {
+            let newRankIndex = 0;
+            
+            // Determinar o rank atual baseado nos acertos
+            for (let i = RANKS.length - 1; i >= 0; i--) {
+                if (correctCount >= RANKS[i].minCorrect) {
+                    newRankIndex = i;
+                    break;
+                }
+            }
+            
+            // Verificar se houve promoção
+            if (newRankIndex > currentRankIndex) {
+                currentRankIndex = newRankIndex;
+                showRankUp();
+            }
+            
+            // Atualizar display do rank
+            const currentRank = RANKS[currentRankIndex];
+            const nextRank = currentRankIndex < RANKS.length - 1 ? RANKS[currentRankIndex + 1] : null;
+            
+            rankDisplay.textContent = currentRank.name;
+            currentRankDisplay.textContent = currentRank.name;
+            currentRankDisplay.style.color = currentRank.color;
+            
+            // Atualizar cor do rank box
+            rankBox.style.setProperty('--current-rank-color', currentRank.color);
+            rankBox.style.background = `linear-gradient(135deg, ${currentRank.color}, rgba(0, 0, 0, 0.5))`;
+            rankBox.style.borderColor = currentRank.color;
+            rankBox.style.boxShadow = `0 0 15px ${currentRank.color}`;
+            
+            // Atualizar ícone
+            rankIcon.className = `fas ${currentRank.icon}`;
+            
+            // Atualizar progresso para o próximo rank
+            if (nextRank) {
+                const progress = correctCount - currentRank.minCorrect;
+                const needed = nextRank.minCorrect - currentRank.minCorrect;
+                const percent = Math.round((progress / needed) * 100);
+                
+                rankProgressDisplay.textContent = `${progress}/${needed} acertos (${percent}%) para o próximo nível`;
+                rankRequirementsDisplay.textContent = `Próximo nível: ${nextRank.name} (${nextRank.minCorrect} acertos)`;
+            } else {
+                rankProgressDisplay.textContent = "Rank máximo alcançado!";
+                rankRequirementsDisplay.textContent = "Você dominou todas as questões!";
+            }
+        }
+        
+        // Mostrar tela de promoção
+        function showRankUp() {
+            const rank = RANKS[currentRankIndex];
+            
+            // Atualizar elementos da tela de promoção
+            rankUpTitle.textContent = `Promovido a ${rank.name}!`;
+            rankUpMessage.textContent = `Você alcançou ${correctCount} acertos e subiu de nível!`;
+            rankUpIcon.className = `fas ${rank.icon}`;
+            
+            // Aplicar cor do rank atual
+            rankUpContainer.style.setProperty('--current-rank-color', rank.color);
+            rankUpBox.style.background = `linear-gradient(135deg, ${rank.color}, #162447)`;
+            rankUpBox.style.borderColor = rank.color;
+            rankUpBox.style.boxShadow = `0 0 25px ${rank.color}`;
+            rankUpTitle.style.color = rank.color;
+            rankUpTitle.style.textShadow = `0 0 10px ${rank.color}`;
+            rankUpIcon.style.color = rank.color;
+            
+            // Mostrar tela de promoção
+            rankUpContainer.style.display = 'flex';
+        }
+        
+        // Fechar tela de promoção
+        function closeRankUp() {
+            rankUpContainer.style.display = 'none';
+        }
+        
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progressPercentage = (currentQuestionIndex / TOTAL_QUESTIONS) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+            progressDisplay.textContent = `Progresso: ${Math.round(progressPercentage)}%`;
+            questionNumberDisplay.textContent = `Questão ${currentQuestionIndex + 1}/${TOTAL_QUESTIONS}`;
+        }
+        
+        // Iniciar temporizador
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_PER_QUESTION;
+            timerDisplay.textContent = timeLeft;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+        
+        // Tempo esgotado
+        function handleTimeout() {
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            checkAnswer('Errado', true);
+        }
+        
+        // Verificar resposta
+        function checkAnswer(answer, isTimeout = false) {
+            clearInterval(timer);
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            const isCorrect = answer === currentQuestion.correct;
+            
+            // Registrar resposta
+            answeredQuestions.push({
+                questionIndex: currentQuestionIndex,
+                question: currentQuestion.question,
+                userAnswer: answer,
+                correctAnswer: currentQuestion.correct,
+                isCorrect,
+                isTimeout
+            });
+            
+            // Atualizar contadores
+            if (isCorrect) {
+                correctCount++;
+                correctDisplay.textContent = correctCount;
+            } else {
+                wrongCount++;
+                wrongDisplay.textContent = wrongCount;
+            }
+            
+            // Mostrar resultado
+            resultDiv.style.display = 'block';
+            
+            if (isTimeout) {
+                resultMessage.textContent = "⏰ Tempo esgotado!";
+                resultMessage.style.color = "#FF9800";
+            } else if (isCorrect) {
+                resultMessage.textContent = "✅ Resposta Correta!";
+                resultMessage.style.color = "#4CAF50";
+            } else {
+                resultMessage.textContent = "❌ Resposta Incorreta!";
+                resultMessage.style.color = "#F44336";
+            }
+            
+            commentDiv.innerHTML = `<b>Explicação:</b> ${currentQuestion.comment}`;
+            nextBtn.disabled = false;
+            
+            // Atualizar rank e salvar progresso
+            updateRank();
+            saveProgress();
+        }
+        
+        // Próxima questão
+        function nextQuestion() {
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                quizCompleted = true;
+                showCompletionMessage();
+                saveProgress();
+            }
+        }
+        
+        // Mostrar mensagem de conclusão
+        function showCompletionMessage() {
+            const accuracy = Math.round((correctCount / allQuestions.length) * 100);
+            const rank = RANKS[currentRankIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question" style="text-align: center;">
+                    <h2>Quiz Concluído!</h2>
+                    <p>Você respondeu a todas as ${allQuestions.length} questões.</p>
+                    <p>Pontuação final: ${correctCount} acertos (${accuracy}%)</p>
+                    <p style="color: ${rank.color}; font-weight: bold;">Rank Final: ${rank.name}</p>
+                    <button onclick="resetQuiz()" style="margin-top: 20px;">Reiniciar Quiz</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+        
+        // Reiniciar quiz
+        function resetQuiz() {
+            resetProgress();
+            nextBtn.style.display = 'block';
+            displayQuestion();
+        }
+        
+        // Exibir questão
+        function displayQuestion() {
+            if (quizCompleted) {
+                showCompletionMessage();
+                return;
+            }
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question">
+                    <p>${currentQuestion.numero}. ${currentQuestion.question}</p>
+                </div>
+                <div class="answer-buttons">
+                    <button onclick="checkAnswer('Certo')">Certo</button>
+                    <button onclick="checkAnswer('Errado')">Errado</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.disabled = true;
+            updateProgress();
+            startTimer();
+        }
+        
+        // Iniciar o quiz
+        init();
+    </script>
+</body>
+</html>

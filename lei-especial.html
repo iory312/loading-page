@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lei Especial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00FFFF;
+            --secondary-color: #0A192F;
+            --accent-color: #1F4068;
+            --dark-accent: #162447;
+            --text-color: #E6F1FF;
+            --correct-color: #4CAF50;
+            --wrong-color: #F44336;
+            --card-bg: rgba(31, 64, 104, 0.7);
+            --neon-glow: 0 0 10px rgba(0, 255, 255, 0.8);
+            --reward-color: #FFD700;
+            --rank-1: #8B93FF;
+            --rank-2: #6B8CFF;
+            --rank-3: #4B86FF;
+            --rank-4: #2B80FF;
+            --rank-5: #0B6BFF;
+            --rank-6: #0055CC;
+            --rank-7: #0040AA;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--secondary-color);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--neon-glow);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                var(--primary-color), 
+                var(--accent-color), 
+                var(--dark-accent), 
+                var(--primary-color));
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 16px;
+            animation: borderGlow 8s linear infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--primary-color);
+            letter-spacing: 1px;
+        }
+        
+        .banner {
+            width: 100%;
+            max-width: 882px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .banner:hover {
+            transform: scale(1.01);
+        }
+        
+        .progress-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #00E5FF);
+            transition: width 0.5s ease-in-out;
+            border-radius: 5px;
+            width: 0%;
+        }
+        
+        .rank-marker {
+            position: absolute;
+            height: 15px;
+            width: 2px;
+            background-color: white;
+            top: -2.5px;
+            transform: translateX(-50%);
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+        
+        .rank-box {
+            background: linear-gradient(135deg, var(--current-rank-color), rgba(0, 0, 0, 0.5));
+            border: 1px solid var(--current-rank-color);
+            box-shadow: 0 0 15px var(--current-rank-color);
+        }
+        
+        .timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .timer span {
+            margin-left: 5px;
+        }
+        
+        .quiz-content {
+            margin: 25px 0;
+            min-height: 150px;
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+        }
+        
+        .answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: rgba(0, 255, 255, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button.correct {
+            background-color: var(--correct-color);
+            border-color: var(--correct-color);
+            color: white;
+        }
+        
+        button.wrong {
+            background-color: var(--wrong-color);
+            border-color: var(--wrong-color);
+            color: white;
+        }
+        
+        .result-container {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-message {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .explanation {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .rank-up-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .rank-up-box {
+            background: linear-gradient(135deg, var(--current-rank-color), #162447);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 25px var(--current-rank-color);
+            border: 2px solid var(--current-rank-color);
+            animation: pulseReward 2s infinite;
+        }
+        
+        @keyframes pulseReward {
+            0% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+            50% { transform: scale(1.02); box-shadow: 0 0 35px var(--current-rank-color); }
+            100% { transform: scale(1); box-shadow: 0 0 25px var(--current-rank-color); }
+        }
+        
+        .rank-up-title {
+            color: var(--current-rank-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px var(--current-rank-color);
+        }
+        
+        .rank-up-message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .rank-icon {
+            font-size: 4rem;
+            color: var(--current-rank-color);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .next-btn {
+            display: block;
+            margin: 25px auto 0;
+            min-width: 150px;
+            background: linear-gradient(45deg, var(--primary-color), #00E5FF);
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        
+        .next-btn:hover {
+            background: linear-gradient(45deg, #00E5FF, var(--primary-color));
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            to { transform: translateY(-100vh) rotate(360deg); }
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-color);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+        
+        .search-results {
+            position: absolute;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--dark-accent);
+            border-radius: 8px;
+            margin-top: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-item:hover {
+            background: var(--accent-color);
+        }
+        
+        .rank-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 3px solid var(--current-rank-color);
+        }
+        
+        .rank-name {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--current-rank-color);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .rank-progress {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .rank-requirements {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .answer-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .stat-box {
+                min-width: 100%;
+            }
+            
+            .rank-up-title {
+                font-size: 1.5rem;
+            }
+            
+            .rank-up-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-particles" id="particles"></div>
+        <img src="PF2025.png" alt="Banner do Site" class="banner">
+        <h1>Lei Especial</h1>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar questão por número ou texto...">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        
+        <div class="rank-info">
+            <div class="rank-name" id="currentRank">Novato Digital</div>
+            <div class="rank-progress" id="rankProgress">0/100 acertos para o próximo nível</div>
+            <div class="rank-requirements" id="rankRequirements">Próximo nível: Aprendiz de Código (100 acertos)</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-info">
+                <span id="progress">Progresso: 0%</span>
+                <span id="question-number">Questão 1/1300</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="rank-marker" style="left: 7.69%;" title="Aprendiz de Código (100)"></div>
+                <div class="rank-marker" style="left: 21.54%;" title="Programador Júnior (280)"></div>
+                <div class="rank-marker" style="left: 38.46%;" title="Desenvolvedor Pleno (500)"></div>
+                <div class="rank-marker" style="left: 53.85%;" title="Sênior de Sistemas (700)"></div>
+                <div class="rank-marker" style="left: 69.23%;" title="Arquiteto Digital (900)"></div>
+                <div class="rank-marker" style="left: 84.62%;" title="Mestre da Nuvem (1100)"></div>
+                <div class="rank-marker" style="left: 100%;" title="Lenda da TI (1300)"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-content">
+            <div id="quiz"></div>
+            <div class="result-container" id="result">
+                <div class="result-message" id="resultMessage"></div>
+                <div class="explanation" id="comment"></div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="timer">⏳ <span id="timer">90</span>s</div>
+                </div>
+                <div class="stat-box">
+                    ✔️ Acertos: <span id="correctCount">0</span>
+                </div>
+                <div class="stat-box">
+                    ❌ Erros: <span id="wrongCount">0</span>
+                </div>
+                <div class="stat-box rank-box" id="rankBox">
+                    <i class="fas fa-user" id="rankIcon"></i> <span id="rankDisplay">Novato</span>
+                </div>
+            </div>
+        </div>
+        
+        <button class="next-btn" onclick="nextQuestion()" id="nextBtn" disabled>Próxima</button>
+    </div>
+    
+    <div class="rank-up-container" id="rankUpContainer">
+        <div class="rank-up-box">
+            <div class="rank-icon">
+                <i class="fas fa-star" id="rankUpIcon"></i>
+            </div>
+            <h2 class="rank-up-title" id="rankUpTitle">Promovido!</h2>
+            <p class="rank-up-message" id="rankUpMessage">Você alcançou um novo nível!</p>
+            <button onclick="closeRankUp()">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de ranks evolutivos
+        const RANKS = [
+            { name: "Novato Digital", minCorrect: 0, color: "var(--rank-1)", icon: "fa-user" },
+            { name: "Aprendiz de Código", minCorrect: 100, color: "var(--rank-2)", icon: "fa-laptop-code" },
+            { name: "Programador Júnior", minCorrect: 280, color: "var(--rank-3)", icon: "fa-code" },
+            { name: "Desenvolvedor Pleno", minCorrect: 500, color: "var(--rank-4)", icon: "fa-file-code" },
+            { name: "Sênior de Sistemas", minCorrect: 700, color: "var(--rank-5)", icon: "fa-server" },
+            { name: "Arquiteto Digital", minCorrect: 900, color: "var(--rank-6)", icon: "fa-network-wired" },
+            { name: "Mestre da Nuvem", minCorrect: 1100, color: "var(--rank-7)", icon: "fa-cloud" },
+            { name: "Lenda da TI", minCorrect: 1300, color: "var(--reward-color)", icon: "fa-crown" }
+        ];
+        
+        // Configurações do quiz
+        const TOTAL_QUESTIONS = 1300;
+        const TIME_PER_QUESTION = 90;
+        
+        // Elementos do DOM
+        const quizDiv = document.getElementById('quiz');
+        const resultDiv = document.getElementById('result');
+        const resultMessage = document.getElementById('resultMessage');
+        const commentDiv = document.getElementById('comment');
+        const progressFill = document.getElementById('progressFill');
+        const progressDisplay = document.getElementById('progress');
+        const questionNumberDisplay = document.getElementById('question-number');
+        const timerDisplay = document.getElementById('timer');
+        const nextBtn = document.getElementById('nextBtn');
+        const correctDisplay = document.getElementById('correctCount');
+        const wrongDisplay = document.getElementById('wrongCount');
+        const rankDisplay = document.getElementById('rankDisplay');
+        const rankBox = document.getElementById('rankBox');
+        const rankIcon = document.getElementById('rankIcon');
+        const currentRankDisplay = document.getElementById('currentRank');
+        const rankProgressDisplay = document.getElementById('rankProgress');
+        const rankRequirementsDisplay = document.getElementById('rankRequirements');
+        const rankUpContainer = document.getElementById('rankUpContainer');
+        const rankUpTitle = document.getElementById('rankUpTitle');
+        const rankUpMessage = document.getElementById('rankUpMessage');
+        const rankUpIcon = document.getElementById('rankUpIcon');
+        const particlesContainer = document.getElementById('particles');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        
+        // Estado do quiz
+        let currentQuestionIndex = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let currentRankIndex = 0;
+        let timeLeft = TIME_PER_QUESTION;
+        let timer;
+        let answeredQuestions = [];
+        let quizCompleted = false;
+        let allQuestions = [];
+        
+        // Banco de questões
+        const questions = [
+
+         {
+            "numero": 1,
+            "question": "A Lei nº 10.357/2001 estabelece que os produtos químicos sujeitos a\ncontrole e fiscalização serão definidos em ato conjunto dos Ministros de\nEstado da Justiça e da Saúde.",
+            "correct": "Certo",
+            "comment": "A Lei nº 10.357/2001 determina que a definição dos produtos químicos sujeitos a controle e fiscalização será feita em ato conjunto dos Ministros de Estado da Justiça e da Saúde. Esta medida busca garantir que a regulamentação dos produtos químicos seja feita com base em critérios técnicos de segurança e saúde pública."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 10.357/2001, o cadastro obrigatório para pessoas\nfísicas e jurídicas que manuseiam produtos químicos controlados deve ser\nrenovado a cada dois anos.",
+            "correct": "Errado",
+            "comment": "A Lei nº 10.357/2001 não especifica a necessidade de renovação do cadastro a cada dois anos. A periodicidade da renovação do cadastro é determinada por regulamentos específicos, e pode variar conforme a regulamentação vigente."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 10.357/2001 prevê que o descumprimento das normas de controle\ne fiscalização de produtos químicos pode resultar em penalidades que\nincluem multas e suspensão de atividades.",
+            "correct": "Certo",
+            "comment": "A lei prevê que o descumprimento das normas pode acarretar em penalidades como multas, suspensão temporária ou definitiva das atividades, entre outras sanções administrativas. Essas medidas visam assegurar o cumprimento rigoroso das normas de controle de produtos químicos.  38"
+},
+
+{
+            "numero": 4,
+            "question": "Segundo a Lei nº 10.357/2001, o controle e a fiscalização de produtos\nquímicos cabem exclusivamente ao Departamento de Polícia Federal.",
+            "correct": "Errado",
+            "comment": "Embora o Departamento de Polícia Federal tenha um papel importante no controle e fiscalização de produtos químicos, a lei permite a colaboração de outros órgãos e entidades, conforme estabelecido em regulamentos específicos."
+},
+
+{
+            "numero": 5,
+            "question": "A comercialização de produtos químicos controlados pode ser feita\nlivremente entre pessoas físicas, desde que não haja fins comerciais,\nconforme a Lei nº 10.357/2001.",
+            "correct": "Errado",
+            "comment": "A comercialização de produtos químicos controlados é restrita e sujeita a controle rigoroso, independentemente de se tratar de pessoas físicas ou jurídicas. A lei visa evitar a distribuição inadequada e o uso indevido desses produtos."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 10.357/2001 determina que os produtos químicos controlados\ndevem ser armazenados em locais que atendam a normas específicas de\nsegurança e controle.",
+            "correct": "Certo",
+            "comment": "A lei exige que os produtos químicos controlados sejam armazenados de acordo com normas específicas de segurança, para prevenir acidentes e garantir a segurança pública. Essas normas são detalhadas em regulamentos complementares."
+},
+
+{
+            "numero": 7,
+            "question": "Conforme a Lei nº 10.357/2001, a importação de produtos químicos\ncontrolados pode ser realizada sem a necessidade de autorização prévia,\ndesde que destinada a fins de pesquisa científica.",
+            "correct": "Errado",
+            "comment": "A importação de produtos químicos controlados requer autorização prévia, mesmo quando destinada a fins de pesquisa científica. Essa exigência visa garantir o controle sobre a entrada e uso desses produtos no país."
+},
+
+{
+            "numero": 8,
+            "question": "A Lei nº 10.357/2001 especifica que todas as operações de transporte de\nprodutos químicos controlados devem ser acompanhadas de documentação\nespecífica que ateste a origem e o destino dos produtos.",
+            "correct": "Certo",
+            "comment": "A lei exige que o transporte de produtos químicos controlados seja acompanhado de documentação específica, para assegurar a rastreabilidade  39 e o controle das operações envolvendo esses produtos, prevenindo desvios e uso indevido."
+},
+
+{
+            "numero": 9,
+            "question": "Segundo a Lei nº 10.357/2001, as atividades de manipulação de produtos\nquímicos controlados são isentas de fiscalização sanitária, uma vez que já\nestão sujeitas ao controle do Departamento de Polícia Federal.",
+            "correct": "Errado",
+            "comment": "As atividades de manipulação de produtos químicos controlados não são isentas de fiscalização sanitária. Elas estão sujeitas a múltiplas camadas de fiscalização, incluindo a sanitária, para garantir a segurança e a saúde pública."
+},
+
+{
+            "numero": 10,
+            "question": "A Lei nº 10.357/2001 estabelece que os dados do cadastro de pessoas\nfísicas e jurídicas que manuseiam produtos químicos controlados são de\nacesso restrito, sendo disponibilizados apenas mediante ordem judicial.",
+            "correct": "Errado",
+            "comment": "Os dados do cadastro podem ser acessados por autoridades competentes para fins de fiscalização e controle, sem a necessidade de ordem judicial, embora o acesso seja restrito a essas finalidades específicas."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 10.357/2001, o registro de operações com\nprodutos químicos controlados deve ser mantido por um período mínimo de\ncinco anos.",
+            "correct": "Certo",
+            "comment": "A lei estabelece que o registro de todas as operações envolvendo produtos químicos controlados deve ser mantido por um período mínimo de cinco anos, permitindo a rastreabilidade e auditoria das atividades realizadas."
+},
+
+{
+            "numero": 12,
+            "question": "A exportação de produtos químicos controlados é permitida pela Lei nº\n10.357/2001 sem a necessidade de qualquer autorização específica, desde\nque o destino final seja um país que também controle esses produtos.",
+            "correct": "Errado",
+            "comment": "A exportação de produtos químicos controlados requer autorização específica, independentemente do país de destino. Essa medida visa garantir que os produtos não sejam desviados para usos ilícitos.  40"
+},
+
+{
+            "numero": 13,
+            "question": "Conforme a Lei nº 10.357/2001, as empresas que fabricam produtos\nquímicos controlados devem implementar programas de treinamento\ncontínuo para seus funcionários sobre o manejo seguro desses produtos.",
+            "correct": "Certo",
+            "comment": "A lei exige que as empresas implementem programas de treinamento contínuo para assegurar que os funcionários estejam cientes e capacitados para manejar produtos químicos controlados com segurança, minimizando riscos de acidentes e exposições."
+},
+
+{
+            "numero": 14,
+            "question": "A Lei nº 10.357/2001 permite que qualquer pessoa física, maior de 18\nanos, adquira produtos químicos controlados para uso pessoal, desde que\ninforme a finalidade da compra.",
+            "correct": "Errado",
+            "comment": "A aquisição de produtos químicos controlados por pessoas físicas está sujeita a rigorosas restrições e controles, e não é permitida para uso pessoal sem justificativa adequada e autorização específica."
+},
+
+{
+            "numero": 15,
+            "question": "Segundo a Lei nº 10.357/2001, as infrações administrativas relacionadas\nao controle de produtos químicos são julgadas exclusivamente pelo\nDepartamento de Polícia Federal.",
+            "correct": "Errado",
+            "comment": "As infrações administrativas podem ser julgadas por diferentes órgãos competentes, conforme estabelecido em regulamentos específicos. O Departamento de Polícia Federal é um dos órgãos envolvidos, mas não o único responsável pelo julgamento."
+},
+
+{
+            "numero": 16,
+            "question": "A Lei nº 10.357/2001 estabelece que o transporte de produtos químicos\ncontrolados deve ser realizado por empresas especializadas, que possuam\nautorização específica para essa atividade.",
+            "correct": "Certo",
+            "comment": "A lei exige que o transporte de produtos químicos controlados seja realizado por empresas especializadas, que possuam a devida autorização, garantindo a segurança no transporte e evitando riscos à saúde pública e ao meio ambiente.  41"
+},
+
+{
+            "numero": 17,
+            "question": "De acordo com a Lei nº 10.357/2001, é obrigatória a comunicação\nimediata às autoridades competentes de qualquer incidente envolvendo\nprodutos químicos controlados.",
+            "correct": "Certo",
+            "comment": "A lei determina que qualquer incidente envolvendo produtos químicos controlados deve ser imediatamente comunicado às autoridades competentes, para que as medidas necessárias sejam adotadas prontamente, minimizando os impactos e riscos."
+},
+
+{
+            "numero": 18,
+            "question": "Conforme a Lei nº 10.357/2001, os produtos químicos apreendidos em\noperações de fiscalização devem ser destruídos imediatamente,\nindependentemente do resultado do processo administrativo ou judicial.",
+            "correct": "Errado",
+            "comment": "A destruição de produtos químicos apreendidos só ocorre após o devido processo administrativo ou judicial, garantindo o direito de defesa e o cumprimento das normas legais."
+},
+
+{
+            "numero": 19,
+            "question": "A Lei nº 10.357/2001 prevê que os fabricantes de produtos químicos\ncontrolados devem manter registros detalhados de todos os insumos\nutilizados no processo de fabricação.",
+            "correct": "Certo",
+            "comment": "A lei exige que os fabricantes mantenham registros detalhados de todos os insumos utilizados no processo de fabricação de produtos químicos controlados, para garantir a rastreabilidade e o controle sobre o uso desses insumos."
+},
+
+{
+            "numero": 20,
+            "question": "Segundo a Lei nº 10.357/2001, a responsabilidade pelo controle de\nprodutos químicos se limita às empresas fabricantes, não abrangendo\ndistribuidores e comerciantes.",
+            "correct": "Errado",
+            "comment": "A responsabilidade pelo controle de produtos químicos abrange toda a cadeia de produção, distribuição e comercialização, incluindo distribuidores e comerciantes, para garantir um controle abrangente e eficaz desses produtos.  42 LEI 11.343/206"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 11.343/2006 estabelece que o usuário de drogas ilícitas não está\nsujeito a penas privativas de liberdade, mas a penas alternativas como\nadvertência, prestação de serviços à comunidade e medidas educativas.",
+            "correct": "Certo",
+            "comment": "A Lei nº 11.343/2006, em seu artigo 28, determina que o usuário de drogas ilícitas não será punido com pena privativa de liberdade. Em vez disso, a lei prevê penas alternativas, como advertência sobre os efeitos das drogas, prestação de serviços à comunidade e medidas educativas, visando a recuperação do usuário."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 11.343/2006, o tráfico de drogas é punido com pena\nde reclusão de 5 a 15 anos e pagamento de multa.",
+            "correct": "Certo",
+            "comment": "O artigo 33 da Lei nº 11.343/2006 estabelece que o tráfico de drogas é punido com reclusão de 5 a 15 anos e pagamento de multa. A gravidade da pena reflete a intenção da lei de combater de forma rigorosa o tráfico de drogas, considerado um crime de alta periculosidade."
+},
+
+{
+            "numero": 3,
+            "question": "Segundo a Lei nº 11.343/2006, o simples fato de portar grande quantidade\nde drogas é suficiente para caracterizar o tráfico de drogas.",
+            "correct": "Errado",
+            "comment": "A caracterização do tráfico de drogas não depende exclusivamente da quantidade de drogas apreendidas. Conforme o artigo 28, parágrafo 2º, devem ser considerados outros elementos, como as circunstâncias da apreensão, os antecedentes do agente e a destinação da droga. A quantidade é um indicativo, mas não é fator determinante isolado."
+},
+
+{
+            "numero": 4,
+            "question": "A Lei nº 11.343/2006 prevê que a cooperação internacional no combate ao\ntráfico de drogas pode incluir a troca de informações, a assistência jurídica\nmútua e a extradição de envolvidos.",
+            "correct": "Certo",
+            "comment": "A lei promove a cooperação internacional no combate ao tráfico de drogas, incluindo a troca de informações, assistência jurídica mútua e extradição, conforme disposto nos artigos 69 a 72. Essa colaboração é essencial para enfrentar um problema de escala global e para garantir a eficácia das medidas repressivas.  43"
+},
+
+{
+            "numero": 5,
+            "question": "Conforme a Lei nº 11.343/2006, a delação premiada é vedada em casos de\ntráfico de drogas, uma vez que não se aplica a crimes de natureza grave.",
+            "correct": "Errado",
+            "comment": "A delação premiada é permitida na Lei nº 11.343/2006, conforme artigo 41. A colaboração do acusado pode resultar em redução de pena, em até dois terços, ou até mesmo na substituição da pena privativa de liberdade por restritiva de direitos. A delação premiada é um instrumento utilizado para obter informações valiosas sobre organizações criminosas."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 11.343/2006 instituiu o Sistema Nacional de Políticas Públicas sobre\nDrogas (Sisnad), com o objetivo de articular as ações de prevenção,\ntratamento e repressão ao tráfico de drogas.",
+            "correct": "Certo",
+            "comment": "O Sisnad, instituído pela Lei nº 11.343/2006, visa articular as políticas públicas relacionadas à prevenção do uso de drogas, ao tratamento de dependentes e à repressão ao tráfico. O sistema integra diversos órgãos governamentais e entidades da sociedade civil, promovendo uma abordagem multifacetada e coordenada."
+},
+
+{
+            "numero": 7,
+            "question": "De acordo com a Lei nº 11.343/2006, o acusado de tráfico de drogas, se\nprimário e de bons antecedentes, tem direito à suspensão condicional do\nprocesso.",
+            "correct": "Errado",
+            "comment": "A suspensão condicional do processo não se aplica aos crimes previstos na Lei de Drogas, incluindo o tráfico, conforme artigo 33. Mesmo sendo primário e de bons antecedentes, o acusado não faz jus a esse benefício devido à gravidade do delito."
+},
+
+{
+            "numero": 8,
+            "question": "A Lei nº 11.343/2006 prevê que o juiz pode determinar a destruição das\ndrogas apreendidas antes do trânsito em julgado da sentença, desde que\nsejam coletadas amostras para exame pericial.",
+            "correct": "Certo",
+            "comment": "O artigo 50, § 3º, da Lei nº 11.343/2006 permite que o juiz determine a destruição das drogas apreendidas antes do trânsito em julgado, desde que amostras sejam coletadas para exame pericial. Essa medida visa evitar o acúmulo e os riscos associados ao armazenamento prolongado de substâncias ilícitas.  44"
+},
+
+{
+            "numero": 9,
+            "question": "Segundo a Lei nº 11.343/2006, as penas aplicáveis ao crime de tráfico de\ndrogas podem ser reduzidas de um sexto a dois terços se o agente for\nprimário, de bons antecedentes e não se dedicar às atividades criminosas nem\nintegrar organização criminosa.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 33, § 4º, da Lei nº 11.343/2006, as penas aplicáveis ao crime de tráfico de drogas podem ser reduzidas de um sexto a dois terços se o agente for primário, de bons antecedentes, não se dedicar a atividades criminosas nem integrar organização criminosa. Este dispositivo visa diferenciar os pequenos traficantes dos grandes traficantes."
+},
+
+{
+            "numero": 10,
+            "question": "A Lei nº 11.343/2006 prevê a possibilidade de progressão de regime para\no condenado por tráfico de drogas após o cumprimento de um sexto da pena.",
+            "correct": "Errado",
+            "comment": "A progressão de regime para condenados por tráfico de drogas requer o cumprimento de pelo menos dois quintos da pena, se primário, e três quintos, se reincidente, conforme estabelece a legislação penal. A regra mais rígida reflete a gravidade do crime de tráfico de drogas."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 11.343/2006, as medidas socioeducativas\naplicáveis ao adolescente infrator por tráfico de drogas incluem a internação\nem estabelecimento educacional e a liberdade assistida.",
+            "correct": "Certo",
+            "comment": "A lei prevê que adolescentes infratores podem ser submetidos a medidas socioeducativas, como a internação em estabelecimento educacional e a liberdade assistida, conforme o Estatuto da Criança e do Adolescente (ECA). Essas medidas visam à reabilitação e à reintegração social do jovem."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 11.343/2006 não admite a substituição da pena privativa de\nliberdade por restritiva de direitos nos casos de tráfico de drogas.",
+            "correct": "Errado",
+            "comment": "A lei admite a substituição da pena privativa de liberdade por restritiva de direitos em casos específicos, como na delação premiada ou quando aplicável a redução de pena do artigo 33, § 4º, desde que atendidos os requisitos legais. Este mecanismo busca incentivar a colaboração e diferenciar casos de menor gravidade.  45"
+},
+
+{
+            "numero": 13,
+            "question": "A Lei nº 11.343/2006 dispõe que o uso compartilhado de drogas entre\namigos, sem intuito de lucro, não configura crime de tráfico de drogas.",
+            "correct": "Errado",
+            "comment": "O uso compartilhado de drogas entre amigos pode configurar crime de tráfico de drogas, conforme interpretação do artigo 33. A jurisprudência considera que a entrega a consumo, mesmo sem intuito de lucro, caracteriza tráfico, sujeito às mesmas penalidades previstas na lei."
+},
+
+{
+            "numero": 14,
+            "question": "A Lei nº 11.343/2006 estabelece que as penas para o crime de tráfico de\ndrogas são aumentadas de um terço até a metade se o crime for cometido\nnas dependências ou imediações de estabelecimentos de ensino, hospitais,\nentre outros locais.",
+            "correct": "Certo",
+            "comment": "O artigo 40 da Lei nº 11.343/2006 prevê o aumento das penas de um terço até a metade se o tráfico de drogas for cometido em determinados locais, como nas dependências ou imediações de estabelecimentos de ensino, hospitais, entre outros, visando proteger áreas sensíveis e vulneráveis."
+},
+
+{
+            "numero": 15,
+            "question": "Segundo a Lei nº 11.343/2006, a absolvição sumária do acusado de tráfico\nde drogas é possível se não houver provas suficientes para a condenação,\ndesde que haja dúvida razoável quanto à autoria do crime.",
+            "correct": "Errado",
+            "comment": "A absolvição sumária ocorre nos casos previstos pelo artigo 397 do Código de Processo Penal, como quando for manifestamente provada a inexistência do fato, não constituir o fato infração penal ou existirem circunstâncias que excluam o crime ou isentem o réu de pena. A dúvida razoável quanto à autoria leva à absolvição ao final do processo, não sumária."
+},
+
+{
+            "numero": 16,
+            "question": "De acordo com a Lei nº 11.343/2006, o inquérito policial por tráfico de\ndrogas pode ser iniciado de ofício pela autoridade policial,\nindependentemente de representação.",
+            "correct": "Certo",
+            "comment": "O inquérito policial por tráfico de drogas pode ser iniciado de ofício pela autoridade policial, conforme dispõe o artigo 39 da Lei nº 11.343/2006. A ação penal nesses casos é pública incondicionada, permitindo que a polícia inicie a investigação sem necessidade de representação.  46"
+},
+
+{
+            "numero": 17,
+            "question": "A Lei nº 11.343/2006 prevê a possibilidade de internação involuntária de\ndependentes químicos, mediante pedido da família ou responsável legal.",
+            "correct": "Certo",
+            "comment": "A internação involuntária de dependentes químicos é prevista na Lei nº 11.343/2006 e pode ser realizada mediante pedido da família ou responsável legal, com autorização de um médico. Essa medida visa proteger o dependente e proporcionar tratamento adequado, quando necessário."
+},
+
+{
+            "numero": 18,
+            "question": "Conforme a Lei nº 11.343/2006, é vedada a concessão de fiança em casos\nde tráfico de drogas, salvo se o acusado for primário e de bons antecedentes.",
+            "correct": "Errado",
+            "comment": "A Lei nº 11.343/2006 não prevê concessão de fiança para tráfico de drogas, independentemente de o acusado ser primário ou ter bons antecedentes. A vedação reflete a gravidade do crime e a necessidade de manter o acusado preso preventivamente para evitar riscos à ordem pública."
+},
+
+{
+            "numero": 19,
+            "question": "A Lei nº 11.343/2006 permite a redução da pena para traficantes que\ncolaborarem efetivamente com a investigação e a elucidação do crime,\nmesmo que essa colaboração ocorra após a condenação.",
+            "correct": "Certo",
+            "comment": "A colaboração efetiva com a investigação pode resultar em benefícios, como a redução da pena, conforme previsto no artigo 41 da Lei nº 11.343/2006. Essa colaboração pode ocorrer em qualquer fase do processo, inclusive após a condenação, desde que traga resultados concretos para a elucidação do crime."
+},
+
+{
+            "numero": 20,
+            "question": "De acordo com a Lei nº 11.343/2006, as organizações não governamentais\n(ONGs) estão autorizadas a prestar serviços de atendimento e tratamento a\ndependentes químicos, desde que registradas e fiscalizadas pelos órgãos\ncompetentes.",
+            "correct": "Certo",
+            "comment": "As ONGs podem prestar serviços de atendimento e tratamento a dependentes químicos, desde que devidamente registradas e fiscalizadas pelos órgãos competentes. A participação dessas organizações é importante para ampliar o acesso ao tratamento e apoiar a recuperação dos dependentes.  47 LEI 4.898/1965"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 4.898/1965 prevê que o abuso de autoridade se caracteriza pelo\nuso indevido, excessivo ou arbitrário de poder por parte de agente público,\nmesmo que não ocorra dano material.",
+            "correct": "Certo",
+            "comment": "A Lei nº 4.898/1965 considera abuso de autoridade o uso indevido, excessivo ou arbitrário de poder por parte de agentes públicos, independentemente da ocorrência de dano material. O foco da lei é a proteção dos direitos e garantias dos cidadãos contra os excessos cometidos por aqueles que exercem funções públicas."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 4.898/1965, o direito de representação contra o\nabuso de autoridade prescreve em dois anos, contados da data em que o fato\nse tornou conhecido.",
+            "correct": "Errado",
+            "comment": "A lei não estabelece um prazo específico para a prescrição do direito de representação contra abuso de autoridade. A prescrição segue as regras gerais do Código Penal, que variam conforme a gravidade da pena cominada ao crime de abuso de autoridade."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 4.898/1965 estabelece que o processo por abuso de autoridade\npode ser iniciado por representação do ofendido ou de qualquer pessoa,\nmediante petição escrita ou verbal.",
+            "correct": "Certo",
+            "comment": "O processo por abuso de autoridade pode ser iniciado por representação do ofendido ou de qualquer pessoa, mediante petição escrita ou verbal dirigida à autoridade competente, conforme artigo 4º da lei. Isso amplia o acesso à justiça e a possibilidade de fiscalização dos atos dos agentes públicos."
+},
+
+{
+            "numero": 4,
+            "question": "A Lei nº 4.898/1965 prevê que as penas aplicáveis ao abuso de autoridade\nincluem advertência, multa e perda do cargo, função ou mandato.",
+            "correct": "Certo",
+            "comment": "As penas para abuso de autoridade, conforme a lei, incluem advertência, multa, suspensão do cargo, função ou mandato, perda do cargo, função ou mandato, e inabilitação para o exercício de qualquer outra função pública por um prazo determinado. Essas penas visam punir e prevenir comportamentos abusivos por parte de agentes públicos.  48"
+},
+
+{
+            "numero": 5,
+            "question": "Conforme a Lei nº 4.898/1965, o procedimento administrativo para\napuração de abuso de autoridade deve ser instaurado no prazo de 30 dias\napós o recebimento da representação.",
+            "correct": "Errado",
+            "comment": "A lei não especifica um prazo de 30 dias para a instauração do procedimento administrativo. O prazo para apuração de abuso de autoridade é determinado pelo regulamento interno do órgão competente e pela gravidade do fato denunciado."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 4.898/1965 dispõe que o recurso contra a decisão administrativa\nem processo de abuso de autoridade deve ser interposto no prazo de 15 dias.",
+            "correct": "Certo",
+            "comment": "O artigo 6º da Lei nº 4.898/1965 estabelece que o recurso contra a decisão administrativa deve ser interposto no prazo de 15 dias, contados da data da ciência da decisão. Esse prazo visa garantir o direito de defesa e a possibilidade de revisão das decisões tomadas no âmbito administrativo."
+},
+
+{
+            "numero": 7,
+            "question": "Segundo a Lei nº 4.898/1965, a competência para julgar os crimes de abuso\nde autoridade é exclusivamente do Tribunal de Justiça do Estado onde\nocorreu o fato.",
+            "correct": "Errado",
+            "comment": "A competência para julgar crimes de abuso de autoridade depende da natureza do cargo e da função do agente público envolvido, podendo ser de juízes de primeira instância ou dos Tribunais de Justiça, conforme as regras de competência estabelecidas no Código de Processo Penal e na Constituição."
+},
+
+{
+            "numero": 8,
+            "question": "De acordo com a Lei nº 4.898/1965, o inquérito policial por abuso de\nautoridade deve ser concluído no prazo de 30 dias, se o indiciado estiver solto,\ne 10 dias, se estiver preso.",
+            "correct": "Certo",
+            "comment": "O prazo para conclusão do inquérito policial por abuso de autoridade segue os mesmos prazos do inquérito para crimes em geral, conforme o Código de Processo Penal: 30 dias se o indiciado estiver solto e 10 dias se estiver preso. Esses prazos visam garantir celeridade na apuração dos fatos.  49"
+},
+
+{
+            "numero": 9,
+            "question": "A Lei nº 4.898/1965 estabelece que o abuso de autoridade é crime de ação\npenal privada, devendo o ofendido promover a ação penal.",
+            "correct": "Errado",
+            "comment": "O abuso de autoridade é crime de ação penal pública incondicionada, conforme artigo 1º da Lei nº 4.898/1965. Isso significa que o Ministério Público pode promover a ação penal independentemente da vontade do ofendido."
+},
+
+{
+            "numero": 10,
+            "question": "A Lei nº 4.898/1965 prevê que a instauração de processo penal por abuso\nde autoridade suspende automaticamente o exercício da função pública do\nacusado.",
+            "correct": "Errado",
+            "comment": "A instauração de processo penal por abuso de autoridade não suspende automaticamente o exercício da função pública do acusado. A suspensão pode ser determinada pela autoridade competente, conforme a gravidade do caso e a necessidade de preservação da ordem pública e da instrução processual."
+},
+
+{
+            "numero": 11,
+            "question": "Conforme a Lei nº 4.898/1965, a reparação dos danos causados pelo\nabuso de autoridade deve ser buscada na esfera civil, independentemente da\napuração na esfera penal.",
+            "correct": "Certo",
+            "comment": "A reparação dos danos causados pelo abuso de autoridade pode ser buscada na esfera civil, independentemente da apuração na esfera penal. Isso ocorre porque a responsabilidade civil é autônoma e pode ser discutida paralelamente à responsabilidade penal, conforme os artigos 186 e 927 do Código Civil."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 4.898/1965 estabelece que o agente público que praticar abuso\nde autoridade estará sujeito a uma pena mínima de detenção de seis meses.",
+            "correct": "Errado",
+            "comment": "A lei prevê penas de detenção de 10 dias a 6 meses ou multa, mas não estabelece uma pena mínima específica de seis meses. As penas variam conforme a gravidade do abuso e as circunstâncias do caso concreto.  50"
+},
+
+{
+            "numero": 13,
+            "question": "De acordo com a Lei nº 4.898/1965, a representação por abuso de\nautoridade pode ser feita diretamente ao Ministério Público ou à autoridade\ncompetente para apuração.",
+            "correct": "Certo",
+            "comment": "A representação por abuso de autoridade pode ser feita diretamente ao Ministério Público ou à autoridade competente para apuração, conforme o artigo 4º da lei. Isso visa garantir que a denúncia seja devidamente apurada e encaminhada para as providências cabíveis."
+},
+
+{
+            "numero": 14,
+            "question": "A Lei nº 4.898/1965 permite a concessão de liberdade provisória ao\nacusado de abuso de autoridade, desde que não represente risco à ordem\npública ou à instrução criminal.",
+            "correct": "Certo",
+            "comment": "A concessão de liberdade provisória ao acusado de abuso de autoridade é permitida, desde que não represente risco à ordem pública ou à instrução criminal, conforme as regras gerais do Código de Processo Penal. A liberdade provisória é uma medida cautelar que visa garantir a liberdade do indivíduo enquanto não há sentença condenatória definitiva."
+},
+
+{
+            "numero": 15,
+            "question": "Conforme a Lei nº 4.898/1965, a competência para julgar os crimes de\nabuso de autoridade é do Juizado Especial Criminal, independentemente da\npena prevista.",
+            "correct": "Errado",
+            "comment": "A competência para julgar crimes de abuso de autoridade não é do Juizado Especial Criminal, mas sim dos juízes e tribunais conforme a regra de competência estabelecida pelo Código de Processo Penal e pela Constituição. A competência depende da natureza do cargo e função do agente público envolvido."
+},
+
+{
+            "numero": 16,
+            "question": "A Lei nº 4.898/1965 prevê que a suspensão do exercício da função pública\ndo acusado pode ser determinada pelo juiz, se for necessária para a instrução\nprocessual.",
+            "correct": "Certo",
+            "comment": "A suspensão do exercício da função pública do acusado pode ser determinada pelo juiz, conforme a gravidade do caso e a necessidade de preservar a instrução processual e a ordem pública. Essa medida cautelar é prevista na lei para evitar que o acusado interfira nas investigações ou na coleta de provas.  51"
+},
+
+{
+            "numero": 17,
+            "question": "De acordo com a Lei nº 4.898/1965, o abuso de autoridade só pode ser\nconfigurado se praticado com dolo, excluindo-se a possibilidade de punição\npor culpa.",
+            "correct": "Certo",
+            "comment": "O abuso de autoridade, conforme a Lei nº 4.898/1965, exige dolo, ou seja, a intenção de praticar o ato abusivo. Não é configurado por culpa, que implica negligência, imprudência ou imperícia. O dolo é um elemento essencial para a configuração do abuso de autoridade."
+},
+
+{
+            "numero": 18,
+            "question": "A Lei nº 4.898/1965 dispõe que o inquérito policial por abuso de\nautoridade pode ser arquivado pelo delegado de polícia, caso não haja\nindícios suficientes de autoria e materialidade.",
+            "correct": "Errado",
+            "comment": "O inquérito policial não pode ser arquivado pelo delegado de polícia. O arquivamento do inquérito é de competência exclusiva do Ministério Público, conforme disposto no Código de Processo Penal. O delegado pode sugerir o arquivamento, mas a decisão final cabe ao MP."
+},
+
+{
+            "numero": 19,
+            "question": "Segundo a Lei nº 4.898/1965, a pena de inabilitação para o exercício de\nfunção pública pode ser aplicada por um período de até três anos.",
+            "correct": "Certo",
+            "comment": "A lei prevê que a pena de inabilitação para o exercício de função pública pode ser aplicada por um período de até três anos, conforme a gravidade do abuso de autoridade e as circunstâncias do caso. Esta penalidade visa impedir que o agente público reincida em condutas abusivas."
+},
+
+{
+            "numero": 20,
+            "question": "A Lei nº 4.898/1965 estabelece que o julgamento dos crimes de abuso de\nautoridade deve ser realizado pelo Tribunal do Júri, dada a gravidade dos atos\ncometidos.",
+            "correct": "Errado",
+            "comment": "O julgamento dos crimes de abuso de autoridade não é realizado pelo Tribunal do Júri, mas sim pelos juízes e tribunais competentes, conforme as regras de competência estabelecidas no Código de Processo Penal e na Constituição. O Tribunal do Júri é reservado para crimes dolosos contra a vida.  52 LEI 9.455/1997"
+},
+
+{
+            "numero": 1,
+            "question": "De acordo com a Lei nº 9.455/1997, constitui crime de tortura submeter\nalguém, com emprego de violência ou grave ameaça, a intenso sofrimento\nfísico ou mental, como forma de aplicar castigo pessoal ou medida de caráter\npreventivo.",
+            "correct": "Certo",
+            "comment": "A Lei nº 9.455/1997, em seu artigo 1º, inciso II, define como crime de tortura submeter alguém, com emprego de violência ou grave ameaça, a intenso sofrimento físico ou mental, como forma de aplicar castigo pessoal ou medida de caráter preventivo. Esta definição abrange situações em que a tortura é utilizada como punição ou medida disciplinar."
+},
+
+{
+            "numero": 2,
+            "question": "Segundo a Lei nº 9.455/1997, a prática de tortura por agente público é\nagravada, aumentando a pena de reclusão em um terço até a metade.",
+            "correct": "Certo",
+            "comment": "A lei prevê que a prática de tortura por agente público é circunstância agravante, aumentando a pena de reclusão em um terço até a metade, conforme o artigo 1º, § 4º. A previsão visa punir com maior rigor aqueles que, em posição de autoridade, abusam de seu poder para cometer tortura."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 9.455/1997 estabelece que a tortura é um crime apenado com\nreclusão de dois a seis anos, podendo ser aumentada em casos específicos.",
+            "correct": "Errado",
+            "comment": "A pena prevista para o crime de tortura na Lei nº 9.455/1997 é de reclusão de dois a oito anos, conforme o artigo 1º, caput. A pena pode ser aumentada em determinadas circunstâncias, como no caso de tortura cometida por agente público ou contra criança, gestante, deficiente, adolescente ou maior de 60 anos."
+},
+
+{
+            "numero": 4,
+            "question": "Conforme a Lei nº 9.455/1997, a pena por crime de tortura não pode ser\nsubstituída por penas restritivas de direitos.",
+            "correct": "Certo",
+            "comment": "O artigo 1º, § 7º, da Lei nº 9.455/1997 estabelece que a pena por crime de tortura não pode ser substituída por penas restritivas de direitos. Essa previsão visa garantir a severidade da punição para um crime tão grave e hediondo como a tortura.  53"
+},
+
+{
+            "numero": 5,
+            "question": "A Lei nº 9.455/1997 determina que a prescrição do crime de tortura se dá\nno prazo de 20 anos, contados do dia em que o fato se tornou conhecido.",
+            "correct": "Errado",
+            "comment": "A prescrição do crime de tortura segue as regras gerais do Código Penal, que dependem da pena máxima cominada ao crime. Para o crime de tortura, cuja pena máxima é de oito anos, a prescrição ocorre em 12 anos, conforme artigo 109, inciso III, do Código Penal."
+},
+
+{
+            "numero": 6,
+            "question": "De acordo com a Lei nº 9.455/1997, é considerado crime de tortura\nsubmeter alguém sob sua guarda, poder ou autoridade com emprego de\nviolência ou grave ameaça, causando-lhe sofrimento físico ou mental.",
+            "correct": "Certo",
+            "comment": "A lei define como crime de tortura submeter alguém sob sua guarda, poder ou autoridade, com emprego de violência ou grave ameaça, causando- lhe sofrimento físico ou mental, conforme artigo 1º, inciso II. A definição busca abarcar situações de abuso de poder e autoridade."
+},
+
+{
+            "numero": 7,
+            "question": "A Lei nº 9.455/1997 prevê que o crime de tortura é considerado hediondo,\nindependentemente das circunstâncias em que foi praticado.",
+            "correct": "Certo",
+            "comment": "A Lei nº 9.455/1997 classifica o crime de tortura como hediondo, conforme o artigo 1º da Lei nº 8.072/1990 (Lei dos Crimes Hediondos). Essa classificação implica a aplicação de um regime penal mais severo, como a proibição de anistia, graça e indulto."
+},
+
+{
+            "numero": 8,
+            "question": "A Lei nº 9.455/1997 estabelece que a prática de tortura cometida contra\npessoa sob a guarda do agente, com a finalidade de obter informação,\ndeclaração ou confissão da vítima ou de terceiro, não é considerada\nagravante.",
+            "correct": "Errado",
+            "comment": "A prática de tortura com a finalidade de obter informação, declaração ou confissão da vítima ou de terceiro é considerada agravante. Conforme o artigo 1º, § 4º, essa circunstância agrava a pena em um terço até a metade, reconhecendo a maior gravidade do delito.  54"
+},
+
+{
+            "numero": 9,
+            "question": "Segundo a Lei nº 9.455/1997, é considerado crime de tortura constranger\nalguém, com emprego de violência ou grave ameaça, causando-lhe\nsofrimento físico ou mental, em razão de discriminação racial ou religiosa.",
+            "correct": "Certo",
+            "comment": "A lei define como crime de tortura constranger alguém, com emprego de violência ou grave ameaça, causando-lhe sofrimento físico ou mental, em razão de discriminação racial ou religiosa, conforme artigo 1º, inciso I, alínea “c”. Esta previsão visa combater a tortura motivada por discriminação."
+},
+
+{
+            "numero": 10,
+            "question": "A Lei nº 9.455/1997 dispõe que, em caso de omissão de socorro à vítima\nde tortura, a pena prevista é de detenção de seis meses a um ano.",
+            "correct": "Errado",
+            "comment": "A omissão de socorro à vítima de tortura é punida com reclusão de um a quatro anos, conforme o artigo 1º, § 2º, da lei. A previsão reforça a gravidade da omissão em casos de tortura, exigindo um tratamento penal mais severo."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 9.455/1997, o crime de tortura é imprescritível,\nnão sendo possível aplicar a prescrição conforme as regras do Código Penal.",
+            "correct": "Errado",
+            "comment": "O crime de tortura não é imprescritível. A prescrição segue as regras gerais do Código Penal, que variam conforme a pena cominada ao crime. Para tortura, a prescrição ocorre em 12 anos, devido à pena máxima de oito anos."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 9.455/1997 prevê que o crime de tortura pode ser julgado em\nprimeira instância por juiz singular, e não pelo Tribunal do Júri.",
+            "correct": "Certo",
+            "comment": "O crime de tortura é julgado por juiz singular em primeira instância, conforme as regras de competência do Código de Processo Penal. Não é da competência do Tribunal do Júri, que julga apenas crimes dolosos contra a vida."
+},
+
+{
+            "numero": 13,
+            "question": "Conforme a Lei nº 9.455/1997, a tortura praticada por motivo de\ndiscriminação racial ou religiosa não é tipificada na legislação.",
+            "correct": "Errado",
+            "comment": "A tortura praticada por motivo de discriminação racial ou religiosa é tipificada na Lei nº 9.455/1997, no artigo 1º, inciso I, alínea “c”. Esta tipificação visa combater práticas de tortura motivadas por preconceito.  55"
+},
+
+{
+            "numero": 14,
+            "question": "A Lei nº 9.455/1997 estabelece que a comunicação de crime de tortura\npode ser feita ao Ministério Público, que terá a responsabilidade de promover\na ação penal pública incondicionada.",
+            "correct": "Certo",
+            "comment": "A comunicação de crime de tortura pode ser feita ao Ministério Público, conforme o artigo 4º da lei. O MP tem a responsabilidade de promover a ação penal pública incondicionada, sem necessidade de representação da vítima."
+},
+
+{
+            "numero": 15,
+            "question": "A Lei nº 9.455/1997 define que a prática de tortura por agentes públicos,\nem exercício de suas funções, não pode resultar na perda do cargo público.",
+            "correct": "Errado",
+            "comment": "A prática de tortura por agentes públicos pode resultar na perda do cargo público, conforme o artigo 1º, § 5º, da lei. Além da pena de reclusão, a condenação pode incluir a perda do cargo, função ou emprego público e a interdição para seu exercício por período de até oito anos."
+},
+
+{
+            "numero": 16,
+            "question": "De acordo com a Lei nº 9.455/1997, o crime de tortura admite a concessão\nde anistia, graça e indulto.",
+            "correct": "Errado",
+            "comment": "O crime de tortura, conforme a Lei nº 9.455/1997 e a Lei nº 8.072/1990 (Lei dos Crimes Hediondos), não admite a concessão de anistia, graça e indulto. Essa previsão reflete a gravidade do crime e a necessidade de punição efetiva."
+},
+
+{
+            "numero": 17,
+            "question": "A Lei nº 9.455/1997 prevê que o processo e julgamento do crime de\ntortura sigam o rito comum ordinário, estabelecido no Código de Processo\nPenal.",
+            "correct": "Certo",
+            "comment": "O processo e julgamento do crime de tortura seguem o rito comum ordinário estabelecido no Código de Processo Penal. Não há rito especial previsto na lei específica para o crime de tortura."
+},
+
+{
+            "numero": 18,
+            "question": "Conforme a Lei nº 9.455/1997, a participação de pessoa jurídica na prática\nde tortura não é contemplada pela legislação.",
+            "correct": "Certo",
+            "comment": "A Lei nº 9.455/1997 não contempla a participação de pessoa jurídica na prática de tortura. A responsabilização pela tortura é direcionada a pessoas físicas, especialmente agentes públicos e indivíduos que, direta ou indiretamente, praticam atos de tortura.  56"
+},
+
+{
+            "numero": 19,
+            "question": "Segundo a Lei nº 9.455/1997, o crime de tortura cometido contra criança\nou adolescente é considerado agravante, aumentando a pena.",
+            "correct": "Certo",
+            "comment": "O crime de tortura cometido contra criança ou adolescente é considerado circunstância agravante, conforme o artigo 1º, § 4º, da lei. A pena é aumentada de um terço até a metade, reconhecendo a vulnerabilidade das vítimas."
+},
+
+{
+            "numero": 20,
+            "question": "A Lei nº 9.455/1997 dispõe que o condenado por crime de tortura deve\niniciar o cumprimento da pena em regime semiaberto.",
+            "correct": "Errado",
+            "comment": "O condenado por crime de tortura deve iniciar o cumprimento da pena em regime fechado, conforme o artigo 2º, § 1º, da Lei dos Crimes Hediondos. Essa disposição visa garantir uma punição mais severa para crimes de extrema gravidade. LEI 8.069/1990"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 8.069/1990 estabelece que a prática de atos infracionais por\ncrianças será apurada através de procedimento específico de apuração de\ninfração administrativa.",
+            "correct": "Errado",
+            "comment": "A prática de atos infracionais por crianças (menores de 12 anos) não é apurada como infração administrativa, mas sim através de medidas de proteção aplicadas pelo Conselho Tutelar, conforme os artigos 98 e 105 do ECA. Já os adolescentes (12 a 18 anos) são sujeitos a procedimentos específicos de apuração de atos infracionais e medidas socioeducativas."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 8.069/1990, a internação provisória do adolescente\ninfrator não pode ultrapassar o prazo de 45 dias.",
+            "correct": "Certo",
+            "comment": "O artigo 108 do ECA determina que a internação provisória do adolescente infrator não pode ultrapassar o prazo de 45 dias. Este prazo visa garantir a celeridade do processo e a proteção dos direitos do adolescente, evitando a detenção prolongada sem uma decisão judicial definitiva.  57"
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 8.069/1990 prevê que a remissão, como forma de exclusão do\nprocesso, pode ser concedida pelo Ministério Público antes de iniciada a\nrepresentação.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 126 do ECA, a remissão pode ser concedida pelo Ministério Público como forma de exclusão do processo antes de iniciada a representação. A remissão pode ser concedida com ou sem a aplicação de medida socioeducativa, buscando a reintegração social do adolescente."
+},
+
+{
+            "numero": 4,
+            "question": "Segundo a Lei nº 8.069/1990, as medidas socioeducativas de internação e\nsemiliberdade não podem ser aplicadas cumulativamente.",
+            "correct": "Errado",
+            "comment": "As medidas socioeducativas de internação e semiliberdade podem ser aplicadas cumulativamente, conforme a necessidade do caso concreto e a evolução do adolescente. A combinação de medidas pode facilitar a reintegração social e a adaptação progressiva do adolescente à liberdade."
+},
+
+{
+            "numero": 5,
+            "question": "De acordo com a Lei nº 8.069/1990, o prazo máximo de internação do\nadolescente infrator é de três anos.",
+            "correct": "Certo",
+            "comment": "O artigo 121, § 3º, do ECA estabelece que a medida socioeducativa de internação não pode exceder três anos. Após esse período, o adolescente deve ser liberado compulsoriamente, independentemente da gravidade do ato infracional cometido."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 8.069/1990 determina que a prescrição das medidas\nsocioeducativas segue os mesmos prazos previstos para os crimes no Código\nPenal.",
+            "correct": "Errado",
+            "comment": "A prescrição das medidas socioeducativas segue regras próprias estabelecidas pelo ECA. O artigo 121, § 5º, prevê que a prescrição das medidas socioeducativas ocorre em período equivalente ao da prescrição penal, mas adaptado às peculiaridades do sistema socioeducativo."
+},
+
+{
+            "numero": 7,
+            "question": "Conforme a Lei nº 8.069/1990, o adolescente apreendido em flagrante por\nato infracional deve ser apresentado à autoridade judiciária em até 24 horas.",
+            "correct": "Certo",
+            "comment": "O artigo 174 do ECA determina que o adolescente apreendido em flagrante por ato infracional deve ser imediatamente encaminhado à autoridade judiciária, e sua apresentação deve ocorrer em até 24 horas. Esse  58 prazo garante o devido processo legal e a proteção dos direitos do adolescente."
+},
+
+{
+            "numero": 8,
+            "question": "A Lei nº 8.069/1990 prevê a possibilidade de aplicação de medidas de\nproteção e medidas socioeducativas ao mesmo tempo, dependendo do caso\nconcreto.",
+            "correct": "Certo",
+            "comment": "O ECA permite a aplicação simultânea de medidas de proteção e medidas socioeducativas, conforme a necessidade e o melhor interesse do adolescente, visando sua proteção integral e reintegração social, conforme artigos 98 e 112."
+},
+
+{
+            "numero": 9,
+            "question": "Segundo a Lei nº 8.069/1990, a oitiva informal é um procedimento exclusivo\ndo juiz da infância e juventude.",
+            "correct": "Errado",
+            "comment": "A oitiva informal pode ser realizada pelo Ministério Público, conforme previsto no artigo 179 do ECA, antes de iniciar a representação. Esse procedimento visa esclarecer os fatos e possibilitar uma solução mais célere e adequada ao caso do adolescente."
+},
+
+{
+            "numero": 10,
+            "question": "De acordo com a Lei nº 8.069/1990, a representação do Ministério Público\ncontra o adolescente infrator deve ser obrigatoriamente acompanhada de\nprova testemunhal.",
+            "correct": "Errado",
+            "comment": "A representação do Ministério Público não necessita obrigatoriamente de prova testemunhal, mas deve ser fundamentada em elementos que indiquem a prática do ato infracional. A produção de provas ocorre durante o procedimento judicial."
+},
+
+{
+            "numero": 11,
+            "question": "Conforme a Lei nº 8.069/1990, o adolescente infrator tem direito à ampla\ndefesa e ao contraditório, assim como no processo penal dos adultos.",
+            "correct": "Certo",
+            "comment": "O ECA assegura ao adolescente infrator o direito à ampla defesa e ao contraditório, conforme o artigo 111, garantias essas que são fundamentais no processo penal e devem ser respeitadas em todas as fases do procedimento socioeducativo.  59"
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 8.069/1990 prevê que o prazo para a conclusão do procedimento\nde apuração de ato infracional é de 45 dias, se o adolescente estiver internado\nprovisoriamente.",
+            "correct": "Certo",
+            "comment": "O artigo 183 do ECA estabelece que o procedimento para apuração de ato infracional deve ser concluído no prazo máximo de 45 dias, se o adolescente estiver internado provisoriamente. Esse prazo garante celeridade e evita a detenção prolongada sem decisão judicial."
+},
+
+{
+            "numero": 13,
+            "question": "Segundo a Lei nº 8.069/1990, a medida socioeducativa de liberdade\nassistida deve ser aplicada por prazo determinado, não podendo exceder dois\nanos.",
+            "correct": "Errado",
+            "comment": "A medida socioeducativa de liberdade assistida, conforme o artigo 118, § 2º, do ECA, deve ser aplicada por prazo mínimo de seis meses, podendo ser prorrogada ou substituída conforme a evolução do adolescente e a avaliação das autoridades competentes."
+},
+
+{
+            "numero": 14,
+            "question": "De acordo com a Lei nº 8.069/1990, o adolescente que comete ato\ninfracional análogo a crime hediondo deve cumprir medida socioeducativa de\ninternação em estabelecimento separado dos adultos.",
+            "correct": "Certo",
+            "comment": "O ECA estabelece que adolescentes devem cumprir medidas socioeducativas em estabelecimentos exclusivos para menores, separados dos adultos, conforme artigo 123. Essa separação visa proteger os adolescentes e garantir um ambiente adequado para sua reabilitação."
+},
+
+{
+            "numero": 15,
+            "question": "A Lei nº 8.069/1990 permite a aplicação de sanções penais cumulativas às\nmedidas socioeducativas para adolescentes infratores.",
+            "correct": "Errado",
+            "comment": "As sanções penais não são aplicáveis a adolescentes infratores. O ECA prevê exclusivamente a aplicação de medidas socioeducativas para adolescentes, conforme artigo 112. Essas medidas visam à reeducação e à reintegração social do adolescente, e não à punição penal.  60"
+},
+
+{
+            "numero": 16,
+            "question": "Conforme a Lei nº 8.069/1990, a medida socioeducativa de prestação de\nserviços à comunidade pode ser aplicada pelo prazo máximo de seis meses.",
+            "correct": "Errado",
+            "comment": "O artigo 117 do ECA prevê que a medida de prestação de serviços à comunidade deve ser aplicada por prazo não superior a seis meses, mas o prazo pode ser prorrogado conforme a avaliação das autoridades competentes e a necessidade do caso."
+},
+
+{
+            "numero": 17,
+            "question": "Segundo a Lei nº 8.069/1990, a medida socioeducativa de advertência é\naplicada em audiência de apresentação, com a presença do adolescente e\nseus pais ou responsáveis.",
+            "correct": "Certo",
+            "comment": "A medida de advertência, conforme artigo 115 do ECA, é aplicada em audiência de apresentação com a presença do adolescente e seus pais ou responsáveis, permitindo uma abordagem educativa e a compreensão das consequências de seus atos."
+},
+
+{
+            "numero": 18,
+            "question": "A Lei nº 8.069/1990 estabelece que a internação-sanção por\ndescumprimento reiterado e injustificado da medida anteriormente imposta\nnão pode exceder 30 dias.",
+            "correct": "Certo",
+            "comment": "O artigo 122, § 1º, do ECA estabelece que a internação-sanção por descumprimento reiterado e injustificado de medida imposta anteriormente não pode exceder 30 dias, garantindo um caráter educativo e proporcional da medida."
+},
+
+{
+            "numero": 19,
+            "question": "De acordo com a Lei nº 8.069/1990, o adolescente apreendido em\nflagrante por ato infracional pode ser liberado pela autoridade policial\nmediante termo de compromisso.",
+            "correct": "Certo",
+            "comment": "O artigo 174, § único, do ECA permite que o adolescente apreendido em flagrante seja liberado pela autoridade policial mediante termo de compromisso, desde que não haja necessidade de internação provisória.  61"
+},
+
+{
+            "numero": 20,
+            "question": "Conforme a Lei nº 8.069/1990, a medida socioeducativa de semiliberdade\nnão pode ser aplicada como medida inicial, devendo sempre ser precedida\npor outras medidas menos gravosas.",
+            "correct": "Errado",
+            "comment": "A medida socioeducativa de semiliberdade pode ser aplicada como medida inicial, conforme artigo 120 do ECA, dependendo das circunstâncias do caso e da gravidade do ato infracional. Ela permite a participação do adolescente em atividades externas e promove sua reintegração social. LEI 10.826/2003"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 10.826/2003 prevê que a posse irregular de arma de fogo de uso\npermitido é punida com detenção de um a três anos e multa.",
+            "correct": "Certo",
+            "comment": "O artigo 12 da Lei nº 10.826/2003 estabelece que a posse irregular de arma de fogo de uso permitido é punida com detenção de um a três anos e multa. Esta previsão busca controlar a posse de armas e garantir a segurança pública, punindo a posse sem a devida regularização."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 10.826/2003, o registro de arma de fogo deve ser\nrenovado a cada cinco anos.",
+            "correct": "Certo",
+            "comment": "O artigo 5º da Lei nº 10.826/2003 prevê que o registro de arma de fogo deve ser renovado a cada cinco anos. A renovação periódica é necessária para garantir que o proprietário ainda atende aos requisitos legais e para manter o controle sobre a posse de armas de fogo."
+},
+
+{
+            "numero": 3,
+            "question": "Segundo a Lei nº 10.826/2003, o porte de arma de fogo de uso permitido\npode ser autorizado para qualquer cidadão que comprove a necessidade por\nexercício de atividade profissional de risco.",
+            "correct": "Certo",
+            "comment": "O artigo 10 da Lei nº 10.826/2003 permite que o porte de arma de fogo de uso permitido seja autorizado para cidadãos que comprovem a necessidade por exercício de atividade profissional de risco ou por ameaça à sua integridade física. Esta autorização é concedida pela Polícia Federal após análise criteriosa.  62"
+},
+
+{
+            "numero": 4,
+            "question": "A Lei nº 10.826/2003 estabelece que a posse de arma de fogo de uso\nrestrito é punida com reclusão de três a seis anos e multa.",
+            "correct": "Errado",
+            "comment": "A posse de arma de fogo de uso restrito é punida com reclusão de três a seis anos e multa, conforme o artigo 16 da Lei nº 10.826/2003. Esta pena mais severa reflete a maior periculosidade das armas de uso restrito, que são destinadas a forças de segurança e defesa."
+},
+
+{
+            "numero": 5,
+            "question": "Conforme a Lei nº 10.826/2003, a comercialização de arma de fogo sem\nautorização legal é considerada crime hediondo.",
+            "correct": "Errado",
+            "comment": "A comercialização de arma de fogo sem autorização legal é crime, mas não é classificada como crime hediondo. O artigo 17 da Lei nº 10.826/2003 pune essa conduta com reclusão de quatro a oito anos e multa, devido à gravidade da infração e ao risco que representa à segurança pública."
+},
+
+{
+            "numero": 6,
+            "question": "De acordo com a Lei nº 10.826/2003, é permitido o porte de armas brancas\n(como facas e canivetes) sem qualquer restrição legal.",
+            "correct": "Errado",
+            "comment": "A Lei nº 10.826/2003 se aplica especificamente a armas de fogo. O porte de armas brancas pode ser regulado por outras legislações estaduais ou municipais. O porte de armas brancas em certas circunstâncias pode ser considerado infração penal ou administrativa conforme a legislação local."
+},
+
+{
+            "numero": 7,
+            "question": "A Lei nº 10.826/2003 determina que o proprietário de arma de fogo deve\ncomunicar imediatamente o extravio, furto ou roubo da arma à Polícia\nFederal.",
+            "correct": "Certo",
+            "comment": "O artigo 6º, § 1º, da Lei nº 10.826/2003 exige que o proprietário de arma de fogo comunique imediatamente o extravio, furto ou roubo da arma à Polícia Federal. Esta medida visa controlar a circulação de armas e facilitar a investigação e recuperação em casos de perda ou roubo."
+},
+
+{
+            "numero": 8,
+            "question": "Segundo a Lei nº 10.826/2003, é possível a aplicação de pena de restrição\nde direitos em substituição à pena privativa de liberdade para o crime de\nposse irregular de arma de fogo de uso permitido.",
+            "correct": "Certo",
+            "comment": "É possível a aplicação de penas restritivas de direitos em substituição à pena privativa de liberdade para crimes de menor gravidade, como a posse  63 irregular de arma de fogo de uso permitido, conforme previsto no artigo 44 do Código Penal e observado pelo Estatuto do Desarmamento."
+},
+
+{
+            "numero": 9,
+            "question": "Conforme a Lei nº 10.826/2003, a importação de arma de fogo de uso\npermitido para uso pessoal não necessita de autorização prévia da Polícia\nFederal.",
+            "correct": "Errado",
+            "comment": "A importação de arma de fogo de uso permitido para uso pessoal requer autorização prévia da Polícia Federal, conforme artigo 6º, § 2º, da Lei nº 10.826/2003. A regulamentação estrita visa controlar a entrada de armas no país e garantir a segurança pública."
+},
+
+{
+            "numero": 10,
+            "question": "De acordo com a Lei nº 10.826/2003, a pena por disparo de arma de fogo\nem lugar habitado ou em suas adjacências é de reclusão de dois a quatro anos\ne multa.",
+            "correct": "Certo",
+            "comment": "O artigo 15 da Lei nº 10.826/2003 estabelece que o disparo de arma de fogo em lugar habitado ou em suas adjacências, em via pública ou em direção a ela, é punido com reclusão de dois a quatro anos e multa. Essa medida visa coibir o uso imprudente de armas de fogo que coloca em risco a segurança das pessoas."
+},
+
+{
+            "numero": 11,
+            "question": "Segundo a Lei nº 10.826/2003, é permitido ao proprietário de arma de\nfogo de uso permitido transferir a posse da arma para outra pessoa sem\nnecessidade de autorização.",
+            "correct": "Errado",
+            "comment": "A transferência de posse de arma de fogo de uso permitido para outra pessoa requer autorização da Polícia Federal, conforme o artigo 4º da lei. A transferência sem a devida autorização é considerada irregular e sujeita a penalidades."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 10.826/2003 prevê que o transporte de arma de fogo\ndesmuniciada e acondicionada de forma que não permita pronto uso é\npermitido sem autorização específica.",
+            "correct": "Certo",
+            "comment": "O transporte de arma de fogo desmuniciada e acondicionada de forma que não permita pronto uso é permitido, desde que o proprietário esteja regularizado e obedeça às normas de transporte estabelecidas pela Polícia Federal. Essa prática visa garantir a segurança durante o transporte de armas.  64"
+},
+
+{
+            "numero": 13,
+            "question": "Conforme a Lei nº 10.826/2003, a pena por omitir-se de observar as\ncautelas necessárias para impedir que menor de 18 anos se apodere de arma\nde fogo é de detenção de um a dois anos e multa.",
+            "correct": "Certo",
+            "comment": "O artigo 13 da Lei nº 10.826/2003 prevê a pena de detenção de um a dois anos e multa para quem se omite de observar as cautelas necessárias para impedir que menor de 18 anos se apodere de arma de fogo. Essa norma visa responsabilizar os proprietários de armas pela guarda segura e prevenir acidentes e uso indevido."
+},
+
+{
+            "numero": 14,
+            "question": "Segundo a Lei nº 10.826/2003, é obrigatório que todas as armas de fogo\nfabricadas ou importadas no Brasil tenham marcação única, gravada no cano\ne na estrutura metálica.",
+            "correct": "Certo",
+            "comment": "A lei exige que todas as armas de fogo fabricadas ou importadas no Brasil tenham marcação única e gravada no cano e na estrutura metálica, conforme artigo 23. Essa marcação é essencial para a rastreabilidade e identificação das armas, auxiliando nas investigações criminais e controle de armas."
+},
+
+{
+            "numero": 15,
+            "question": "De acordo com a Lei nº 10.826/2003, o crime de tráfico internacional de\narmas de fogo é punido com reclusão de seis a doze anos e multa.",
+            "correct": "Errado",
+            "comment": "O crime de tráfico internacional de armas de fogo é punido com reclusão de quatro a oito anos e multa, conforme artigo 18 da Lei nº 10.826/2003. Esta pena visa coibir o tráfico de armas, que representa uma ameaça significativa à segurança nacional e internacional."
+},
+
+{
+            "numero": 16,
+            "question": "A Lei nº 10.826/2003 dispõe que a anistia para regularização de armas de\nfogo é válida para todas as armas, inclusive as de uso restrito.",
+            "correct": "Errado",
+            "comment": "A anistia para regularização de armas de fogo prevista na Lei nº 10.826/2003 não inclui armas de uso restrito. A regularização por anistia aplica-se apenas às armas de uso permitido, com o objetivo de retirar armas irregulares de circulação e incentivar a regularização.  65"
+},
+
+{
+            "numero": 17,
+            "question": "Conforme a Lei nº 10.826/2003, a prática de tiro esportivo é\nregulamentada e exige que o atirador possua Certificado de Registro de\nAtirador (CRA) emitido pelo Exército.",
+            "correct": "Certo",
+            "comment": "A prática de tiro esportivo é regulamentada pela Lei nº 10.826/2003 e exige que o atirador possua Certificado de Registro de Atirador (CRA) emitido pelo Exército, conforme artigo 6º, § 2º. Este certificado assegura que o atirador cumpre todos os requisitos legais e de segurança para a prática esportiva."
+},
+
+{
+            "numero": 18,
+            "question": "De acordo com a Lei nº 10.826/2003, o crime de posse ou porte ilegal de\narma de fogo de uso permitido é inafiançável.",
+            "correct": "Errado",
+            "comment": "O crime de posse ou porte ilegal de arma de fogo de uso permitido não é inafiançável. A fiança pode ser concedida conforme as circunstâncias do caso e a avaliação do juiz, de acordo com os artigos 12, 14 e 15 da lei e as disposições do Código de Processo Penal."
+},
+
+{
+            "numero": 19,
+            "question": "A Lei nº 10.826/2003 estabelece que as armas de fogo apreendidas devem\nser encaminhadas ao Exército para destruição ou doação aos órgãos de\nsegurança pública após a conclusão do processo judicial.",
+            "correct": "Certo",
+            "comment": "O artigo 25 da Lei nº 10.826/2003 dispõe que as armas de fogo apreendidas devem ser encaminhadas ao Exército para destruição ou doação aos órgãos de segurança pública após a conclusão do processo judicial. Esta medida visa retirar armas de circulação e fortalecer os órgãos de segurança."
+},
+
+{
+            "numero": 20,
+            "question": "Segundo a Lei nº 10.826/2003, o registro de arma de fogo no Sistema\nNacional de Armas (SINARM) deve ser feito apenas uma vez e não precisa ser\nrenovado.",
+            "correct": "Errado",
+            "comment": "O registro de arma de fogo no Sistema Nacional de Armas (SINARM) deve ser renovado periodicamente, a cada cinco anos, conforme artigo 5º da lei. A renovação periódica é essencial para manter o controle atualizado sobre as armas de fogo e garantir a segurança pública.  66 LEI 9.605/1998"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 9.605/1998 estabelece que a responsabilidade penal da pessoa\njurídica não exclui a das pessoas físicas, autoras, coautoras ou partícipes do\nmesmo fato.",
+            "correct": "Certo",
+            "comment": "O artigo 3º da Lei nº 9.605/1998 estabelece que a responsabilidade penal da pessoa jurídica não exclui a das pessoas físicas, autoras, coautoras ou partícipes do mesmo fato. Esta disposição visa garantir que tanto a pessoa jurídica quanto as pessoas físicas envolvidas sejam responsabilizadas pelos crimes ambientais."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 9.605/1998, a prática de atos de pesca em períodos\nnos quais a pesca seja proibida é considerada crime ambiental, punido com\ndetenção de um a três anos ou multa, ou ambas as penas cumulativamente.",
+            "correct": "Certo",
+            "comment": "O artigo 34 da Lei nº 9.605/1998 dispõe que praticar atos de pesca em períodos nos quais a pesca seja proibida é crime ambiental, punido com detenção de um a três anos ou multa, ou ambas as penas cumulativamente. A legislação visa proteger os recursos pesqueiros e garantir a sustentabilidade dos ecossistemas aquáticos."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 9.605/1998 prevê que a suspensão condicional do processo é\naplicável a todos os crimes ambientais, independentemente da pena prevista.",
+            "correct": "Errado",
+            "comment": "A suspensão condicional do processo é aplicável somente aos crimes ambientais cuja pena mínima cominada não seja superior a um ano, conforme disposto no artigo 89 da Lei nº 9.099/1995, aplicável subsidiariamente. Esta medida busca promover a resolução rápida e eficaz de infrações de menor gravidade."
+},
+
+{
+            "numero": 4,
+            "question": "Conforme a Lei nº 9.605/1998, a pena de multa para crimes ambientais\npode ser fixada no valor correspondente ao dobro do lucro econômico obtido\npela empresa infratora.",
+            "correct": "Certo",
+            "comment": "O artigo 18 da Lei nº 9.605/1998 estabelece que a pena de multa pode ser fixada no valor correspondente ao dobro do lucro econômico obtido pela empresa infratora, além de outras penalidades. Esta disposição visa  67 desestimular práticas criminosas e garantir que a sanção seja proporcional ao ganho obtido ilegalmente."
+},
+
+{
+            "numero": 5,
+            "question": "A Lei nº 9.605/1998 determina que a aplicação da pena de prestação de\nserviços à comunidade é vedada para os crimes ambientais cometidos por\npessoas jurídicas.",
+            "correct": "Errado",
+            "comment": "A aplicação da pena de prestação de serviços à comunidade é prevista para pessoas jurídicas, conforme o artigo 21 da lei. Esta pena pode incluir a execução de projetos de recuperação ambiental e outras atividades que contribuam para a reparação do dano causado."
+},
+
+{
+            "numero": 6,
+            "question": "Segundo a Lei nº 9.605/1998, a destruição de florestas nativas ou plantadas\nem unidades de conservação é punida com reclusão de dois a cinco anos.",
+            "correct": "Certo",
+            "comment": "O artigo 38 da Lei nº 9.605/1998 estabelece que destruir ou danificar florestas nativas ou plantadas em unidades de conservação é punido com reclusão de dois a cinco anos. Esta penalidade visa proteger áreas de preservação ambiental e garantir a conservação da biodiversidade."
+},
+
+{
+            "numero": 7,
+            "question": "De acordo com a Lei nº 9.605/1998, é possível a aplicação da pena de\ninterdição temporária de direitos às pessoas físicas condenadas por crimes\nambientais.",
+            "correct": "Certo",
+            "comment": "O artigo 8º da Lei nº 9.605/1998 prevê a aplicação da pena de interdição temporária de direitos às pessoas físicas condenadas por crimes ambientais. Esta pena pode incluir a proibição de contratar com o poder público ou de obter subsídios e incentivos fiscais."
+},
+
+{
+            "numero": 8,
+            "question": "Conforme a Lei nº 9.605/1998, a realização de perícia técnica é dispensável\npara a comprovação do dano ambiental em processos criminais.",
+            "correct": "Errado",
+            "comment": "A realização de perícia técnica é essencial para a comprovação do dano ambiental em processos criminais, conforme o artigo 19 da lei. A perícia técnica fornece a base científica necessária para a avaliação do dano e a determinação das responsabilidades.  68"
+},
+
+{
+            "numero": 9,
+            "question": "A Lei nº 9.605/1998 prevê que, nos casos de crimes ambientais, a reparação\ndo dano ambiental pode ser determinada como condição para a suspensão\nda pena.",
+            "correct": "Certo",
+            "comment": "O artigo 27 da Lei nº 9.605/1998 prevê que a reparação do dano ambiental pode ser determinada como condição para a suspensão da pena. Esta medida busca assegurar que o infrator contribua para a recuperação do ambiente degradado, além de cumprir a sanção penal."
+},
+
+{
+            "numero": 10,
+            "question": "Segundo a Lei nº 9.605/1998, a ação penal nos crimes ambientais é\nsempre pública incondicionada, independentemente da gravidade do dano\ncausado.",
+            "correct": "Errado",
+            "comment": "A ação penal nos crimes ambientais pode ser pública incondicionada ou pública condicionada à representação, dependendo da gravidade e das circunstâncias do crime. A lei prevê diferentes tipos de ação penal para assegurar a devida persecução dos crimes ambientais."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 9.605/1998, a publicidade de ato lesivo ao meio\nambiente é punida com detenção de seis meses a um ano, ou multa, ou ambas\nas penas cumulativamente.",
+            "correct": "Certo",
+            "comment": "O artigo 45 da Lei nº 9.605/1998 dispõe que a publicidade de ato lesivo ao meio ambiente é punida com detenção de seis meses a um ano, ou multa, ou ambas as penas cumulativamente. Esta previsão visa coibir a divulgação de práticas prejudiciais ao meio ambiente e promover a conscientização sobre a proteção ambiental."
+},
+
+{
+            "numero": 12,
+            "question": "Conforme a Lei nº 9.605/1998, a reincidência em crimes ambientais pode\nresultar na aplicação de pena de interdição definitiva de direitos.",
+            "correct": "Certo",
+            "comment": "A reincidência em crimes ambientais pode resultar na aplicação de pena de interdição definitiva de direitos, conforme o artigo 10 da lei. Esta medida visa impedir que reincidentes continuem a praticar atos lesivos ao meio ambiente, protegendo os recursos naturais.  69"
+},
+
+{
+            "numero": 13,
+            "question": "A Lei nº 9.605/1998 estabelece que o início do cumprimento de pena de\nprestação de serviços à comunidade deve ocorrer no prazo máximo de trinta\ndias após a condenação transitada em julgado.",
+            "correct": "Errado",
+            "comment": "A lei não especifica um prazo máximo de trinta dias para o início do cumprimento de pena de prestação de serviços à comunidade após a condenação transitada em julgado. O cumprimento da pena deve seguir as determinações do juiz, conforme as circunstâncias do caso e as disposições legais."
+},
+
+{
+            "numero": 14,
+            "question": "Segundo a Lei nº 9.605/1998, a prescrição da pretensão punitiva dos\ncrimes ambientais ocorre no prazo de cinco anos.",
+            "correct": "Errado",
+            "comment": "A prescrição da pretensão punitiva dos crimes ambientais segue as regras do Código Penal, variando conforme a pena máxima cominada ao crime. Assim, a prescrição pode ocorrer em prazos diferentes, conforme a gravidade do crime ambiental e as disposições do Código Penal."
+},
+
+{
+            "numero": 15,
+            "question": "De acordo com a Lei nº 9.605/1998, as penas restritivas de direitos podem\nsubstituir as penas privativas de liberdade em casos de crimes ambientais.",
+            "correct": "Certo",
+            "comment": "O artigo 7º da Lei nº 9.605/1998 prevê a possibilidade de substituição das penas privativas de liberdade por penas restritivas de direitos em casos de crimes ambientais, conforme as circunstâncias do caso e a avaliação do juiz. Esta medida visa promover a recuperação do ambiente e a reintegração social do infrator."
+},
+
+{
+            "numero": 16,
+            "question": "Conforme a Lei nº 9.605/1998, a responsabilidade administrativa pela\nprática de infrações ambientais é condicionada à existência de dano\nambiental efetivo.",
+            "correct": "Errado",
+            "comment": "A responsabilidade administrativa pela prática de infrações ambientais não é condicionada à existência de dano ambiental efetivo. A lei prevê sanções administrativas para infrações que representem risco ou potencial de dano ao meio ambiente, independentemente da concretização do dano.  70"
+},
+
+{
+            "numero": 17,
+            "question": "Segundo a Lei nº 9.605/1998, a conversão de penas privativas de liberdade\nem multa é vedada para os crimes ambientais.",
+            "correct": "Errado",
+            "comment": "A conversão de penas privativas de liberdade em multa pode ser permitida para crimes ambientais, conforme as disposições do Código Penal e a avaliação do juiz, que deve considerar as circunstâncias do caso e a gravidade da infração."
+},
+
+{
+            "numero": 18,
+            "question": "De acordo com a Lei nº 9.605/1998, a suspensão das atividades de uma\nempresa infratora pode ser aplicada como medida cautelar, antes mesmo da\ncondenação definitiva.",
+            "correct": "Certo",
+            "comment": "O artigo 19 da Lei nº 9.605/1998 prevê que a suspensão das atividades de uma empresa infratora pode ser aplicada como medida cautelar, antes mesmo da condenação definitiva. Esta medida visa evitar a continuidade do dano ambiental e proteger o meio ambiente enquanto o processo está em andamento."
+},
+
+{
+            "numero": 19,
+            "question": "Conforme a Lei nº 9.605/1998, os órgãos ambientais devem realizar\nfiscalização periódica para assegurar o cumprimento das normas ambientais.",
+            "correct": "Certo",
+            "comment": "A lei estabelece que os órgãos ambientais devem realizar fiscalização periódica para assegurar o cumprimento das normas ambientais e prevenir infrações. A fiscalização regular é fundamental para garantir a proteção dos recursos naturais e a observância das leis ambientais."
+},
+
+{
+            "numero": 20,
+            "question": "A Lei nº 9.605/1998 prevê que a aplicação de medidas de recuperação\nambiental é obrigatória apenas nos casos em que o dano ambiental for\nirreversível.",
+            "correct": "Errado",
+            "comment": "A aplicação de medidas de recuperação ambiental é obrigatória sempre que houver dano ao meio ambiente, independentemente de ser reversível ou irreversível. A lei visa assegurar a reparação do dano e a restauração das condições ambientais, conforme o artigo 27.  71 LEI 10.446/2002"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 10.446/2002 estabelece que a Polícia Federal pode atuar na\nrepressão de crimes contra os direitos humanos, independentemente da\nsolicitação do Ministério da Justiça.",
+            "correct": "Errado",
+            "comment": "De acordo com o artigo 1º da Lei nº 10.446/2002, a atuação da Polícia Federal na repressão de crimes contra os direitos humanos depende de solicitação expressa do Ministério da Justiça. Esta previsão busca assegurar a coordenação e a uniformidade na repressão desses crimes de grande repercussão."
+},
+
+{
+            "numero": 2,
+            "question": "Conforme a Lei nº 10.446/2002, é competência da Polícia Federal investigar\ncrimes de tráfico de pessoas para fins de exploração sexual, mesmo que\nocorram apenas dentro de um estado.",
+            "correct": "Errado",
+            "comment": "A competência da Polícia Federal para investigar crimes de tráfico de pessoas, inclusive para fins de exploração sexual, está prevista quando há repercussão interestadual ou internacional, conforme o artigo 1º. A atuação da Polícia Federal visa enfrentar crimes que extrapolam as fronteiras estaduais e exigem repressão uniforme."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 10.446/2002 autoriza a Polícia Federal a investigar crimes contra o\nsistema financeiro nacional que tenham repercussão interestadual.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal tem competência para investigar crimes contra o sistema financeiro nacional que tenham repercussão interestadual, conforme o artigo 1º, inciso III, da Lei nº 10.446/2002. Esta atuação visa garantir a integridade do sistema financeiro e combater crimes complexos e de ampla repercussão."
+},
+
+{
+            "numero": 4,
+            "question": "Segundo a Lei nº 10.446/2002, a competência da Polícia Federal para\ninvestigar crimes é exclusiva, não sendo permitida a cooperação com outras\npolícias.",
+            "correct": "Errado",
+            "comment": "A competência da Polícia Federal para investigar crimes de repercussão interestadual ou internacional pode ser exercida em cooperação com outras polícias, conforme a necessidade e a complexidade do caso. A  72 cooperação entre diferentes forças policiais é essencial para a eficácia da repressão a crimes complexos."
+},
+
+{
+            "numero": 5,
+            "question": "De acordo com a Lei nº 10.446/2002, os crimes de falsificação de\ndocumentos públicos que tenham repercussão interestadual podem ser\ninvestigados pela Polícia Federal.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal pode investigar crimes de falsificação de documentos públicos que tenham repercussão interestadual, conforme previsto no artigo 1º, inciso V, da Lei nº 10.446/2002. A falsificação de documentos públicos é um crime que pode afetar a administração pública em várias unidades da federação, justificando a atuação federal."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 10.446/2002 permite que a Polícia Federal investigue crimes\npraticados por organizações criminosas que atuem em mais de um estado da\nfederação.",
+            "correct": "Certo",
+            "comment": "A atuação da Polícia Federal na investigação de crimes praticados por organizações criminosas que atuem em mais de um estado é prevista pela Lei nº 10.446/2002, artigo 1º, inciso IV. Esta medida visa enfrentar a complexidade e a abrangência das atividades das organizações criminosas, que frequentemente operam em várias jurisdições."
+},
+
+{
+            "numero": 7,
+            "question": "Conforme a Lei nº 10.446/2002, a Polícia Federal não tem competência para\ninvestigar crimes de sequestro em que a vítima seja levada de um estado para\noutro.",
+            "correct": "Errado",
+            "comment": "A Polícia Federal tem competência para investigar crimes de sequestro em que a vítima seja levada de um estado para outro, conforme o artigo 1º, inciso II, da Lei nº 10.446/2002. Esta competência é necessária para lidar com a natureza interestadual do crime e garantir uma resposta coordenada e eficaz."
+},
+
+{
+            "numero": 8,
+            "question": "De acordo com a Lei nº 10.446/2002, a Polícia Federal pode investigar\ncrimes de terrorismo, mesmo que a conduta tenha ocorrido exclusivamente\ndentro de um estado.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal pode investigar crimes de terrorismo, independentemente de a conduta ter ocorrido exclusivamente dentro de um  73 estado, devido à gravidade e à potencial repercussão internacional desses crimes. Esta competência é prevista no artigo 1º, inciso I, da lei."
+},
+
+{
+            "numero": 9,
+            "question": "A Lei nº 10.446/2002 estipula que a Polícia Federal pode atuar na\ninvestigação de crimes ambientais que tenham impacto em mais de um\nestado da federação.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal pode atuar na investigação de crimes ambientais que tenham impacto em mais de um estado da federação, conforme o artigo 1º, inciso VII, da Lei nº 10.446/2002. A atuação federal é necessária para lidar com a repercussão interestadual dos crimes ambientais e proteger os recursos naturais."
+},
+
+{
+            "numero": 10,
+            "question": "Conforme a Lei nº 10.446/2002, a Polícia Federal deve obter autorização\njudicial prévia para iniciar investigações de crimes de corrupção que tenham\nrepercussão interestadual.",
+            "correct": "Errado",
+            "comment": "A Polícia Federal não precisa obter autorização judicial prévia para iniciar investigações de crimes de corrupção com repercussão interestadual. A competência para investigar esses crimes é estabelecida pela lei, e a atuação policial pode ser iniciada com base em indícios e na necessidade de repressão uniforme."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 10.446/2002, a atuação da Polícia Federal pode\nser requerida por qualquer autoridade policial estadual em caso de\nrepercussão interestadual do crime.",
+            "correct": "Errado",
+            "comment": "A atuação da Polícia Federal, conforme a Lei nº 10.446/2002, é solicitada pelo Ministério da Justiça e não por qualquer autoridade policial estadual. Esta centralização visa garantir a coordenação e a uniformidade na repressão a crimes de grande repercussão."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 10.446/2002 prevê que a Polícia Federal pode investigar crimes\ncontra o patrimônio cultural que tenham repercussão internacional.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal tem competência para investigar crimes contra o patrimônio cultural que tenham repercussão internacional, conforme o artigo 1º, inciso VIII, da Lei nº 10.446/2002. Esta competência é essencial para  74 proteger o patrimônio cultural brasileiro e cooperar em investigações internacionais."
+},
+
+{
+            "numero": 13,
+            "question": "Segundo a Lei nº 10.446/2002, a Polícia Federal pode atuar de ofício em\ncrimes de lavagem de dinheiro com repercussão interestadual.",
+            "correct": "Errado",
+            "comment": "A atuação da Polícia Federal em crimes de lavagem de dinheiro com repercussão interestadual requer solicitação expressa do Ministério da Justiça, conforme o artigo 1º da lei. Esta disposição assegura a coordenação das ações repressivas e a uniformidade na investigação desses crimes complexos."
+},
+
+{
+            "numero": 14,
+            "question": "De acordo com a Lei nº 10.446/2002, a Polícia Federal tem competência\npara investigar crimes de furto qualificado que ocorram em dois ou mais\nestados da federação.",
+            "correct": "Errado",
+            "comment": "A Polícia Federal não possui competência específica para investigar crimes de furto qualificado apenas com base na ocorrência em dois ou mais estados. A competência para esses crimes continua sendo das polícias estaduais, a menos que se trate de organização criminosa com atuação interestadual, conforme artigo 1º."
+},
+
+{
+            "numero": 15,
+            "question": "Conforme a Lei nº 10.446/2002, os crimes de falsificação de moeda são de\ncompetência exclusiva da Polícia Federal, independentemente da\nrepercussão.",
+            "correct": "Certo",
+            "comment": "A falsificação de moeda é um crime de competência da Polícia Federal, conforme o artigo 109, inciso IV, da Constituição Federal, independentemente da repercussão interestadual ou internacional. Esta competência busca proteger a integridade do sistema financeiro nacional."
+},
+
+{
+            "numero": 16,
+            "question": "A Lei nº 10.446/2002 dispõe que a Polícia Federal pode investigar crimes\ncontra a ordem tributária, desde que tenham repercussão interestadual.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal pode investigar crimes contra a ordem tributária que tenham repercussão interestadual, conforme artigo 1º, inciso III, da Lei nº 10.446/2002. Esta competência visa combater a evasão fiscal e outros crimes tributários que afetam múltiplas jurisdições.  75"
+},
+
+{
+            "numero": 17,
+            "question": "Segundo a Lei nº 10.446/2002, a competência da Polícia Federal para\ninvestigar crimes é ampliada pela legislação estadual, quando necessário.",
+            "correct": "Errado",
+            "comment": "A competência da Polícia Federal para investigar crimes é estabelecida pela legislação federal, e não pode ser ampliada por legislação estadual. Qualquer ampliação de competência deve ser prevista em lei federal, conforme os princípios constitucionais."
+},
+
+{
+            "numero": 18,
+            "question": "De acordo com a Lei nº 10.446/2002, a Polícia Federal tem competência\npara investigar crimes de tráfico de drogas que tenham repercussão\ninterestadual.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal tem competência para investigar crimes de tráfico de drogas com repercussão interestadual ou internacional, conforme o artigo 1º, inciso V, da lei. Esta atuação é essencial para combater o tráfico de drogas em sua dimensão ampla e complexa."
+},
+
+{
+            "numero": 19,
+            "question": "Conforme a Lei nº 10.446/2002, a Polícia Federal pode solicitar\ncooperação internacional diretamente a organismos estrangeiros para\ninvestigar crimes de sua competência.",
+            "correct": "Certo",
+            "comment": "A Polícia Federal pode solicitar cooperação internacional diretamente a organismos estrangeiros para investigar crimes de sua competência, conforme os tratados e acordos internacionais dos quais o Brasil é parte. Esta cooperação é crucial para enfrentar crimes transnacionais e complexos."
+},
+
+{
+            "numero": 20,
+            "question": "A Lei nº 10.446/2002 estabelece que a competência da Polícia Federal é\nexclusiva para todos os crimes listados na lei, independentemente da atuação\nde outras polícias.",
+            "correct": "Errado",
+            "comment": "A competência da Polícia Federal para investigar crimes listados na Lei nº 10.446/2002 não é exclusiva e pode ser exercida em cooperação com outras polícias, conforme necessário. A cooperação entre diferentes forças policiais é fundamental para a eficácia da repressão a crimes complexos e de ampla repercussão.  76 LEI 12.030/2009"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 12.030/2009 assegura a autonomia técnica e científica dos peritos\noficiais, independentemente de sua vinculação institucional.",
+            "correct": "Certo",
+            "comment": "A Lei nº 12.030/2009, em seu artigo 1º, assegura a autonomia técnica, científica e funcional dos peritos oficiais, independentemente da vinculação institucional. Isso significa que os peritos devem conduzir suas atividades de acordo com os princípios da ciência e da técnica, sem interferência externa que possa comprometer a imparcialidade e a integridade das perícias."
+},
+
+{
+            "numero": 2,
+            "question": "De acordo com a Lei nº 12.030/2009, somente médicos-legistas e peritos\ncriminais são considerados peritos oficiais de natureza criminal.",
+            "correct": "Errado",
+            "comment": "A Lei nº 12.030/2009 inclui, além de médicos-legistas e peritos criminais, os peritos odontolegistas e os peritos em outras áreas reconhecidas pelo órgão de perícia oficial. O artigo 2º da lei reconhece a diversidade de especialidades envolvidas na perícia criminal, refletindo a complexidade e a abrangência das atividades periciais."
+},
+
+{
+            "numero": 3,
+            "question": "A Lei nº 12.030/2009 determina que as perícias de natureza criminal devem\nser realizadas exclusivamente por peritos oficiais.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 1º, as perícias de natureza criminal devem ser realizadas exclusivamente por peritos oficiais. Em casos excepcionais, onde não houver peritos oficiais, poderão ser nomeados peritos ad hoc, mas a preferência é sempre pelos peritos oficiais, para garantir a qualidade e a imparcialidade dos laudos."
+},
+
+{
+            "numero": 4,
+            "question": "Segundo a Lei nº 12.030/2009, os peritos oficiais podem ser contratados\ntemporariamente para atender demandas emergenciais do órgão de perícia\ncriminal.",
+            "correct": "Errado",
+            "comment": "A lei não prevê a contratação temporária de peritos oficiais. A seleção e contratação de peritos oficiais seguem os processos regulares de concurso público, conforme estabelecido pelo artigo 3º da lei, para assegurar a competência e a idoneidade dos profissionais.  77"
+},
+
+{
+            "numero": 5,
+            "question": "De acordo com a Lei nº 12.030/2009, é vedada a acumulação de funções de\nperito oficial com qualquer outra atividade profissional pública ou privada.",
+            "correct": "Errado",
+            "comment": "A lei não veda a acumulação de funções de perito oficial com outras atividades profissionais, desde que não haja conflito de interesses ou comprometimento da autonomia e imparcialidade das perícias. No entanto, o exercício concomitante de cargos públicos segue as regras gerais de acumulação previstas na Constituição Federal."
+},
+
+{
+            "numero": 6,
+            "question": "A Lei nº 12.030/2009 estabelece que os peritos criminais devem possuir\ncurso superior específico na área de atuação pericial.",
+            "correct": "Certo",
+            "comment": "O artigo 2º da Lei nº 12.030/2009 exige que os peritos criminais possuam curso superior específico na área de atuação pericial. Esta exigência visa garantir que os profissionais tenham o conhecimento técnico necessário para a realização de perícias de alta qualidade e precisão."
+},
+
+{
+            "numero": 7,
+            "question": "Conforme a Lei nº 12.030/2009, a ausência de laudo pericial oficial pode ser\nsuprida por testemunho de autoridade policial.",
+            "correct": "Errado",
+            "comment": "A ausência de laudo pericial oficial não pode ser suprida por testemunho de autoridade policial. O laudo pericial é um documento técnico e científico essencial para a prova pericial, e a sua ausência compromete a validade das provas e a investigação criminal."
+},
+
+{
+            "numero": 8,
+            "question": "De acordo com a Lei nº 12.030/2009, os peritos oficiais têm direito à\nremuneração compatível com a complexidade e a responsabilidade de suas\nfunções.",
+            "correct": "Certo",
+            "comment": "A lei assegura que os peritos oficiais tenham remuneração compatível com a complexidade e a responsabilidade de suas funções. Essa previsão está alinhada com a necessidade de valorizar o trabalho dos peritos e garantir a atratividade da carreira pericial."
+},
+
+{
+            "numero": 9,
+            "question": "A Lei nº 12.030/2009 prevê que os peritos oficiais podem recusar a\nrealização de perícia se considerarem que não possuem condições técnicas\nadequadas para tal.",
+            "correct": "Certo",
+            "comment": "Os peritos oficiais podem recusar a realização de perícia se não possuírem condições técnicas adequadas, conforme os princípios de  78 autonomia técnica e científica garantidos pela lei. Essa recusa deve ser justificada e fundamentada, visando manter a integridade e a qualidade dos laudos periciais."
+},
+
+{
+            "numero": 10,
+            "question": "Segundo a Lei nº 12.030/2009, o laudo pericial deve ser elaborado no\nprazo máximo de 30 dias, podendo ser prorrogado por igual período mediante\njustificativa.",
+            "correct": "Errado",
+            "comment": "A lei não especifica um prazo máximo de 30 dias para a elaboração do laudo pericial. O prazo para elaboração do laudo pode variar conforme a complexidade do caso e a demanda do órgão de perícia. A prorrogação de prazos também deve ser justificada conforme a necessidade técnica."
+},
+
+{
+            "numero": 11,
+            "question": "De acordo com a Lei nº 12.030/2009, os peritos oficiais podem atuar como\nassistentes técnicos em processos judiciais em que não sejam parte.",
+            "correct": "Certo",
+            "comment": "Os peritos oficiais podem atuar como assistentes técnicos em processos judiciais, desde que não estejam envolvidos como partes no processo. Esta atuação como assistentes técnicos está alinhada com os princípios de autonomia e independência profissional."
+},
+
+{
+            "numero": 12,
+            "question": "A Lei nº 12.030/2009 assegura que os peritos oficiais são responsáveis civil\ne criminalmente pelos laudos que emitirem, podendo ser penalizados por erro\ntécnico não intencional.",
+            "correct": "Errado",
+            "comment": "A responsabilidade civil e criminal dos peritos oficiais está condicionada à comprovação de dolo ou culpa grave. Erros técnicos não intencionais, decorrentes da complexidade da matéria ou de limitações técnicas, não implicam responsabilidade penal ou civil."
+},
+
+{
+            "numero": 13,
+            "question": "Conforme a Lei nº 12.030/2009, os peritos oficiais devem manter sigilo\nsobre as informações obtidas no exercício de suas funções.",
+            "correct": "Certo",
+            "comment": "A lei assegura que os peritos oficiais devem manter sigilo sobre as informações obtidas no exercício de suas funções. Esta obrigação de sigilo visa proteger a integridade das investigações e a privacidade das partes envolvidas.  79"
+},
+
+{
+            "numero": 14,
+            "question": "De acordo com a Lei nº 12.030/2009, os laudos periciais elaborados por\nperitos oficiais podem ser contestados por laudos de peritos particulares\ncontratados pelas partes.",
+            "correct": "Certo",
+            "comment": "Os laudos periciais elaborados por peritos oficiais podem ser contestados por laudos de peritos particulares contratados pelas partes, conforme o princípio do contraditório e da ampla defesa. Essa contestação deve ser fundamentada tecnicamente e pode ser apreciada pelo juiz."
+},
+
+{
+            "numero": 15,
+            "question": "A Lei nº 12.030/2009 estabelece que os peritos oficiais não podem ser\nremovidos ou transferidos de seus cargos sem motivo justificado.",
+            "correct": "Certo",
+            "comment": "A lei assegura que os peritos oficiais não podem ser removidos ou transferidos de seus cargos sem motivo justificado, visando garantir a estabilidade e a independência funcional. A remoção ou transferência deve ser fundamentada e obedecer aos critérios legais e administrativos."
+},
+
+{
+            "numero": 16,
+            "question": "Segundo a Lei nº 12.030/2009, a atuação de peritos ad hoc é permitida\napenas em casos excepcionais e devidamente justificados.",
+            "correct": "Certo",
+            "comment": "A atuação de peritos ad hoc é permitida apenas em casos excepcionais, quando não houver peritos oficiais disponíveis, e deve ser devidamente justificada. Essa previsão visa garantir que as perícias sejam realizadas preferencialmente por peritos oficiais, mantendo a qualidade e a imparcialidade dos laudos."
+},
+
+{
+            "numero": 17,
+            "question": "De acordo com a Lei nº 12.030/2009, os peritos oficiais podem ser\nrequisitados para realizar perícias fora de sua área de atuação específica,\ndesde que tenham conhecimento técnico suficiente.",
+            "correct": "Errado",
+            "comment": "Os peritos oficiais devem realizar perícias dentro de sua área de atuação específica e conforme sua especialidade técnica. A realização de perícias fora dessa área pode comprometer a qualidade e a confiabilidade dos laudos, violando os princípios de autonomia técnica e científica.  80"
+},
+
+{
+            "numero": 18,
+            "question": "A Lei nº 12.030/2009 dispõe que os peritos oficiais devem passar por\navaliações periódicas de desempenho para garantir a manutenção de sua\nqualidade técnica.",
+            "correct": "Certo",
+            "comment": "A lei prevê que os peritos oficiais devem passar por avaliações periódicas de desempenho, visando garantir a manutenção e a melhoria contínua da qualidade técnica de suas atividades. Essas avaliações são essenciais para assegurar a eficiência e a eficácia dos serviços periciais."
+},
+
+{
+            "numero": 19,
+            "question": "Conforme a Lei nº 12.030/2009, a formação continuada dos peritos oficiais\né uma obrigação dos órgãos de perícia, que devem proporcionar cursos e\ntreinamentos regulares.",
+            "correct": "Certo",
+            "comment": "A formação continuada dos peritos oficiais é uma obrigação dos órgãos de perícia, conforme a lei, que devem proporcionar cursos e treinamentos regulares. Essa formação continuada é crucial para a atualização dos conhecimentos e habilidades dos peritos, garantindo a excelência nas perícias."
+},
+
+{
+            "numero": 20,
+            "question": "A Lei nº 12.030/2009 prevê que os peritos oficiais devem ser nomeados\npor indicação política para garantir a confiança na sua atuação.",
+            "correct": "Errado",
+            "comment": "A nomeação de peritos oficiais deve ser realizada por meio de concurso público, conforme critérios técnicos e de mérito, e não por indicação política. Essa exigência visa garantir a imparcialidade, a independência e a competência dos peritos oficiais, protegendo a qualidade das perícias. LEI 12.037/2009"
+},
+
+{
+            "numero": 1,
+            "question": "A Lei nº 12.037/2009 estabelece que a identificação criminal de pessoa\ncivilmente identificada somente poderá ocorrer nas hipóteses expressamente\nprevistas na própria lei.",
+            "correct": "Certo",
+            "comment": "A Lei nº 12.037/2009, em seu artigo 3º, dispõe que a identificação criminal de pessoa civilmente identificada somente poderá ocorrer nas hipóteses expressamente previstas na lei. Esta medida visa proteger a  81 dignidade e a privacidade dos indivíduos, limitando a identificação criminal a situações específicas e justificadas."
+},
+
+{
+            "numero": 2,
+            "question": "Segundo a Lei nº 12.037/2009, uma pessoa pode ser identificada\ncriminalmente mesmo possuindo documento de identificação civil válido e\nregular.",
+            "correct": "Certo",
+            "comment": "A lei permite a identificação criminal de pessoa civilmente identificada, mesmo possuindo documento válido, em casos específicos como suspeita de falsidade do documento, necessidade de averiguação de múltiplas identidades, ou quando for essencial às investigações criminais, conforme artigo 3º, incisos I a V."
+},
+
+{
+            "numero": 3,
+            "question": "De acordo com a Lei nº 12.037/2009, é vedada a coleta de material\nbiológico para fins de identificação criminal de pessoa civilmente identificada.",
+            "correct": "Errado",
+            "comment": "A coleta de material biológico para fins de identificação criminal é permitida pela lei, especialmente para a formação de banco de dados genéticos, conforme regulamentação específica, e deve obedecer aos princípios de legalidade e necessidade, conforme artigos 5º e 7º."
+},
+
+{
+            "numero": 4,
+            "question": "A Lei nº 12.037/2009 determina que a identificação criminal poderá ser\nrealizada mesmo quando a pessoa apresentar documento de identificação\ncivil, se houver dúvida sobre a autenticidade do documento.",
+            "correct": "Certo",
+            "comment": "Conforme o artigo 3º, inciso I, a identificação criminal pode ser realizada se houver dúvida sobre a autenticidade do documento de identificação apresentado. Esta previsão visa assegurar a precisão na identificação do indivíduo e evitar fraudes."
+},
+
+{
+            "numero": 5,
+            "question": "A Lei nº 12.037/2009 estabelece que a identificação criminal de pessoa\ncivilmente identificada deve ser imediatamente comunicada ao juiz\ncompetente.",
+            "correct": "Errado",
+            "comment": "A lei não prevê a comunicação imediata ao juiz competente em todos os casos de identificação criminal de pessoa civilmente identificada. A comunicação ao juiz ocorre em casos específicos conforme o andamento das investigações e a necessidade de medidas judiciais.  82"
+},
+
+{
+            "numero": 6,
+            "question": "Conforme a Lei nº 12.037/2009, o banco de dados genéticos é administrado\nexclusivamente pelo Instituto Nacional de Criminalística.",
+            "correct": "Errado",
+            "comment": "O banco de dados genéticos é administrado pelo Sistema Nacional de Informações de Segurança Pública, Prisionais e sobre Drogas (SINESP), conforme regulamentação específica, não sendo exclusividade do Instituto Nacional de Criminalística. Esta estrutura permite maior integração e coordenação entre os diversos órgãos de segurança pública."
+},
+
+{
+            "numero": 7,
+            "question": "De acordo com a Lei nº 12.037/2009, é obrigatório o uso de técnicas de\nreconhecimento facial em todos os casos de identificação criminal.",
+            "correct": "Errado",
+            "comment": "A lei não torna obrigatórias as técnicas de reconhecimento facial em todos os casos de identificação criminal. A utilização dessas técnicas deve ser justificada pela necessidade específica de cada caso e conforme regulamentação e disponibilidade tecnológica."
+},
+
+{
+            "numero": 8,
+            "question": "A Lei nº 12.037/2009 prevê a coleta de impressões digitais como forma de\nidentificação criminal, independentemente da apresentação de documento\nde identidade válido.",
+            "correct": "Certo",
+            "comment": "A coleta de impressões digitais é uma forma de identificação criminal prevista pela lei, e pode ocorrer mesmo que a pessoa apresente documento de identidade válido, em situações específicas previstas no artigo 3º, como dúvida sobre a autenticidade do documento."
+},
+
+{
+            "numero": 9,
+            "question": "Segundo a Lei nº 12.037/2009, a identificação criminal de adolescentes\ninfratores segue as mesmas regras aplicáveis aos adultos.",
+            "correct": "Errado",
+            "comment": "A identificação criminal de adolescentes infratores segue regras específicas estabelecidas pelo Estatuto da Criança e do Adolescente (ECA), que são diferentes das aplicáveis aos adultos, respeitando a condição peculiar de pessoa em desenvolvimento e os direitos assegurados pelo ECA."
+},
+
+{
+            "numero": 10,
+            "question": "A Lei nº 12.037/2009 estabelece que a identificação criminal por meio de\ncoleta de DNA é permitida somente com autorização judicial.",
+            "correct": "Errado",
+            "comment": "A coleta de DNA para fins de identificação criminal não requer necessariamente autorização judicial, podendo ser realizada conforme  83 regulamentação específica e necessidade investigativa. No entanto, deve obedecer aos princípios de legalidade e necessidade."
+},
+
+{
+            "numero": 11,
+            "question": "Conforme a Lei nº 12.037/2009, a identificação criminal é dispensada\nquando a pessoa estiver portando um passaporte válido e regular.",
+            "correct": "Errado",
+            "comment": "A identificação criminal pode ser realizada mesmo que a pessoa esteja portando um passaporte válido e regular, se houver dúvida sobre a autenticidade do documento ou em outras situações previstas no artigo 3º da lei."
+},
+
+{
+            "numero": 12,
+            "question": "De acordo com a Lei nº 12.037/2009, a identificação criminal pode ser\nsolicitada pelo Ministério Público, pela autoridade policial ou pelo próprio juiz.",
+            "correct": "Certo",
+            "comment": "A identificação criminal pode ser solicitada pelo Ministério Público, pela autoridade policial ou pelo juiz, conforme a necessidade das investigações ou do processo judicial, assegurando a correta identificação do indivíduo e a integridade das provas."
+},
+
+{
+            "numero": 13,
+            "question": "A Lei nº 12.037/2009 determina que a identificação criminal de civilmente\nidentificado deve ser feita com discrição, preservando a dignidade e a\nprivacidade do indivíduo.",
+            "correct": "Certo",
+            "comment": "A lei prevê que a identificação criminal deve ser feita com discrição, preservando a dignidade e a privacidade do indivíduo, conforme os princípios da dignidade da pessoa humana e os direitos fundamentais garantidos pela Constituição Federal."
+},
+
+{
+            "numero": 14,
+            "question": "Segundo a Lei nº 12.037/2009, é permitida a divulgação pública das\ninformações coletadas durante a identificação criminal.",
+            "correct": "Errado",
+            "comment": "A divulgação pública das informações coletadas durante a identificação criminal é vedada, exceto em casos específicos previstos em lei e mediante autorização judicial. A divulgação indevida pode violar os direitos à privacidade e à dignidade do indivíduo.  84"
+},
+
+{
+            "numero": 15,
+            "question": "Conforme a Lei nº 12.037/2009, a coleta de material biológico para\nidentificação criminal pode ser realizada compulsoriamente em qualquer fase\ndo processo penal.",
+            "correct": "Errado",
+            "comment": "A coleta de material biológico para identificação criminal deve obedecer a regulamentações específicas e não pode ser realizada compulsoriamente em qualquer fase do processo penal. É necessário justificar a necessidade e a legalidade do procedimento, respeitando os direitos do indivíduo."
+},
+
+{
+            "numero": 16,
+            "question": "De acordo com a Lei nº 12.037/2009, a identificação criminal pode incluir\na coleta de dados biométricos, como reconhecimento de íris e voz.",
+            "correct": "Certo",
+            "comment": "A identificação criminal pode incluir a coleta de dados biométricos, como reconhecimento de íris e voz, conforme regulamentações específicas e avanços tecnológicos que permitam a identificação precisa e segura do indivíduo."
+},
+
+{
+            "numero": 17,
+            "question": "A Lei nº 12.037/2009 estabelece que, em caso de suspeita de falsidade\ndocumental, a identificação criminal é dispensada se o indivíduo não possuir\nantecedentes criminais.",
+            "correct": "Errado",
+            "comment": "Em caso de suspeita de falsidade documental, a identificação criminal não é dispensada, mesmo que o indivíduo não possua antecedentes criminais. A correta identificação é essencial para assegurar a integridade das investigações e prevenir fraudes."
+},
+
+{
+            "numero": 18,
+            "question": "Conforme a Lei nº 12.037/2009, os dados coletados para identificação\ncriminal devem ser armazenados de forma segura e sigilosa, com acesso\nrestrito aos responsáveis pela investigação.",
+            "correct": "Certo",
+            "comment": "Os dados coletados para identificação criminal devem ser armazenados de forma segura e sigilosa, com acesso restrito aos responsáveis pela investigação, conforme os princípios da proteção de dados e privacidade. A segurança e a confidencialidade dos dados são essenciais para evitar abusos e vazamentos.  85"
+},
+
+{
+            "numero": 19,
+            "question": "De acordo com a Lei nº 12.037/2009, é permitido o uso de força física para\nrealizar a identificação criminal de um indivíduo que se recusa a colaborar.",
+            "correct": "Errado",
+            "comment": "O uso de força física para realizar a identificação criminal deve ser evitado, e qualquer medida coercitiva deve ser justificada pela necessidade e proporcionalidade, respeitando os direitos do indivíduo e os princípios da legalidade e da dignidade da pessoa humana."
+},
+
+{
+            "numero": 20,
+            "question": "Segundo a Lei nº 12.037/2009, a recusa em fornecer material biológico\npara identificação criminal pode ser interpretada como indício de\nculpabilidade.",
+            "correct": "Errado",
+            "comment": "A recusa em fornecer material biológico para identificação criminal não pode ser interpretada automaticamente como indício de culpabilidade. Tal interpretação violaria os princípios do direito à não autoincriminação e da presunção de inocência, garantidos pela Constituição Federal."
+}
+
+
+            ];
+        
+      // Função de busca corrigida
+        function setupSearch() {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.trim().toLowerCase();
+                
+                if (searchTerm.length < 2) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+                
+                const results = allQuestions.filter(q => {
+                    return q.question.toLowerCase().includes(searchTerm) || 
+                           q.numero.toString().includes(searchTerm);
+                }).slice(0, 10);
+                
+                displaySearchResults(results);
+            });
+
+            // Fechar resultados ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+
+        // Exibir resultados da busca
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (!results || results.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'search-item';
+                noResults.textContent = 'Nenhuma questão encontrada';
+                searchResults.appendChild(noResults);
+            } else {
+                results.forEach(q => {
+                    const item = document.createElement('div');
+                    item.className = 'search-item';
+                    item.innerHTML = `<strong>#${q.numero}</strong>: ${q.question.substring(0, 70)}${q.question.length > 70 ? '...' : ''}`;
+                    item.addEventListener('click', () => {
+                        goToQuestion(q.numero - 1);
+                        searchResults.style.display = 'none';
+                    });
+                    searchResults.appendChild(item);
+                });
+            }
+            
+            searchResults.style.display = results.length ? 'block' : 'none';
+        }
+
+        // Ir para questão específica
+        function goToQuestion(index) {
+            if (index >= 0 && index < allQuestions.length) {
+                currentQuestionIndex = index;
+                displayQuestion();
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+            }
+        }
+        
+        // Inicialização
+        function init() {
+            createParticles();
+            loadQuestions();
+            loadProgress();
+            setupSearch();
+            displayQuestion();
+        }
+        
+        // Carregar questões
+        function loadQuestions() {
+            allQuestions = questions;
+            
+            // Preencher com questões fictícias se necessário
+            for (let i = questions.length + 1; i <= TOTAL_QUESTIONS; i++) {
+                allQuestions.push({
+                    "numero": i,
+                    "question": `Questão ${i}: Exemplo de pergunta sobre conceitos avançados de TI.`,
+                    "correct": i % 2 === 0 ? "Certo" : "Errado",
+                    "comment": `Explicação detalhada para a questão ${i}.`
+                });
+            }
+        }
+        
+        // Criar partículas flutuantes
+        function createParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 3 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = `-${size}px`;
+                
+                const duration = Math.random() * 20 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Carregar progresso salvo
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('quizProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                currentQuestionIndex = progress.currentQuestionIndex || 0;
+                correctCount = progress.correctCount || 0;
+                wrongCount = progress.wrongCount || 0;
+                currentRankIndex = progress.currentRankIndex || 0;
+                answeredQuestions = progress.answeredQuestions || [];
+                quizCompleted = progress.quizCompleted || false;
+                
+                correctDisplay.textContent = correctCount;
+                wrongDisplay.textContent = wrongCount;
+                
+                updateRank();
+                
+                if (quizCompleted) {
+                    showCompletionMessage();
+                }
+            }
+        }
+        
+        // Salvar progresso
+        function saveProgress() {
+            const progress = {
+                currentQuestionIndex,
+                correctCount,
+                wrongCount,
+                currentRankIndex,
+                answeredQuestions,
+                quizCompleted
+            };
+            localStorage.setItem('quizProgress', JSON.stringify(progress));
+        }
+        
+        // Resetar progresso
+        function resetProgress() {
+            localStorage.removeItem('quizProgress');
+            currentQuestionIndex = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            currentRankIndex = 0;
+            answeredQuestions = [];
+            quizCompleted = false;
+            
+            correctDisplay.textContent = '0';
+            wrongDisplay.textContent = '0';
+            
+            updateRank();
+            displayQuestion();
+        }
+        
+        // Atualizar rank do jogador
+        function updateRank() {
+            let newRankIndex = 0;
+            
+            // Determinar o rank atual baseado nos acertos
+            for (let i = RANKS.length - 1; i >= 0; i--) {
+                if (correctCount >= RANKS[i].minCorrect) {
+                    newRankIndex = i;
+                    break;
+                }
+            }
+            
+            // Verificar se houve promoção
+            if (newRankIndex > currentRankIndex) {
+                currentRankIndex = newRankIndex;
+                showRankUp();
+            }
+            
+            // Atualizar display do rank
+            const currentRank = RANKS[currentRankIndex];
+            const nextRank = currentRankIndex < RANKS.length - 1 ? RANKS[currentRankIndex + 1] : null;
+            
+            rankDisplay.textContent = currentRank.name;
+            currentRankDisplay.textContent = currentRank.name;
+            currentRankDisplay.style.color = currentRank.color;
+            
+            // Atualizar cor do rank box
+            rankBox.style.setProperty('--current-rank-color', currentRank.color);
+            rankBox.style.background = `linear-gradient(135deg, ${currentRank.color}, rgba(0, 0, 0, 0.5))`;
+            rankBox.style.borderColor = currentRank.color;
+            rankBox.style.boxShadow = `0 0 15px ${currentRank.color}`;
+            
+            // Atualizar ícone
+            rankIcon.className = `fas ${currentRank.icon}`;
+            
+            // Atualizar progresso para o próximo rank
+            if (nextRank) {
+                const progress = correctCount - currentRank.minCorrect;
+                const needed = nextRank.minCorrect - currentRank.minCorrect;
+                const percent = Math.round((progress / needed) * 100);
+                
+                rankProgressDisplay.textContent = `${progress}/${needed} acertos (${percent}%) para o próximo nível`;
+                rankRequirementsDisplay.textContent = `Próximo nível: ${nextRank.name} (${nextRank.minCorrect} acertos)`;
+            } else {
+                rankProgressDisplay.textContent = "Rank máximo alcançado!";
+                rankRequirementsDisplay.textContent = "Você dominou todas as questões!";
+            }
+        }
+        
+        // Mostrar tela de promoção
+        function showRankUp() {
+            const rank = RANKS[currentRankIndex];
+            
+            // Atualizar elementos da tela de promoção
+            rankUpTitle.textContent = `Promovido a ${rank.name}!`;
+            rankUpMessage.textContent = `Você alcançou ${correctCount} acertos e subiu de nível!`;
+            rankUpIcon.className = `fas ${rank.icon}`;
+            
+            // Aplicar cor do rank atual
+            rankUpContainer.style.setProperty('--current-rank-color', rank.color);
+            rankUpBox.style.background = `linear-gradient(135deg, ${rank.color}, #162447)`;
+            rankUpBox.style.borderColor = rank.color;
+            rankUpBox.style.boxShadow = `0 0 25px ${rank.color}`;
+            rankUpTitle.style.color = rank.color;
+            rankUpTitle.style.textShadow = `0 0 10px ${rank.color}`;
+            rankUpIcon.style.color = rank.color;
+            
+            // Mostrar tela de promoção
+            rankUpContainer.style.display = 'flex';
+        }
+        
+        // Fechar tela de promoção
+        function closeRankUp() {
+            rankUpContainer.style.display = 'none';
+        }
+        
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progressPercentage = (currentQuestionIndex / TOTAL_QUESTIONS) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+            progressDisplay.textContent = `Progresso: ${Math.round(progressPercentage)}%`;
+            questionNumberDisplay.textContent = `Questão ${currentQuestionIndex + 1}/${TOTAL_QUESTIONS}`;
+        }
+        
+        // Iniciar temporizador
+        function startTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_PER_QUESTION;
+            timerDisplay.textContent = timeLeft;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+        
+        // Tempo esgotado
+        function handleTimeout() {
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            checkAnswer('Errado', true);
+        }
+        
+        // Verificar resposta
+        function checkAnswer(answer, isTimeout = false) {
+            clearInterval(timer);
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            const isCorrect = answer === currentQuestion.correct;
+            
+            // Registrar resposta
+            answeredQuestions.push({
+                questionIndex: currentQuestionIndex,
+                question: currentQuestion.question,
+                userAnswer: answer,
+                correctAnswer: currentQuestion.correct,
+                isCorrect,
+                isTimeout
+            });
+            
+            // Atualizar contadores
+            if (isCorrect) {
+                correctCount++;
+                correctDisplay.textContent = correctCount;
+            } else {
+                wrongCount++;
+                wrongDisplay.textContent = wrongCount;
+            }
+            
+            // Mostrar resultado
+            resultDiv.style.display = 'block';
+            
+            if (isTimeout) {
+                resultMessage.textContent = "⏰ Tempo esgotado!";
+                resultMessage.style.color = "#FF9800";
+            } else if (isCorrect) {
+                resultMessage.textContent = "✅ Resposta Correta!";
+                resultMessage.style.color = "#4CAF50";
+            } else {
+                resultMessage.textContent = "❌ Resposta Incorreta!";
+                resultMessage.style.color = "#F44336";
+            }
+            
+            commentDiv.innerHTML = `<b>Explicação:</b> ${currentQuestion.comment}`;
+            nextBtn.disabled = false;
+            
+            // Atualizar rank e salvar progresso
+            updateRank();
+            saveProgress();
+        }
+        
+        // Próxima questão
+        function nextQuestion() {
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                quizCompleted = true;
+                showCompletionMessage();
+                saveProgress();
+            }
+        }
+        
+        // Mostrar mensagem de conclusão
+        function showCompletionMessage() {
+            const accuracy = Math.round((correctCount / allQuestions.length) * 100);
+            const rank = RANKS[currentRankIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question" style="text-align: center;">
+                    <h2>Quiz Concluído!</h2>
+                    <p>Você respondeu a todas as ${allQuestions.length} questões.</p>
+                    <p>Pontuação final: ${correctCount} acertos (${accuracy}%)</p>
+                    <p style="color: ${rank.color}; font-weight: bold;">Rank Final: ${rank.name}</p>
+                    <button onclick="resetQuiz()" style="margin-top: 20px;">Reiniciar Quiz</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.style.display = 'none';
+        }
+        
+        // Reiniciar quiz
+        function resetQuiz() {
+            resetProgress();
+            nextBtn.style.display = 'block';
+            displayQuestion();
+        }
+        
+        // Exibir questão
+        function displayQuestion() {
+            if (quizCompleted) {
+                showCompletionMessage();
+                return;
+            }
+            
+            const currentQuestion = allQuestions[currentQuestionIndex];
+            
+            quizDiv.innerHTML = `
+                <div class="question">
+                    <p>${currentQuestion.numero}. ${currentQuestion.question}</p>
+                </div>
+                <div class="answer-buttons">
+                    <button onclick="checkAnswer('Certo')">Certo</button>
+                    <button onclick="checkAnswer('Errado')">Errado</button>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'none';
+            nextBtn.disabled = true;
+            updateProgress();
+            startTimer();
+        }
+        
+        // Iniciar o quiz
+        init();
+    </script>
+</body>
+</html>
